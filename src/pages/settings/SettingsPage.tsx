@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { X, Upload } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
+import { useThemeStore, THEMES, getTheme, applyTheme } from '@/store/themeStore'
 
 interface OrgSettings { name?: string; email?: string; phone?: string; address?: string; website?: string; logoUrl?: string; primaryColor?: string; tagline?: string }
 interface UserProfile { displayName?: string; email?: string; phone?: string; bio?: string; avatarUrl?: string }
@@ -17,7 +18,8 @@ const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, 
 
 const NAV_ITEMS = [
   { key: 'profile', label: 'Profile', icon: '👤' },
-  { key: 'branding', label: 'Branding', icon: '🎨' },
+  { key: 'appearance', label: 'Appearance', icon: '🎨' },
+  { key: 'branding', label: 'Branding', icon: '🏢' },
   { key: 'printouts', label: 'Printouts', icon: '🖨️' },
   { key: 'notifications', label: 'Notifications', icon: '🔔' },
   { key: 'security', label: 'Security', icon: '🔒' },
@@ -39,6 +41,7 @@ function ToggleSwitch({ value, onChange, label }: { value: boolean; onChange: (v
 
 export function SettingsPage() {
   const [activeSection, setActiveSection] = useState('profile')
+  const { themeKey, setTheme } = useThemeStore()
   const [profileForm, setProfileForm] = useState<UserProfile>({ displayName: '', email: '', phone: '', bio: '', avatarUrl: '' })
   const [orgForm, setOrgForm] = useState<OrgSettings>({ name: '', email: '', phone: '', address: '', website: '', logoUrl: '', primaryColor: '#7c6bff', tagline: '' })
   const [notifForm, setNotifForm] = useState<NotifSettings>({ emailDigest: true, smsAlerts: false, attendanceReminders: true, paymentAlerts: true, prayerUpdates: false })
@@ -120,6 +123,50 @@ export function SettingsPage() {
               <div style={{ marginBottom: 16 }}><label style={labelStyle}>AVATAR URL</label><input type="url" value={profileForm.avatarUrl ?? ''} onChange={e => setProfileForm(f => ({ ...f, avatarUrl: e.target.value }))} placeholder="https://..." style={inputStyle} /></div>
               <button onClick={() => saveProfile.mutate()} disabled={saveProfile.isPending} style={gradientBtn}>{saveProfile.isPending ? 'Saving...' : 'Save Profile'}</button>
               {saveProfile.isSuccess && <span style={{ color: '#34d399', fontSize: 13, marginLeft: 12 }}>✓ Saved</span>}
+            </div>
+          )}
+
+          {/* APPEARANCE */}
+          {activeSection === 'appearance' && (
+            <div>
+              <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18, margin: '0 0 6px' }}>Appearance</h2>
+              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, margin: '0 0 24px' }}>Choose a theme for your ChurchOS workspace. Changes apply instantly.</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 16 }}>
+                {THEMES.map(theme => {
+                  const active = themeKey === theme.key
+                  return (
+                    <button key={theme.key} onClick={() => { setTheme(theme.key); applyTheme(theme) }}
+                      style={{
+                        border: active ? `2px solid ${theme.accent}` : '2px solid rgba(255,255,255,0.08)',
+                        borderRadius: 16, padding: 0, cursor: 'pointer', overflow: 'hidden', backgroundColor: 'transparent',
+                        boxShadow: active ? `0 0 0 4px ${theme.accent}22` : 'none',
+                        transition: 'all 0.15s',
+                      }}>
+                      {/* Preview swatch */}
+                      <div style={{ backgroundColor: theme.pageBg, padding: '12px 12px 8px' }}>
+                        {/* Fake sidebar + content */}
+                        <div style={{ display: 'flex', gap: 6, height: 60 }}>
+                          <div style={{ width: 24, backgroundColor: theme.sidebarBg, borderRadius: 6, flexShrink: 0 }} />
+                          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                            <div style={{ height: 8, backgroundColor: theme.cardBg, borderRadius: 4 }} />
+                            <div style={{ height: 8, backgroundColor: theme.cardBg, borderRadius: 4, width: '70%' }} />
+                            <div style={{ height: 20, borderRadius: 6, marginTop: 4, background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentDark})`, opacity: 0.9 }} />
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ padding: '8px 12px 10px', backgroundColor: theme.cardBg, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ color: active ? theme.accent : 'rgba(255,255,255,0.7)', fontSize: 12, fontWeight: active ? 700 : 500 }}>{theme.name}</span>
+                        {active && <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: theme.accent, flexShrink: 0 }} />}
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+              <div style={{ marginTop: 24, backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 14, padding: '14px 18px' }}>
+                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>
+                  Current theme: <strong style={{ color: 'white' }}>{getTheme(themeKey).name}</strong>
+                </p>
+              </div>
             </div>
           )}
 

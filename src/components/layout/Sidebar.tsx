@@ -5,7 +5,7 @@ import {
   Wallet, Banknote, UserCog, ShieldCheck, BarChart2, CreditCard,
   MessageSquare, Heart, BookOpen, FileText, ChevronDown, ChevronLeft,
   ChevronRight, Settings, Compass, ClipboardList, Baby, Building,
-  Briefcase, Zap, Cross, BookMarked,
+  Briefcase, Zap, Cross, BookMarked, MessagesSquare,
 } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 
@@ -76,6 +76,8 @@ const NAV: NavEntry[] = [
   ]},
 
   { type: 'section', label: 'GLOBAL MODULES' },
+
+  { type: 'item', to: '/chat', label: 'Staff Chat', icon: MessagesSquare },
 
   { type: 'group', label: 'Communication', icon: MessageSquare, items: [
     { to: '/communication', label: 'Messages & Campaigns' },

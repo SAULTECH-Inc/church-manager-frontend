@@ -5,6 +5,8 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { LoginPage } from '@/pages/auth/LoginPage'
 import { SignupPage } from '@/pages/auth/SignupPage'
+import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage'
+import { ResetPasswordPage } from '@/pages/auth/ResetPasswordPage'
 import { DashboardPage } from '@/pages/dashboard/DashboardPage'
 import { Suspense, lazy } from 'react'
 
@@ -42,6 +44,7 @@ const SearchPage       = lazy(() => import('@/pages/search/SearchPage').then(m =
 const ProjectsPage     = lazy(() => import('@/pages/projects/ProjectsPage').then(m => ({ default: m.ProjectsPage })))
 const WorkflowsPage    = lazy(() => import('@/pages/workflows/WorkflowsPage').then(m => ({ default: m.WorkflowsPage })))
 const CemeteryPage     = lazy(() => import('@/pages/cemetery/CemeteryPage').then(m => ({ default: m.CemeteryPage })))
+const ChatPage         = lazy(() => import('@/pages/chat/ChatPage').then(m => ({ default: m.ChatPage })))
 
 function PageLoader() {
   return (
@@ -58,8 +61,10 @@ export default function App() {
         <Suspense fallback={<PageLoader />}>
           <Routes>
             {/* Public */}
-            <Route path="/login"  element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login"           element={<LoginPage />} />
+            <Route path="/signup"          element={<SignupPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password"  element={<ResetPasswordPage />} />
 
             {/* Protected */}
             <Route element={<ProtectedRoute />}>
@@ -100,6 +105,7 @@ export default function App() {
                 <Route path="/projects"       element={<ProjectsPage />} />
                 <Route path="/workflows"      element={<WorkflowsPage />} />
                 <Route path="/cemetery"       element={<CemeteryPage />} />
+                <Route path="/chat"           element={<ChatPage />} />
               </Route>
             </Route>
 

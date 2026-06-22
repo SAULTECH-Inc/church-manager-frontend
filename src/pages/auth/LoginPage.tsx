@@ -103,6 +103,14 @@ export function LoginPage() {
               {errors.password && <p className="text-xs mt-1.5" style={{ color: '#fca5a5' }}>{errors.password.message}</p>}
             </div>
 
+            <div className="flex justify-end">
+              <Link to="/forgot-password" className="text-xs font-medium" style={{ color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#7c6bff')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}>
+                Forgot password?
+              </Link>
+            </div>
+
             <button
               type="submit"
               disabled={loginMutation.isPending}
