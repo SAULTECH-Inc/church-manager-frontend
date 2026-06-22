@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
-import { Plus, Trash2, X, ChevronDown, ChevronUp, ToggleLeft, ToggleRight } from 'lucide-react'
+import { Plus, Trash2, X, ChevronDown, ChevronUp, ToggleLeft, ToggleRight, Pencil } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
 
@@ -50,7 +50,11 @@ const TABS = ['Role Groups', 'Dynamic Roles', 'Permissions', 'User Assignments',
 export function RolesPage() {
   const [activeTab, setActiveTab] = useState(0)
   const [groupDrawer, setGroupDrawer] = useState(false)
+  const [editGroup, setEditGroup] = useState<RoleGroup | null>(null)
+  const [editGroupForm, setEditGroupForm] = useState({ name: '', description: '' })
   const [roleDrawer, setRoleDrawer] = useState(false)
+  const [editRole, setEditRole] = useState<DynamicRole | null>(null)
+  const [editRoleForm, setEditRoleForm] = useState({ name: '', description: '', groupId: '' })
   const [permDrawer, setPermDrawer] = useState(false)
   const [guardDrawer, setGuardDrawer] = useState(false)
   const [chainDrawer, setChainDrawer] = useState(false)
@@ -75,7 +79,9 @@ export function RolesPage() {
 
   const toQS = (obj: Record<string, string>) => { const p = new URLSearchParams(); Object.entries(obj).forEach(([k, v]) => { if (v) p.append(k, v) }); return p.toString() }
   const createGroup = useMutation({ mutationFn: () => api.post(`/api/roles/groups?${toQS(groupForm)}`), onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['roles'] }); setGroupDrawer(false); setGroupForm({ name: '', description: '' }) } })
+  const editGroupMut = useMutation({ mutationFn: () => api.post(`/api/roles/groups/${editGroup!.id}/update?${toQS(editGroupForm)}`), onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['roles'] }); setEditGroup(null) } })
   const createRole = useMutation({ mutationFn: () => api.post(`/api/roles/create?${toQS(roleForm)}`), onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['roles'] }); setRoleDrawer(false); setRoleForm({ name: '', description: '', groupId: '', permissions: '' }) } })
+  const editRoleMut = useMutation({ mutationFn: () => api.post(`/api/roles/${editRole!.id}/update?${toQS(editRoleForm)}`), onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['roles'] }); setEditRole(null) } })
   const createPerm = useMutation({ mutationFn: () => { const p = new URLSearchParams(); if (permForm.name) p.append('permissionKey', permForm.name); if (permForm.module) p.append('module', permForm.module); if (permForm.description) p.append('description', permForm.description); return api.post(`/api/roles/permissions/create?${p}`) }, onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['roles'] }); setPermDrawer(false); setPermForm({ name: '', module: '', description: '' }) } })
   const createGuard = useMutation({ mutationFn: () => { const p = new URLSearchParams(); if (guardForm.method) p.append('httpMethod', guardForm.method); if (guardForm.pathPattern) p.append('pathPattern', guardForm.pathPattern); if (guardForm.permissionGate) p.append('permissionGate', guardForm.permissionGate); if (guardForm.roleGate) p.append('roleGate', guardForm.roleGate); return api.post(`/api/roles/endpoints/create?${p}`) }, onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['roles'] }); setGuardDrawer(false); setGuardForm({ method: 'GET', pathPattern: '', permissionGate: '', roleGate: '' }) } })
   const deleteGroup = useMutation({ mutationFn: (id: string) => api.post(`/api/roles/groups/${id}/delete`), onSuccess: () => queryClient.invalidateQueries({ queryKey: ['roles'] }) })
@@ -156,7 +162,10 @@ export function RolesPage() {
                   <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{g.description || '—'}</td>
                   <td className="px-5 py-4"><span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: '#a78bfa', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{g.roleCount}</span></td>
                   <td className="px-5 py-4">
-                    <button onClick={() => { if (confirm('Delete group?')) deleteGroup.mutate(g.id) }} style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Trash2 size={13} /></button>
+                    <div className="flex gap-2">
+                      <button onClick={() => { setEditGroup(g); setEditGroupForm({ name: g.name, description: g.description ?? '' }) }} style={{ background: 'rgba(124,107,255,0.1)', border: 'none', color: '#a78bfa', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Pencil size={13} /></button>
+                      <button onClick={() => { if (confirm('Delete group?')) deleteGroup.mutate(g.id) }} style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Trash2 size={13} /></button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -180,6 +189,8 @@ export function RolesPage() {
                     style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: 'rgba(255,255,255,0.6)', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <ChevronDown size={13} style={{ transform: expandedRole === role.id ? 'rotate(180deg)' : 'none', transition: '0.2s' }} />
                   </button>
+                  <button onClick={() => { setEditRole(role); setEditRoleForm({ name: role.name, description: role.description ?? '', groupId: '' }) }}
+                    style={{ background: 'rgba(124,107,255,0.1)', border: 'none', color: '#a78bfa', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Pencil size={12} /></button>
                   <button onClick={() => { if (confirm('Delete role?')) deleteRole.mutate(role.id) }} style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Trash2 size={12} /></button>
                 </div>
               </div>
@@ -349,6 +360,23 @@ export function RolesPage() {
           </div>
         </div>
       )}
+
+      <Drawer open={!!editGroup} onClose={() => setEditGroup(null)} title="Edit Role Group"
+        footer={<><button onClick={() => setEditGroup(null)} style={outlineBtn}>Cancel</button><button onClick={() => editGroupMut.mutate()} disabled={!editGroupForm.name || editGroupMut.isPending} style={gradientBtn}>{editGroupMut.isPending ? 'Saving...' : 'Save Changes'}</button></>}>
+        <div><label style={labelStyle}>GROUP NAME <span style={{ color: '#f87171' }}>*</span></label><input type="text" value={editGroupForm.name} onChange={e => setEditGroupForm(f => ({ ...f, name: e.target.value }))} style={inputStyle} /></div>
+        <div><label style={labelStyle}>DESCRIPTION</label><textarea rows={3} value={editGroupForm.description} onChange={e => setEditGroupForm(f => ({ ...f, description: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+      </Drawer>
+
+      <Drawer open={!!editRole} onClose={() => setEditRole(null)} title="Edit Role"
+        footer={<><button onClick={() => setEditRole(null)} style={outlineBtn}>Cancel</button><button onClick={() => editRoleMut.mutate()} disabled={!editRoleForm.name || editRoleMut.isPending} style={gradientBtn}>{editRoleMut.isPending ? 'Saving...' : 'Save Changes'}</button></>}>
+        <div><label style={labelStyle}>ROLE NAME <span style={{ color: '#f87171' }}>*</span></label><input type="text" value={editRoleForm.name} onChange={e => setEditRoleForm(f => ({ ...f, name: e.target.value }))} style={inputStyle} /></div>
+        <div><label style={labelStyle}>DESCRIPTION</label><textarea rows={3} value={editRoleForm.description} onChange={e => setEditRoleForm(f => ({ ...f, description: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+        <div><label style={labelStyle}>GROUP</label>
+          <select value={editRoleForm.groupId} onChange={e => setEditRoleForm(f => ({ ...f, groupId: e.target.value }))} style={inputStyle}>
+            <option value="">No group...</option>
+            {groups.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
+          </select></div>
+      </Drawer>
 
       <Drawer open={groupDrawer} onClose={() => setGroupDrawer(false)} title="Add Role Group"
         footer={<><button onClick={() => setGroupDrawer(false)} style={outlineBtn}>Cancel</button><button onClick={() => createGroup.mutate()} disabled={!groupForm.name || createGroup.isPending} style={gradientBtn}>{createGroup.isPending ? 'Saving...' : 'Create Group'}</button></>}>

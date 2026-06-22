@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
-import { Plus, X, Trash2, ChevronDown, ChevronUp, ToggleLeft, ToggleRight } from 'lucide-react'
+import { Plus, X, Trash2, ChevronDown, ChevronUp, ToggleLeft, ToggleRight, Pencil } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
 
@@ -61,6 +61,8 @@ export function WorkflowsPage() {
   const [addFieldFor,   setAddFieldFor]   = useState<string | null>(null)
   const [addStepFor,    setAddStepFor]    = useState<string | null>(null)
 
+  const [editFormItem, setEditFormItem] = useState<WorkflowForm | null>(null)
+  const [editFormData, setEditFormData] = useState({ title: '', description: '', category: 'OTHER', isPublic: false })
   const [formForm, setFormForm]   = useState(EMPTY_FORM_FORM)
   const [fieldForm, setFieldForm] = useState(EMPTY_FIELD)
   const [chainForm, setChainForm] = useState(EMPTY_CHAIN)
@@ -74,6 +76,10 @@ export function WorkflowsPage() {
   const createFormMut = useMutation({
     mutationFn: () => api.post('/api/workflows/forms/create', null, { params: formForm }),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['workflows'] }); setCreateForm(false); setFormForm(EMPTY_FORM_FORM) },
+  })
+  const editFormMut = useMutation({
+    mutationFn: () => api.post(`/api/workflows/forms/${editFormItem!.id}/edit`, null, { params: editFormData }),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['workflows'] }); setEditFormItem(null) },
   })
   const deleteFormMut = useMutation({
     mutationFn: (id: string) => api.post(`/api/workflows/forms/${id}/delete`),
@@ -190,6 +196,8 @@ export function WorkflowsPage() {
                       <button onClick={() => setExpandedForm(isOpen ? null : f.id)} style={{ ...outlineBtn, padding: '5px 10px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
                         {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                       </button>
+                      <button onClick={() => { setEditFormItem(f); setEditFormData({ title: f.title, description: f.description ?? '', category: f.category, isPublic: f.isPublic }) }}
+                        style={{ background: 'rgba(124,107,255,0.1)', border: 'none', color: '#a78bfa', borderRadius: 10, padding: '5px 9px', cursor: 'pointer' }}><Pencil size={13} /></button>
                       <button onClick={() => { if (confirm('Delete form?')) deleteFormMut.mutate(f.id) }}
                         style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 10, padding: '5px 9px', cursor: 'pointer' }}><Trash2 size={13} /></button>
                     </div>
@@ -298,6 +306,21 @@ export function WorkflowsPage() {
           })}
         </div>
       )}
+
+      {/* Edit Form Drawer */}
+      <Drawer open={!!editFormItem} onClose={() => setEditFormItem(null)} title="Edit Form"
+        footer={<><button onClick={() => setEditFormItem(null)} style={outlineBtn}>Cancel</button><button onClick={() => editFormMut.mutate()} disabled={!editFormData.title || editFormMut.isPending} style={gradientBtn}>{editFormMut.isPending ? 'Saving…' : 'Save Changes'}</button></>}>
+        <div><label style={labelStyle}>FORM TITLE *</label><input value={editFormData.title} onChange={e => setEditFormData(f => ({ ...f, title: e.target.value }))} style={inputStyle} /></div>
+        <div><label style={labelStyle}>DESCRIPTION</label><textarea rows={3} value={editFormData.description} onChange={e => setEditFormData(f => ({ ...f, description: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+        <div><label style={labelStyle}>CATEGORY</label>
+          <select value={editFormData.category} onChange={e => setEditFormData(f => ({ ...f, category: e.target.value }))} style={inputStyle}>
+            {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+          </select></div>
+        <div className="flex items-center gap-3">
+          <input type="checkbox" id="editIsPublic" checked={editFormData.isPublic} onChange={e => setEditFormData(f => ({ ...f, isPublic: e.target.checked }))} />
+          <label htmlFor="editIsPublic" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, cursor: 'pointer' }}>Make this form publicly accessible</label>
+        </div>
+      </Drawer>
 
       {/* Create Form Drawer */}
       <Drawer open={createForm} onClose={() => setCreateForm(false)} title="Create Form"

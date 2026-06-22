@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
-import { Plus, Trash2, X, Check, Download, Upload, ChevronDown } from 'lucide-react'
+import { Plus, Trash2, X, Check, Download, Upload, ChevronDown, Pencil } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
 import { getInitials } from '@/lib/utils'
@@ -63,6 +63,8 @@ export function HRPage() {
   const [importFile, setImportFile] = useState<File | null>(null)
   const [exportMenu, setExportMenu] = useState(false)
   const [deptFilter, setDeptFilter] = useState('')
+  const [editStaff, setEditStaff] = useState<StaffMember | null>(null)
+  const [editStaffForm, setEditStaffForm] = useState({ fullName: '', email: '', phone: '', department: '', jobTitle: '', employmentType: 'FULL_TIME', salary: '', salaryFrequency: 'MONTHLY', bankName: '', accountNumber: '', emergencyContact: '', emergencyPhone: '', qualifications: '' })
   const [staffForm, setStaffForm] = useState({ memberId: '', fullName: '', email: '', phone: '', department: '', jobTitle: '', employmentType: 'FULL_TIME', startDate: '', salary: '', salaryFrequency: 'MONTHLY', bankName: '', accountNumber: '', emergencyContact: '', emergencyPhone: '', qualifications: '' })
   const [leaveForm, setLeaveForm] = useState({ staffId: '', leaveType: 'ANNUAL', startDate: '', endDate: '', reason: '' })
 
@@ -72,6 +74,10 @@ export function HRPage() {
   })
 
   const toQS = (obj: Record<string, string>) => { const p = new URLSearchParams(); Object.entries(obj).forEach(([k, v]) => { if (v) p.append(k, v) }); return p.toString() }
+  const editStaffMut = useMutation({
+    mutationFn: () => api.post(`/api/hr/${editStaff!.id}/edit?${toQS(editStaffForm)}`),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['hr'] }); setEditStaff(null) },
+  })
   const createStaff = useMutation({
     mutationFn: () => api.post(`/api/hr/create?${toQS(staffForm)}`),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['hr'] }); setStaffDrawer(false); setStaffForm({ memberId: '', fullName: '', email: '', phone: '', department: '', jobTitle: '', employmentType: 'FULL_TIME', startDate: '', salary: '', salaryFrequency: 'MONTHLY', bankName: '', accountNumber: '', emergencyContact: '', emergencyPhone: '', qualifications: '' }) },
@@ -203,6 +209,10 @@ export function HRPage() {
                             {s.status === 'ACTIVE' && <button onClick={() => changeStatus.mutate({ id: s.id, status: 'SUSPENDED' })} style={{ backgroundColor: 'rgba(245,158,11,0.1)', border: 'none', color: '#f59e0b', borderRadius: 8, padding: '4px 8px', cursor: 'pointer', fontSize: 11 }}>Suspend</button>}
                             {s.status === 'SUSPENDED' && <button onClick={() => changeStatus.mutate({ id: s.id, status: 'ACTIVE' })} style={{ backgroundColor: 'rgba(52,211,153,0.1)', border: 'none', color: '#34d399', borderRadius: 8, padding: '4px 8px', cursor: 'pointer', fontSize: 11 }}>Reactivate</button>}
                             {s.status !== 'TERMINATED' && <button onClick={() => { if (confirm('Terminate staff?')) changeStatus.mutate({ id: s.id, status: 'TERMINATED' }) }} style={{ backgroundColor: 'rgba(239,68,68,0.08)', border: 'none', color: '#f87171', borderRadius: 8, padding: '4px 8px', cursor: 'pointer', fontSize: 11 }}>Terminate</button>}
+                            <button onClick={() => { setEditStaff(s); setEditStaffForm({ fullName: s.fullName, email: s.email ?? '', phone: s.phone ?? '', department: s.department ?? '', jobTitle: s.jobTitle ?? '', employmentType: s.employmentType ?? 'FULL_TIME', salary: s.salary?.toString() ?? '', salaryFrequency: s.salaryFrequency ?? 'MONTHLY', bankName: '', accountNumber: '', emergencyContact: '', emergencyPhone: '', qualifications: '' }) }}
+                              style={{ background: 'rgba(124,107,255,0.1)', border: 'none', color: '#a78bfa', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <Pencil size={11} />
+                            </button>
                             <button onClick={() => { if (confirm('Delete?')) deleteStaff.mutate(s.id) }}
                               style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               <Trash2 size={11} />
@@ -261,6 +271,43 @@ export function HRPage() {
           </div>
         </div>
       )}
+
+      <Drawer open={!!editStaff} onClose={() => setEditStaff(null)} title="Edit Staff Member"
+        footer={<>
+          <button onClick={() => setEditStaff(null)} style={outlineBtn}>Cancel</button>
+          <button onClick={() => editStaffMut.mutate()} disabled={!editStaffForm.fullName || editStaffMut.isPending} style={gradientBtn}>{editStaffMut.isPending ? 'Saving...' : 'Save Changes'}</button>
+        </>}>
+        <div><label style={labelStyle}>FULL NAME <span style={{ color: '#f87171' }}>*</span></label><input type="text" value={editStaffForm.fullName} onChange={e => setEditStaffForm(f => ({ ...f, fullName: e.target.value }))} style={inputStyle} /></div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div><label style={labelStyle}>EMAIL</label><input type="email" value={editStaffForm.email} onChange={e => setEditStaffForm(f => ({ ...f, email: e.target.value }))} style={inputStyle} /></div>
+          <div><label style={labelStyle}>PHONE</label><input type="text" value={editStaffForm.phone} onChange={e => setEditStaffForm(f => ({ ...f, phone: e.target.value }))} style={inputStyle} /></div>
+        </div>
+        <div><label style={labelStyle}>DEPARTMENT</label>
+          <input type="text" list="edit-dept-list" value={editStaffForm.department} onChange={e => setEditStaffForm(f => ({ ...f, department: e.target.value }))} style={inputStyle} />
+          <datalist id="edit-dept-list"><option value="Administration" /><option value="Finance" /><option value="Media" /><option value="Music" /><option value="Children's Ministry" /><option value="Youth Ministry" /><option value="Maintenance" /><option value="Security" /></datalist>
+        </div>
+        <div><label style={labelStyle}>JOB TITLE</label><input type="text" value={editStaffForm.jobTitle} onChange={e => setEditStaffForm(f => ({ ...f, jobTitle: e.target.value }))} style={inputStyle} /></div>
+        <div><label style={labelStyle}>EMPLOYMENT TYPE</label>
+          <select value={editStaffForm.employmentType} onChange={e => setEditStaffForm(f => ({ ...f, employmentType: e.target.value }))} style={inputStyle}>
+            {['FULL_TIME', 'PART_TIME', 'CONTRACT', 'VOLUNTEER'].map(t => <option key={t}>{t}</option>)}
+          </select></div>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
+          <div><label style={labelStyle}>SALARY</label><input type="number" min="0" step="0.01" value={editStaffForm.salary} onChange={e => setEditStaffForm(f => ({ ...f, salary: e.target.value }))} style={inputStyle} /></div>
+          <div><label style={labelStyle}>FREQUENCY</label>
+            <select value={editStaffForm.salaryFrequency} onChange={e => setEditStaffForm(f => ({ ...f, salaryFrequency: e.target.value }))} style={inputStyle}>
+              {['MONTHLY', 'WEEKLY', 'ANNUALLY'].map(t => <option key={t}>{t}</option>)}
+            </select></div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div><label style={labelStyle}>BANK NAME</label><input type="text" value={editStaffForm.bankName} onChange={e => setEditStaffForm(f => ({ ...f, bankName: e.target.value }))} style={inputStyle} /></div>
+          <div><label style={labelStyle}>ACCOUNT NUMBER</label><input type="text" value={editStaffForm.accountNumber} onChange={e => setEditStaffForm(f => ({ ...f, accountNumber: e.target.value }))} style={inputStyle} /></div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div><label style={labelStyle}>EMERGENCY CONTACT</label><input type="text" value={editStaffForm.emergencyContact} onChange={e => setEditStaffForm(f => ({ ...f, emergencyContact: e.target.value }))} style={inputStyle} /></div>
+          <div><label style={labelStyle}>EMERGENCY PHONE</label><input type="text" value={editStaffForm.emergencyPhone} onChange={e => setEditStaffForm(f => ({ ...f, emergencyPhone: e.target.value }))} style={inputStyle} /></div>
+        </div>
+        <div><label style={labelStyle}>QUALIFICATIONS</label><textarea rows={2} value={editStaffForm.qualifications} onChange={e => setEditStaffForm(f => ({ ...f, qualifications: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+      </Drawer>
 
       <Drawer open={importOpen} onClose={() => setImportOpen(false)} title="Import Staff Records"
         footer={<>

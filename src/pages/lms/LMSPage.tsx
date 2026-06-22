@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
-import { Plus, Trash2, X, ExternalLink } from 'lucide-react'
+import { Plus, Trash2, X, ExternalLink, Pencil } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
 
@@ -52,6 +52,8 @@ const LEVEL_GRADIENTS: Record<string, string> = {
 
 export function LMSPage() {
   const [courseDrawer, setCourseDrawer] = useState(false)
+  const [editCourse, setEditCourse] = useState<Course | null>(null)
+  const [editCourseForm, setEditCourseForm] = useState({ title: '', description: '', instructor: '', level: 'BEGINNER', status: 'ACTIVE', category: '', classroomUrl: '', thumbnailUrl: '' })
   const [enrollDrawer, setEnrollDrawer] = useState(false)
   const [enrollCourseId, setEnrollCourseId] = useState('')
   const [courseForm, setCourseForm] = useState({ title: '', description: '', instructor: '', level: 'BEGINNER', category: '', classroomUrl: '', thumbnailUrl: '' })
@@ -78,6 +80,14 @@ export function LMSPage() {
       return api.post(`/api/lms/enroll?${p}`)
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['lms'] }); setEnrollDrawer(false); setEnrollForm({ memberId: '' }); setEnrollCourseId('') },
+  })
+  const editCourseMut = useMutation({
+    mutationFn: () => {
+      const p = new URLSearchParams()
+      Object.entries(editCourseForm).forEach(([k, v]) => { if (v) p.append(k, v) })
+      return api.post(`/api/lms/courses/${editCourse!.id}/edit?${p}`)
+    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['lms'] }); setEditCourse(null) },
   })
   const deleteCourse = useMutation({
     mutationFn: (id: string) => api.post(`/api/lms/courses/${id}/delete`),
@@ -162,6 +172,10 @@ export function LMSPage() {
                         <ExternalLink size={13} /> Classroom
                       </a>
                     )}
+                    <button onClick={() => { setEditCourse(course); setEditCourseForm({ title: course.title, description: course.description ?? '', instructor: course.instructor ?? '', level: course.level, status: course.status, category: course.category ?? '', classroomUrl: course.classroomUrl ?? '', thumbnailUrl: course.thumbnailUrl ?? '' }) }}
+                      style={{ backgroundColor: 'rgba(124,107,255,0.1)', border: 'none', color: '#a78bfa', borderRadius: 12, width: 36, height: 36, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Pencil size={14} />
+                    </button>
                     <button onClick={() => { if (confirm('Delete course?')) deleteCourse.mutate(course.id) }}
                       style={{ backgroundColor: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 12, width: 36, height: 36, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <Trash2 size={14} />
@@ -173,6 +187,26 @@ export function LMSPage() {
           })}
         </div>
       )}
+
+      <Drawer open={!!editCourse} onClose={() => setEditCourse(null)} title="Edit Course"
+        footer={<><button onClick={() => setEditCourse(null)} style={outlineBtn}>Cancel</button><button onClick={() => editCourseMut.mutate()} disabled={!editCourseForm.title || editCourseMut.isPending} style={gradientBtn}>{editCourseMut.isPending ? 'Saving...' : 'Save Changes'}</button></>}>
+        <div><label style={labelStyle}>COURSE TITLE <span style={{ color: '#f87171' }}>*</span></label><input type="text" value={editCourseForm.title} onChange={e => setEditCourseForm(f => ({ ...f, title: e.target.value }))} style={inputStyle} /></div>
+        <div><label style={labelStyle}>DESCRIPTION</label><textarea rows={3} value={editCourseForm.description} onChange={e => setEditCourseForm(f => ({ ...f, description: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+        <div><label style={labelStyle}>INSTRUCTOR <span style={{ color: '#f87171' }}>*</span></label><input type="text" value={editCourseForm.instructor} onChange={e => setEditCourseForm(f => ({ ...f, instructor: e.target.value }))} style={inputStyle} /></div>
+        <div><label style={labelStyle}>CATEGORY</label><input type="text" value={editCourseForm.category} onChange={e => setEditCourseForm(f => ({ ...f, category: e.target.value }))} placeholder="e.g. Bible Study, Leadership" style={inputStyle} /></div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div><label style={labelStyle}>LEVEL</label>
+            <select value={editCourseForm.level} onChange={e => setEditCourseForm(f => ({ ...f, level: e.target.value }))} style={inputStyle}>
+              {['BEGINNER', 'INTERMEDIATE', 'ADVANCED'].map(l => <option key={l}>{l}</option>)}
+            </select></div>
+          <div><label style={labelStyle}>STATUS</label>
+            <select value={editCourseForm.status} onChange={e => setEditCourseForm(f => ({ ...f, status: e.target.value }))} style={inputStyle}>
+              {['DRAFT', 'ACTIVE', 'COMPLETED'].map(s => <option key={s}>{s}</option>)}
+            </select></div>
+        </div>
+        <div><label style={labelStyle}>CLASSROOM URL</label><input type="url" value={editCourseForm.classroomUrl} onChange={e => setEditCourseForm(f => ({ ...f, classroomUrl: e.target.value }))} placeholder="https://..." style={inputStyle} /></div>
+        <div><label style={labelStyle}>THUMBNAIL URL</label><input type="url" value={editCourseForm.thumbnailUrl} onChange={e => setEditCourseForm(f => ({ ...f, thumbnailUrl: e.target.value }))} placeholder="https://..." style={inputStyle} /></div>
+      </Drawer>
 
       <Drawer open={courseDrawer} onClose={() => setCourseDrawer(false)} title="New Course"
         footer={<><button onClick={() => setCourseDrawer(false)} style={outlineBtn}>Cancel</button><button onClick={() => createCourse.mutate()} disabled={!courseForm.title || createCourse.isPending} style={gradientBtn}>{createCourse.isPending ? 'Creating...' : 'Create Course'}</button></>}>

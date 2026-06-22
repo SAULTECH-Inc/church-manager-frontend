@@ -52,6 +52,18 @@ interface DashboardData {
   fellowshipGroupCount: number
   membersInGroups: number
   volunteerCount: number
+  // Extended module stats
+  staffCount: number
+  activeStaffCount: number
+  pendingLeaveCount: number
+  childrenCount: number
+  pastorCount: number
+  familyCount: number
+  courseCount: number
+  activeCourseCount: number
+  enrollmentCount: number
+  totalPlots: number
+  occupiedPlots: number
 }
 
 // ─── Colour tokens ───────────────────────────────────────────────────────────
@@ -195,10 +207,7 @@ export function DashboardPage() {
 
   const { data, isLoading } = useQuery<DashboardData>({
     queryKey: ['dashboard'],
-    queryFn: async () => {
-      const res = await api.get<{ data: DashboardData }>('/api/dashboard')
-      return res.data.data
-    },
+    queryFn: () => api.get('/api/dashboard').then(r => r.data as DashboardData),
   })
 
   if (isLoading) {
@@ -299,6 +308,30 @@ export function DashboardPage() {
           sub={`${d?.eventsThisMonth ?? 0} events this month`}
           onClick={() => navigate('/volunteers')}
         />
+      </div>
+
+      {/* ── Module counts row ──────────────────────────────────────── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 12, marginBottom: 20 }}>
+        {[
+          { label: 'Staff', value: d?.staffCount ?? 0, sub: `${d?.activeStaffCount ?? 0} active`, color: '#34d399', path: '/hr' },
+          { label: 'Children', value: d?.childrenCount ?? 0, sub: 'registered', color: '#fb923c', path: '/children' },
+          { label: 'Pastors', value: d?.pastorCount ?? 0, sub: 'ordained', color: '#a78bfa', path: '/pastors' },
+          { label: 'Families', value: d?.familyCount ?? 0, sub: 'household units', color: '#60a5fa', path: '/families' },
+          { label: 'Courses', value: d?.courseCount ?? 0, sub: `${d?.activeCourseCount ?? 0} active · ${d?.enrollmentCount ?? 0} enrolled`, color: '#f59e0b', path: '/lms' },
+          { label: 'Cemetery Plots', value: d?.totalPlots ?? 0, sub: `${d?.occupiedPlots ?? 0} occupied`, color: '#94a3b8', path: '/cemetery' },
+        ].map(m => (
+          <div key={m.label} onClick={() => navigate(m.path)} style={{
+            backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: '14px 16px',
+            cursor: 'pointer', transition: 'border-color 0.2s',
+          }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = `${m.color}40`}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = BORDER}
+          >
+            <p style={{ color: m.color, fontSize: 22, fontWeight: 700, margin: '0 0 2px' }}>{m.value.toLocaleString()}</p>
+            <p style={{ color: 'white', fontSize: 12, fontWeight: 600, margin: '0 0 2px' }}>{m.label}</p>
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, margin: 0 }}>{m.sub}</p>
+          </div>
+        ))}
       </div>
 
       {/* ── Row 2 — Financial chart + fund type breakdown ──────────── */}

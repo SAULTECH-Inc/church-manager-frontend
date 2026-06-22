@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
-import { Plus, X, Trash2 } from 'lucide-react'
+import { Plus, X, Trash2, Pencil } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
 
@@ -59,7 +59,9 @@ export function CemeteryPage() {
   const [reserveOpen, setReserveOpen] = useState(false)
   const [filterStatus, setFilterStatus] = useState('ALL')
 
+  const [editPlot,    setEditPlot]    = useState<BurialPlot | null>(null)
   const [plotForm,    setPlotForm]    = useState({ plotNumber: '', section: '', rowNumber: '', graveType: 'ADULT', notes: '' })
+  const [editForm,    setEditForm]    = useState({ plotNumber: '', section: '', rowNumber: '', graveType: 'ADULT', notes: '' })
   const [buryForm,    setBuryForm]    = useState({ occupantName: '', dateOfBirth: '', dateOfDeath: '', dateOfBurial: '', notes: '' })
   const [reserveForm, setReserveForm] = useState({ plotId: '', reservedForName: '', reservedDate: '', amountPaid: '', notes: '' })
 
@@ -75,6 +77,10 @@ export function CemeteryPage() {
   const buryMut = useMutation({
     mutationFn: () => api.post(`/api/cemetery/plots/${buryPlotId}/bury`, null, { params: buryForm }),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['cemetery'] }); setBuryPlotId(null); setBuryForm({ occupantName: '', dateOfBirth: '', dateOfDeath: '', dateOfBurial: '', notes: '' }) },
+  })
+  const editPlotMut = useMutation({
+    mutationFn: () => api.post(`/api/cemetery/plots/${editPlot!.id}/edit`, null, { params: { ...editForm, graveType: editForm.graveType || undefined } }),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['cemetery'] }); setEditPlot(null) },
   })
   const deletePlotMut = useMutation({
     mutationFn: (id: string) => api.post(`/api/cemetery/plots/${id}/delete`),
@@ -181,6 +187,8 @@ export function CemeteryPage() {
                           {p.status === 'AVAILABLE' && (
                             <button onClick={() => setBuryPlotId(p.id)} style={{ ...gradientBtn, padding: '5px 12px', fontSize: 12 }}>Record Burial</button>
                           )}
+                          <button onClick={() => { setEditPlot(p); setEditForm({ plotNumber: p.plotNumber, section: p.section ?? '', rowNumber: p.rowNumber ?? '', graveType: p.graveType, notes: p.notes ?? '' }) }}
+                            style={{ background: 'rgba(124,107,255,0.1)', border: 'none', color: '#a78bfa', borderRadius: 8, padding: '5px 10px', cursor: 'pointer' }}><Pencil size={13} /></button>
                           <button onClick={() => { if (confirm('Delete this plot?')) deletePlotMut.mutate(p.id) }}
                             style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, padding: '5px 10px', cursor: 'pointer' }}><Trash2 size={13} /></button>
                         </div>
@@ -233,6 +241,21 @@ export function CemeteryPage() {
           )}
         </div>
       )}
+
+      {/* Edit Plot Drawer */}
+      <Drawer open={!!editPlot} onClose={() => setEditPlot(null)} title="Edit Burial Plot"
+        footer={<><button onClick={() => setEditPlot(null)} style={outlineBtn}>Cancel</button><button onClick={() => editPlotMut.mutate()} disabled={editPlotMut.isPending} style={gradientBtn}>{editPlotMut.isPending ? 'Saving…' : 'Save Changes'}</button></>}>
+        <div><label style={labelStyle}>PLOT NUMBER</label><input value={editForm.plotNumber} onChange={e => setEditForm(f => ({ ...f, plotNumber: e.target.value }))} style={inputStyle} /></div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div><label style={labelStyle}>SECTION</label><input value={editForm.section} onChange={e => setEditForm(f => ({ ...f, section: e.target.value }))} style={inputStyle} /></div>
+          <div><label style={labelStyle}>ROW</label><input value={editForm.rowNumber} onChange={e => setEditForm(f => ({ ...f, rowNumber: e.target.value }))} style={inputStyle} /></div>
+        </div>
+        <div><label style={labelStyle}>GRAVE TYPE</label>
+          <select value={editForm.graveType} onChange={e => setEditForm(f => ({ ...f, graveType: e.target.value }))} style={inputStyle}>
+            {['ADULT', 'CHILD', 'INFANT'].map(t => <option key={t}>{t}</option>)}
+          </select></div>
+        <div><label style={labelStyle}>NOTES</label><textarea rows={3} value={editForm.notes} onChange={e => setEditForm(f => ({ ...f, notes: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+      </Drawer>
 
       {/* Add Plot Drawer */}
       <Drawer open={createPlot} onClose={() => setCreatePlot(false)} title="Add Burial Plot"
