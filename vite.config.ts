@@ -5,6 +5,9 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  define: {
+    global: 'globalThis',
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -20,6 +23,11 @@ export default defineConfig({
       '/webhook': {
         target: 'http://localhost:9911',
         changeOrigin: true,
+      },
+      '/ws': {
+        target: 'http://localhost:9911',
+        changeOrigin: true,
+        ws: true,
       },
     },
   },

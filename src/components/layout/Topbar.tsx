@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Bell, Settings, LogOut, Search, CheckCheck, X } from 'lucide-react'
+import { Bell, Settings, LogOut, Search, CheckCheck, X, Palette } from 'lucide-react'
 import { logout } from '@/api/auth'
 import { useAuthStore } from '@/store/authStore'
 import { api } from '@/api/client'
 import { useState, useRef, useEffect } from 'react'
+import { useThemeStore, THEMES, applyTheme } from '@/store/themeStore'
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -48,21 +49,24 @@ export function Topbar() {
   const [notifOpen, setNotifOpen] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
 
+  const { themeKey, setTheme } = useThemeStore()
+  const [themeOpen, setThemeOpen] = useState(false)
+  const themeRef = useRef<HTMLDivElement>(null)
+
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSettled: () => { clearAuth(); navigate('/login') },
   })
 
-  // Close panel on outside click
+  // Close panels on outside click
   useEffect(() => {
     function handler(e: MouseEvent) {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
-        setNotifOpen(false)
-      }
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) setNotifOpen(false)
+      if (themeRef.current && !themeRef.current.contains(e.target as Node)) setThemeOpen(false)
     }
-    if (notifOpen) document.addEventListener('mousedown', handler)
+    document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
-  }, [notifOpen])
+  }, [])
 
   const { data: unreadData } = useQuery({
     queryKey: ['notif-count'],
@@ -129,6 +133,53 @@ export function Topbar() {
             onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
             onKeyDown={e => { if (e.key === 'Enter') navigate('/search') }}
           />
+        </div>
+
+        {/* Theme switcher */}
+        <div className="relative" ref={themeRef}>
+          <button
+            className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors"
+            style={{ color: 'rgba(255,255,255,0.5)', backgroundColor: themeOpen ? 'rgba(255,255,255,0.06)' : 'transparent' }}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)')}
+            onMouseLeave={e => { if (!themeOpen) e.currentTarget.style.backgroundColor = 'transparent' }}
+            onClick={() => setThemeOpen(o => !o)}
+            title="Change theme"
+          >
+            <Palette size={16} />
+          </button>
+          {themeOpen && (
+            <div style={{
+              position: 'absolute', top: 44, right: 0, zIndex: 200, width: 220,
+              backgroundColor: 'var(--drawer-bg, #1a1b3a)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              borderRadius: 14,
+              boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
+              overflow: 'hidden',
+            }}>
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '12px 14px 8px' }}>Theme</p>
+              {THEMES.map(t => {
+                const active = themeKey === t.key
+                return (
+                  <button key={t.key} onClick={() => { setTheme(t.key); applyTheme(t); setThemeOpen(false) }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '9px 14px',
+                      border: 'none', cursor: 'pointer', backgroundColor: active ? 'rgba(255,255,255,0.06)' : 'transparent',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)')}
+                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = active ? 'rgba(255,255,255,0.06)' : 'transparent')}
+                  >
+                    {/* Color swatch */}
+                    <div style={{ display: 'flex', gap: 3, flexShrink: 0 }}>
+                      <div style={{ width: 12, height: 24, borderRadius: '4px 0 0 4px', backgroundColor: t.sidebarBg }} />
+                      <div style={{ width: 20, height: 24, borderRadius: '0 4px 4px 0', background: `linear-gradient(to bottom, ${t.cardBg} 50%, ${t.accent}44)` }} />
+                    </div>
+                    <span style={{ color: active ? 'white' : 'rgba(255,255,255,0.65)', fontSize: 13, fontWeight: active ? 600 : 400, flex: 1, textAlign: 'left' }}>{t.name}</span>
+                    {active && <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: t.accent, flexShrink: 0 }} />}
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </div>
 
         {/* Settings */}
