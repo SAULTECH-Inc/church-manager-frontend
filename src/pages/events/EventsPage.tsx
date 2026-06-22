@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { api } from '@/api/client'
+import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import { RichTextDisplay } from '@/components/editor/RichTextDisplay'
 
 // Design system constants
 const PAGE_BG = '#131326'
@@ -50,8 +52,8 @@ const schema = z.object({
   startDate: z.string().min(1, 'Start date is required'),
   endDate: z.string().optional(),
   location: z.string().optional(),
-  maxCapacity: z.coerce.number().optional(),
-  budgetAllocated: z.coerce.number().optional(),
+  maxCapacity: z.string().optional(),
+  budgetAllocated: z.string().optional(),
   description: z.string().optional(),
 })
 
@@ -108,6 +110,7 @@ function formatEventType(t: string) {
 export function EventsPage() {
   const queryClient = useQueryClient()
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [editEvent, setEditEvent] = useState<Event | null>(null)
   const [typeFilter, setTypeFilter] = useState<'ALL' | EventType>('ALL')
 
   const toQS = (obj: Record<string, unknown>) => { const p = new URLSearchParams(); Object.entries(obj).forEach(([k, v]) => { if (v !== '' && v !== null && v !== undefined) p.append(k, String(v)) }); return p.toString() }
@@ -134,10 +137,34 @@ export function EventsPage() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['events'] }),
   })
 
+  const editMutation = useMutation({
+    mutationFn: (d: FormData) => api.post(`/api/events/${editEvent?.id}/edit?${toQS(d as unknown as Record<string, unknown>)}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] })
+      setEditEvent(null)
+      editForm.reset()
+    },
+  })
+
   const form = useForm<FormData>({ resolver: zodResolver(schema) })
+  const editForm = useForm<FormData>({ resolver: zodResolver(schema) })
 
   const events = eventsData?.events ?? []
   const filtered = typeFilter === 'ALL' ? events : events.filter(e => e.eventType === typeFilter)
+
+  function openEdit(ev: Event) {
+    setEditEvent(ev)
+    editForm.reset({
+      name: ev.name,
+      eventType: ev.eventType ?? '',
+      startDate: ev.startDate?.replace(' ', 'T').slice(0, 16) ?? '',
+      endDate: ev.endDate?.replace(' ', 'T').slice(0, 16) ?? '',
+      location: ev.location ?? '',
+      maxCapacity: ev.maxCapacity?.toString() ?? '',
+      budgetAllocated: ev.budgetAllocated?.toString() ?? '',
+      description: ev.description ?? '',
+    })
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: PAGE_BG, color: TEXT, padding: '32px 24px' }}>
@@ -244,11 +271,7 @@ export function EventsPage() {
                     {/* Event Program */}
                     <td style={{ padding: '14px 16px', maxWidth: '220px' }}>
                       <div style={{ fontWeight: 600, color: TEXT, fontSize: '14px' }}>{e.name}</div>
-                      {e.description && (
-                        <div style={{ fontSize: '12px', color: TEXT_MUTED, marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {e.description}
-                        </div>
-                      )}
+                      {e.description && <RichTextDisplay html={e.description} clamp={1} style={{ fontSize: '12px', marginTop: '2px' }} />}
                     </td>
 
                     {/* Type badge */}
@@ -325,42 +348,18 @@ export function EventsPage() {
 
                     {/* Actions */}
                     <td style={{ padding: '14px 16px' }}>
-                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                        <Link
-                          to={`/events/${e.id}`}
-                          style={{
-                            background: 'rgba(124,107,255,0.12)',
-                            color: '#a5b4fc',
-                            border: '1px solid rgba(124,107,255,0.25)',
-                            borderRadius: '6px',
-                            padding: '5px 14px',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            textDecoration: 'none',
-                            display: 'inline-block',
-                          }}
-                        >
+                      <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                        <button onClick={() => openEdit(e)}
+                          style={{ background: 'rgba(124,107,255,0.12)', border: '1px solid rgba(124,107,255,0.25)', color: '#a5b4fc', borderRadius: '6px', width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          ✎
+                        </button>
+                        <Link to={`/events/${e.id}`}
+                          style={{ background: 'rgba(124,107,255,0.12)', color: '#a5b4fc', border: '1px solid rgba(124,107,255,0.25)', borderRadius: '6px', padding: '5px 12px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-block', whiteSpace: 'nowrap' }}>
                           Manage
                         </Link>
-                        <button
-                          onClick={() => {
-                            if (window.confirm(`Delete "${e.name}"?`)) {
-                              deleteMutation.mutate(e.id)
-                            }
-                          }}
+                        <button onClick={() => { if (window.confirm(`Delete "${e.name}"?`)) deleteMutation.mutate(e.id) }}
                           disabled={deleteMutation.isPending}
-                          style={{
-                            background: 'rgba(239,68,68,0.10)',
-                            color: '#fca5a5',
-                            border: '1px solid rgba(239,68,68,0.2)',
-                            borderRadius: '6px',
-                            padding: '5px 10px',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                          }}
-                        >
+                          style={{ background: 'rgba(239,68,68,0.10)', color: '#fca5a5', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '6px', width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 600, flexShrink: 0 }}>
                           ✕
                         </button>
                       </div>
@@ -372,6 +371,52 @@ export function EventsPage() {
           </table>
         </div>
       )}
+
+      {/* ── Edit Event Modal ── */}
+      {!!editEvent && <div onClick={() => { setEditEvent(null); editForm.reset() }} style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} />}
+      {!!editEvent && <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
+      <div style={{ backgroundColor: DRAWER_BG, borderRadius: 24, width: '100%', maxWidth: 560, maxHeight: '90vh', border: `1px solid rgba(255,255,255,0.1)`, display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+        <div style={{ padding: '24px', borderBottom: `1px solid ${BORDER}`, flexShrink: 0 }}>
+          <h2 style={{ color: TEXT, fontSize: '18px', fontWeight: 700, margin: 0 }}>Edit Event</h2>
+          <p style={{ color: TEXT_MUTED, fontSize: '13px', marginTop: '4px' }}>{editEvent.name}</p>
+        </div>
+        <form onSubmit={editForm.handleSubmit((d: FormData) => editMutation.mutate(d))}
+          style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, overflowY: 'auto' }}>
+          <div>
+            <label style={labelStyle}>Event Name *</label>
+            <input {...editForm.register('name')} style={inputStyle} />
+            {editForm.formState.errors.name && <p style={{ color: '#f87171', fontSize: '12px', marginTop: '4px' }}>{editForm.formState.errors.name.message}</p>}
+          </div>
+          <div>
+            <label style={labelStyle}>Event Type *</label>
+            <select {...editForm.register('eventType')} style={{ ...inputStyle, appearance: 'none' }}>
+              <option value="">Select type...</option>
+              {EVENT_TYPES.map(t => <option key={t} value={t}>{formatEventType(t)}</option>)}
+            </select>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div><label style={labelStyle}>Start Date *</label><input {...editForm.register('startDate')} type="datetime-local" style={inputStyle} /></div>
+            <div><label style={labelStyle}>End Date</label><input {...editForm.register('endDate')} type="datetime-local" style={inputStyle} /></div>
+          </div>
+          <div><label style={labelStyle}>Location</label><input {...editForm.register('location')} style={inputStyle} /></div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div><label style={labelStyle}>Max Capacity</label><input {...editForm.register('maxCapacity')} type="number" min={0} style={inputStyle} /></div>
+            <div><label style={labelStyle}>Budget Allocated (₦)</label><input {...editForm.register('budgetAllocated')} type="number" min={0} style={inputStyle} /></div>
+          </div>
+          <div><label style={labelStyle}>Description</label><Controller name="description" control={editForm.control} render={({ field }) => <RichTextEditor value={field.value ?? ''} onChange={field.onChange} placeholder="Event description..." minHeight={100} />} /></div>
+          <div style={{ display: 'flex', gap: '12px', marginTop: 'auto', paddingTop: '8px' }}>
+            <button type="button" onClick={() => { setEditEvent(null); editForm.reset() }}
+              style={{ flex: 1, background: 'rgba(255,255,255,0.06)', color: TEXT_MUTED, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '10px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>
+              Cancel
+            </button>
+            <button type="submit" disabled={editMutation.isPending}
+              style={{ flex: 1, background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DARK})`, color: '#fff', border: 'none', borderRadius: '8px', padding: '10px', fontSize: '14px', fontWeight: 600, cursor: editMutation.isPending ? 'not-allowed' : 'pointer', opacity: editMutation.isPending ? 0.7 : 1 }}>
+              {editMutation.isPending ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        </form>
+      </div>
+      </div>}
 
       {/* ── Create Event Modal ── */}
       {drawerOpen && <div onClick={() => { setDrawerOpen(false); form.reset() }} style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} />}
@@ -395,7 +440,7 @@ export function EventsPage() {
         </div>
 
         <form
-          onSubmit={form.handleSubmit(d => createMutation.mutate(d))}
+          onSubmit={form.handleSubmit((d: FormData) => createMutation.mutate(d))}
           style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}
         >
           <div>
@@ -451,12 +496,7 @@ export function EventsPage() {
 
           <div>
             <label style={labelStyle}>Description</label>
-            <textarea
-              {...form.register('description')}
-              placeholder="Brief description of the event..."
-              rows={3}
-              style={{ ...inputStyle, resize: 'vertical', fontFamily: 'inherit' }}
-            />
+            <Controller name="description" control={form.control} render={({ field }) => <RichTextEditor value={field.value ?? ''} onChange={field.onChange} placeholder="Brief description of the event..." minHeight={100} />} />
           </div>
 
           <div style={{ display: 'flex', gap: '12px', marginTop: 'auto', paddingTop: '8px' }}>

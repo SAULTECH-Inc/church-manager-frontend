@@ -3,6 +3,8 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { Plus, Trash2, X, Send } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
+import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import { RichTextDisplay } from '@/components/editor/RichTextDisplay'
 
 interface Message { id: string; subject: string; body?: string; channel: string; audienceFilter?: string; recipientCount?: number; status: string; sentAt?: string; createdAt?: string }
 
@@ -121,7 +123,7 @@ export function CommunicationPage() {
                   <tr key={m.id} className="border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
                     <td className="px-5 py-4">
                       <p style={{ color: 'white', fontWeight: 600, margin: 0 }}>{m.subject}</p>
-                      {m.body && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: '2px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 220 }}>{m.body}</p>}
+                      {m.body && <RichTextDisplay html={m.body} clamp={2} style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: '2px 0 0', maxWidth: 220 }} />}
                     </td>
                     <td className="px-5 py-4"><span style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'white', borderRadius: 20, padding: '3px 10px', fontSize: 12 }}>{channelIcon(m.channel)} {m.channel}</span></td>
                     <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{m.audienceFilter || 'ALL'}</td>
@@ -181,7 +183,7 @@ export function CommunicationPage() {
             <label style={{ ...labelStyle, marginBottom: 0 }}>MESSAGE BODY <span style={{ color: '#f87171' }}>*</span></label>
             <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>{charCount}{form.channel === 'SMS' && ` · ${smsCredits} SMS credit${smsCredits !== 1 ? 's' : ''}`}</span>
           </div>
-          <textarea rows={6} value={form.body} onChange={e => setForm(f => ({ ...f, body: e.target.value }))} placeholder="Type your message here..." style={{ ...inputStyle, resize: 'vertical' as const }} />
+          <RichTextEditor value={form.body} onChange={v => setForm(f => ({ ...f, body: v }))} placeholder="Type your message here..." minHeight={180} />
         </div>
         <div style={{ backgroundColor: 'rgba(124,107,255,0.1)', borderRadius: 12, padding: '12px 16px' }}>
           <p style={{ color: '#7c6bff', fontSize: 13, margin: 0 }}>ℹ️ Recipients are resolved from the church directory based on your audience selection at send time.</p>

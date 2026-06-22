@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { Plus, Trash2, X, Calendar, BookOpen } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
+import { RichTextEditor } from '@/components/editor/RichTextEditor'
 
 interface ServiceSchedule { id: string; title: string; serviceType: string; serviceDate: string; startTime?: string; endTime?: string; theme?: string; preacherName?: string; notes?: string }
 interface Sermon { id: string; title: string; series?: string; sermonDate: string; preacherName?: string; scriptureRef?: string; summary?: string }
@@ -34,19 +35,21 @@ function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
 }
 
 const SERVICE_TYPE_LABELS: Record<string, { label: string; color: string; bg: string }> = {
-  SUNDAY_MAIN: { label: 'Sunday Main', color: '#7c6bff', bg: 'rgba(124,107,255,0.15)' },
-  WEDNESDAY_PRAYER: { label: 'Wednesday Prayer', color: '#60a5fa', bg: 'rgba(96,165,250,0.15)' },
-  FRIDAY_FASTING: { label: 'Friday Fasting', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
-  SPECIAL_SERVICE: { label: 'Special Service', color: '#34d399', bg: 'rgba(52,211,153,0.15)' },
-  YOUTH_SERVICE: { label: 'Youth Service', color: '#f472b6', bg: 'rgba(244,114,182,0.15)' },
-  CHILDREN_SERVICE: { label: "Children's Service", color: '#fb923c', bg: 'rgba(251,146,60,0.15)' },
+  SUNDAY_SERVICE: { label: 'Sunday Service', color: '#7c6bff', bg: 'rgba(124,107,255,0.15)' },
+  MIDWEEK:        { label: 'Midweek', color: '#60a5fa', bg: 'rgba(96,165,250,0.15)' },
+  PRAYER:         { label: 'Prayer', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
+  SPECIAL:        { label: 'Special Service', color: '#34d399', bg: 'rgba(52,211,153,0.15)' },
+  YOUTH:          { label: 'Youth Service', color: '#f472b6', bg: 'rgba(244,114,182,0.15)' },
+  WOMEN:          { label: "Women's Service", color: '#e879f9', bg: 'rgba(232,121,249,0.15)' },
+  MEN:            { label: "Men's Service", color: '#38bdf8', bg: 'rgba(56,189,248,0.15)' },
+  CHILDREN:       { label: "Children's Service", color: '#fb923c', bg: 'rgba(251,146,60,0.15)' },
 }
 
 export function ServicePage() {
   const [tab, setTab] = useState<'schedule' | 'sermons'>('schedule')
   const [scheduleDrawer, setScheduleDrawer] = useState(false)
   const [sermonDrawer, setSermonDrawer] = useState(false)
-  const [schedForm, setSchedForm] = useState({ title: '', serviceDate: '', serviceType: 'SUNDAY_MAIN', startTime: '', endTime: '', theme: '', preacherId: '', preacherName: '', notes: '' })
+  const [schedForm, setSchedForm] = useState({ title: '', serviceDate: '', serviceType: 'SUNDAY_SERVICE', startTime: '', endTime: '', theme: '', preacherId: '', preacherName: '', notes: '' })
   const [sermonForm, setSermonForm] = useState({ title: '', series: '', sermonDate: '', preacherId: '', preacherName: '', scriptureRef: '', summary: '', audioUrl: '', videoUrl: '' })
 
   const { data, isLoading } = useQuery({
@@ -57,7 +60,7 @@ export function ServicePage() {
   const toQS = (obj: Record<string, string>) => { const p = new URLSearchParams(); Object.entries(obj).forEach(([k, v]) => { if (v) p.append(k, v) }); return p.toString() }
   const createSchedule = useMutation({
     mutationFn: () => api.post(`/api/service/schedule?${toQS(schedForm)}`),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['service'] }); setScheduleDrawer(false); setSchedForm({ title: '', serviceDate: '', serviceType: 'SUNDAY_MAIN', startTime: '', endTime: '', theme: '', preacherId: '', preacherName: '', notes: '' }) },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['service'] }); setScheduleDrawer(false); setSchedForm({ title: '', serviceDate: '', serviceType: 'SUNDAY_SERVICE', startTime: '', endTime: '', theme: '', preacherId: '', preacherName: '', notes: '' }) },
   })
   const createSermon = useMutation({
     mutationFn: () => api.post(`/api/service/sermon?${toQS(sermonForm)}`),
@@ -183,7 +186,7 @@ export function ServicePage() {
       <Drawer open={scheduleDrawer} onClose={() => setScheduleDrawer(false)} title="Schedule Service"
         footer={<>
           <button onClick={() => setScheduleDrawer(false)} style={outlineBtn}>Cancel</button>
-          <button onClick={() => createSchedule.mutate()} disabled={!schedForm.title || !schedForm.serviceDate || createSchedule.isPending} style={gradientBtn}>{createSchedule.isPending ? 'Saving...' : 'Schedule Service'}</button>
+          <button onClick={() => createSchedule.mutate()} disabled={!schedForm.title || !schedForm.serviceDate || !schedForm.startTime || createSchedule.isPending} style={gradientBtn}>{createSchedule.isPending ? 'Saving...' : 'Schedule Service'}</button>
         </>}>
         <div><label style={labelStyle}>SERVICE TITLE <span style={{ color: '#f87171' }}>*</span></label><input type="text" value={schedForm.title} onChange={e => setSchedForm(f => ({ ...f, title: e.target.value }))} placeholder="e.g. Sunday Morning Service" style={inputStyle} /></div>
         <div><label style={labelStyle}>DATE <span style={{ color: '#f87171' }}>*</span></label><input type="date" value={schedForm.serviceDate} onChange={e => setSchedForm(f => ({ ...f, serviceDate: e.target.value }))} style={inputStyle} /></div>
@@ -202,7 +205,7 @@ export function ServicePage() {
             {members.map(m => <option key={m.id} value={m.id}>{m.fullName}</option>)}
           </select></div>
         <div><label style={labelStyle}>PREACHER NAME (GUEST)</label><input type="text" value={schedForm.preacherName} onChange={e => setSchedForm(f => ({ ...f, preacherName: e.target.value }))} placeholder="Guest preacher name" style={inputStyle} /></div>
-        <div><label style={labelStyle}>NOTES</label><textarea rows={3} value={schedForm.notes} onChange={e => setSchedForm(f => ({ ...f, notes: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+        <div><label style={labelStyle}>NOTES</label><RichTextEditor value={schedForm.notes ?? ''} onChange={v => setSchedForm(f => ({ ...f, notes: v }))} placeholder="Service notes..." minHeight={100} /></div>
       </Drawer>
 
       <Drawer open={sermonDrawer} onClose={() => setSermonDrawer(false)} title="Add Sermon"
@@ -223,7 +226,7 @@ export function ServicePage() {
           </select></div>
         <div><label style={labelStyle}>PREACHER NAME (GUEST)</label><input type="text" value={sermonForm.preacherName} onChange={e => setSermonForm(f => ({ ...f, preacherName: e.target.value }))} style={inputStyle} /></div>
         <div><label style={labelStyle}>SCRIPTURE REFERENCE</label><input type="text" value={sermonForm.scriptureRef} onChange={e => setSermonForm(f => ({ ...f, scriptureRef: e.target.value }))} placeholder="e.g. John 3:16" style={inputStyle} /></div>
-        <div><label style={labelStyle}>SUMMARY</label><textarea rows={3} value={sermonForm.summary} onChange={e => setSermonForm(f => ({ ...f, summary: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+        <div><label style={labelStyle}>SUMMARY</label><RichTextEditor value={sermonForm.summary ?? ''} onChange={v => setSermonForm(f => ({ ...f, summary: v }))} placeholder="Sermon summary, key points..." minHeight={120} /></div>
         <div><label style={labelStyle}>AUDIO URL</label><input type="url" value={sermonForm.audioUrl} onChange={e => setSermonForm(f => ({ ...f, audioUrl: e.target.value }))} placeholder="https://..." style={inputStyle} /></div>
         <div><label style={labelStyle}>VIDEO URL</label><input type="url" value={sermonForm.videoUrl} onChange={e => setSermonForm(f => ({ ...f, videoUrl: e.target.value }))} placeholder="https://..." style={inputStyle} /></div>
       </Drawer>

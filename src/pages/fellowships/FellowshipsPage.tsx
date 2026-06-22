@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
-import { Search, Plus, Users, X, Trash2 } from 'lucide-react'
+import { Search, Plus, Users, X, Trash2, Pencil } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
 import { getInitials } from '@/lib/utils'
+import { RichTextEditor } from '@/components/editor/RichTextEditor'
 
 interface Group {
   id: string
@@ -71,7 +72,9 @@ export function FellowshipsPage() {
   const [typeFilter, setTypeFilter] = useState('ALL')
   const [selected, setSelected] = useState<string[]>([])
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [editGroup, setEditGroup] = useState<Group | null>(null)
   const [form, setForm] = useState(emptyForm)
+  const [editForm, setEditForm] = useState(emptyForm)
 
   const { data, isLoading } = useQuery({
     queryKey: ['fellowships'],
@@ -96,6 +99,32 @@ export function FellowshipsPage() {
       setForm(emptyForm)
     },
   })
+  const editMutation = useMutation({
+    mutationFn: () => api.post(`/api/fellowships/${editGroup?.id}/edit?${toQS(editForm)}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['fellowships'] })
+      setEditGroup(null)
+      setEditForm(emptyForm)
+    },
+  })
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => api.post(`/api/fellowships/${id}/delete`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['fellowships'] }),
+  })
+
+  function openEdit(g: Group) {
+    setEditForm({
+      name: g.name,
+      description: g.description ?? '',
+      type: g.type,
+      leaderId: g.leader?.id ?? '',
+      coLeaderId: g.coLeader?.id ?? '',
+      meetingLocation: g.meetingLocation ?? '',
+      meetingDay: g.meetingDay ?? '',
+      meetingTime: g.meetingTime ?? '',
+    })
+    setEditGroup(g)
+  }
 
   const groups = data?.groups ?? []
   const globalStats = data?.globalStats ?? { totalGroups: 0, activeMembersInGroups: 0, averageAttendanceRate: 0 }
@@ -484,21 +513,20 @@ export function FellowshipsPage() {
                           </span>
                         </td>
                         <td className="px-5 py-4">
-                          <Link
-                            to={`/fellowships/${g.id}`}
-                            style={{
-                              background: 'rgba(124,107,255,0.15)',
-                              color: '#a78bfa',
-                              borderRadius: 12,
-                              padding: '6px 14px',
-                              fontSize: 13,
-                              fontWeight: 500,
-                              textDecoration: 'none',
-                              whiteSpace: 'nowrap',
-                            }}
-                          >
-                            Manage Group
-                          </Link>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'nowrap' }}>
+                            <button onClick={() => openEdit(g)}
+                              style={{ background: 'rgba(124,107,255,0.12)', border: '1px solid rgba(124,107,255,0.25)', color: '#a78bfa', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              <Pencil size={12} />
+                            </button>
+                            <button onClick={() => { if (confirm(`Delete "${g.name}"?`)) deleteMutation.mutate(g.id) }}
+                              style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              <Trash2 size={12} />
+                            </button>
+                            <Link to={`/fellowships/${g.id}`}
+                              style={{ background: 'rgba(124,107,255,0.15)', color: '#a78bfa', borderRadius: 12, padding: '6px 12px', fontSize: 12, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                              Manage
+                            </Link>
+                          </div>
                         </td>
                       </tr>
                     )
@@ -618,6 +646,50 @@ export function FellowshipsPage() {
         </div>
       )}
 
+      {/* Edit Group Modal */}
+      {editGroup && <div onClick={() => { setEditGroup(null); setEditForm(emptyForm) }} style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} />}
+      {editGroup && <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
+      <div style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18, margin: 0 }}>Edit Group</h2>
+          <button onClick={() => { setEditGroup(null); setEditForm(emptyForm) }} style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: 'none', borderRadius: 8, width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'rgba(255,255,255,0.6)' }}><X size={16} /></button>
+        </div>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <div><label style={labelStyle}>Group Name *</label><input type="text" value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} style={inputStyle} /></div>
+            <div><label style={labelStyle}>Description</label><RichTextEditor value={editForm.description ?? ''} onChange={v => setEditForm(f => ({ ...f, description: v }))} placeholder="Describe this group..." minHeight={100} /></div>
+            <div><label style={labelStyle}>Group Type *</label>
+              <select value={editForm.type} onChange={e => setEditForm(f => ({ ...f, type: e.target.value }))} style={{ ...inputStyle, appearance: 'none' }}>
+                <option value="" disabled>Select type</option>
+                <option value="CELL_GROUP">Cell Group</option><option value="HOUSE_FELLOWSHIP">House Fellowship</option>
+                <option value="SMALL_GROUP">Small Group</option><option value="MINISTRY">Ministry</option>
+                <option value="DISCIPLESHIP_CLASS">Discipleship Class</option>
+              </select></div>
+            <div><label style={labelStyle}>Leader</label>
+              <select value={editForm.leaderId} onChange={e => setEditForm(f => ({ ...f, leaderId: e.target.value }))} style={{ ...inputStyle, appearance: 'none' }}>
+                <option value="">Select leader</option>
+                {members.map(m => <option key={m.id} value={m.id}>{m.fullName}</option>)}
+              </select></div>
+            <div><label style={labelStyle}>Co-Leader</label>
+              <select value={editForm.coLeaderId} onChange={e => setEditForm(f => ({ ...f, coLeaderId: e.target.value }))} style={{ ...inputStyle, appearance: 'none' }}>
+                <option value="">Select co-leader</option>
+                {members.map(m => <option key={m.id} value={m.id}>{m.fullName}</option>)}
+              </select></div>
+            <div><label style={labelStyle}>Meeting Location</label><input type="text" value={editForm.meetingLocation} onChange={e => setEditForm(f => ({ ...f, meetingLocation: e.target.value }))} style={inputStyle} /></div>
+            <div><label style={labelStyle}>Meeting Day</label><input type="text" value={editForm.meetingDay} onChange={e => setEditForm(f => ({ ...f, meetingDay: e.target.value }))} style={inputStyle} /></div>
+            <div><label style={labelStyle}>Meeting Time</label><input type="text" value={editForm.meetingTime} onChange={e => setEditForm(f => ({ ...f, meetingTime: e.target.value }))} style={inputStyle} /></div>
+          </div>
+        </div>
+        <div style={{ padding: '16px 24px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+          <button onClick={() => { setEditGroup(null); setEditForm(emptyForm) }} style={{ backgroundColor: 'transparent', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 500, cursor: 'pointer' }}>Cancel</button>
+          <button onClick={() => { if (!editForm.name.trim() || !editForm.type) return; editMutation.mutate() }} disabled={editMutation.isPending}
+            style={{ background: editMutation.isPending ? 'rgba(124,107,255,0.5)' : 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: editMutation.isPending ? 'not-allowed' : 'pointer' }}>
+            {editMutation.isPending ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
+      </div>
+      </div>}
+
       {/* Create Group Modal */}
       {drawerOpen && <div onClick={() => setDrawerOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} />}
       {drawerOpen && <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
@@ -683,13 +755,7 @@ export function FellowshipsPage() {
             {/* Description */}
             <div>
               <label style={labelStyle}>Description</label>
-              <textarea
-                rows={3}
-                placeholder="Brief description of this group..."
-                value={form.description}
-                onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-                style={{ ...inputStyle, resize: 'vertical', fontFamily: 'inherit' }}
-              />
+              <RichTextEditor value={form.description ?? ''} onChange={v => setForm(f => ({ ...f, description: v }))} placeholder="Brief description of this group..." minHeight={100} />
             </div>
 
             {/* Group Type */}

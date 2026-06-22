@@ -3,6 +3,8 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { Plus, Trash2, X } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
+import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import { RichTextDisplay } from '@/components/editor/RichTextDisplay'
 
 interface PrayerRequest { id: string; title: string; requesterName?: string; anonymous: boolean; category?: string; urgency?: string; description?: string; status: string; answeredNote?: string; createdAt?: string; publicRequest?: boolean }
 interface Testimony { id: string; title: string; authorName?: string; anonymous: boolean; category?: string; body?: string; status: string; createdAt?: string }
@@ -169,7 +171,7 @@ export function PrayerPage() {
                         {r.category && <span style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', borderRadius: 20, padding: '2px 8px', fontSize: 11 }}>{r.category}</span>}
                         {r.urgency && r.urgency !== 'NORMAL' && <span style={{ backgroundColor: r.urgency === 'CRITICAL' ? 'rgba(239,68,68,0.15)' : 'rgba(245,158,11,0.15)', color: r.urgency === 'CRITICAL' ? '#f87171' : '#f59e0b', borderRadius: 20, padding: '2px 8px', fontSize: 11, fontWeight: 600 }}>{r.urgency}</span>}
                       </div>
-                      {r.description && <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, margin: '0 0 10px', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const }}>{r.description}</p>}
+                      {r.description && <RichTextDisplay html={r.description} clamp={3} style={{ margin: '0 0 10px' }} />}
                       {r.answeredNote && <div style={{ backgroundColor: 'rgba(52,211,153,0.1)', borderRadius: 10, padding: '8px 12px', marginBottom: 10 }}><p style={{ color: '#34d399', fontSize: 12, margin: 0 }}>✅ {r.answeredNote}</p></div>}
                       <div style={{ display: 'flex', gap: 6 }}>
                         {r.status === 'OPEN' && <button onClick={() => prayerStatus.mutate({ id: r.id, status: 'IN_PRAYER' })} style={{ backgroundColor: 'rgba(124,107,255,0.15)', border: 'none', color: '#7c6bff', borderRadius: 8, padding: '5px 10px', cursor: 'pointer', fontSize: 11 }}>🕊️ In Prayer</button>}
@@ -205,7 +207,7 @@ export function PrayerPage() {
                       <h3 style={{ color: 'white', fontWeight: 700, fontSize: 15, margin: '0 0 4px' }}>{t.title}</h3>
                       <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: '0 0 8px' }}>{t.anonymous ? 'Anonymous' : (t.authorName || 'Member')} {t.createdAt ? '· ' + new Date(t.createdAt).toLocaleDateString() : ''}</p>
                       {t.category && <span style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', borderRadius: 20, padding: '2px 8px', fontSize: 11, display: 'inline-block', marginBottom: 10 }}>{t.category}</span>}
-                      {t.body && <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, margin: '0 0 10px', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical' as const }}>{t.body}</p>}
+                      {t.body && <RichTextDisplay html={t.body} clamp={4} style={{ margin: '0 0 10px' }} />}
                       <div style={{ display: 'flex', gap: 6 }}>
                         {t.status !== 'APPROVED' && t.status !== 'FEATURED' && <button onClick={() => testimonyMod.mutate({ id: t.id, status: 'APPROVED' })} style={{ backgroundColor: 'rgba(52,211,153,0.1)', border: 'none', color: '#34d399', borderRadius: 8, padding: '5px 10px', cursor: 'pointer', fontSize: 11 }}>Approve</button>}
                         {t.status !== 'FEATURED' && <button onClick={() => testimonyMod.mutate({ id: t.id, status: 'FEATURED' })} style={{ backgroundColor: 'rgba(245,158,11,0.1)', border: 'none', color: '#f59e0b', borderRadius: 8, padding: '5px 10px', cursor: 'pointer', fontSize: 11 }}>⭐ Feature</button>}
@@ -239,7 +241,7 @@ export function PrayerPage() {
           <select value={prForm.urgency} onChange={e => setPrForm(f => ({ ...f, urgency: e.target.value }))} style={inputStyle}>
             <option value="NORMAL">Normal</option><option value="URGENT">Urgent</option><option value="CRITICAL">Critical</option>
           </select></div>
-        <div><label style={labelStyle}>DESCRIPTION <span style={{ color: '#f87171' }}>*</span></label><textarea rows={4} value={prForm.description} onChange={e => setPrForm(f => ({ ...f, description: e.target.value }))} placeholder="Share the prayer request..." style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+        <div><label style={labelStyle}>DESCRIPTION <span style={{ color: '#f87171' }}>*</span></label><RichTextEditor value={prForm.description} onChange={v => setPrForm(f => ({ ...f, description: v }))} placeholder="Share the prayer request..." minHeight={120} /></div>
         <Toggle value={prForm.publicRequest} onChange={v => setPrForm(f => ({ ...f, publicRequest: v }))} label="Make Public to Church" />
       </Drawer>
 
@@ -260,7 +262,7 @@ export function PrayerPage() {
           <select value={teForm.category} onChange={e => setTeForm(f => ({ ...f, category: e.target.value }))} style={inputStyle}>
             {['HEALING', 'PROVISION', 'PROTECTION', 'SALVATION', 'RESTORATION', 'FINANCIAL', 'MARRIAGE', 'OTHER'].map(c => <option key={c}>{c}</option>)}
           </select></div>
-        <div><label style={labelStyle}>YOUR STORY <span style={{ color: '#f87171' }}>*</span></label><textarea rows={5} value={teForm.body} onChange={e => setTeForm(f => ({ ...f, body: e.target.value }))} placeholder="Share what God has done..." style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+        <div><label style={labelStyle}>YOUR STORY <span style={{ color: '#f87171' }}>*</span></label><RichTextEditor value={teForm.body} onChange={v => setTeForm(f => ({ ...f, body: v }))} placeholder="Share what God has done..." minHeight={160} /></div>
         <div style={{ backgroundColor: 'rgba(124,107,255,0.1)', borderRadius: 12, padding: '12px 16px' }}>
           <p style={{ color: '#7c6bff', fontSize: 13, margin: 0 }}>ℹ️ Testimonies are reviewed before being published to the church community.</p>
         </div>

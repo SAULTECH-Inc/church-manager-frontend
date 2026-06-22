@@ -3,6 +3,8 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { Plus, Trash2, X, ExternalLink, Pencil } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
+import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import { RichTextDisplay } from '@/components/editor/RichTextDisplay'
 
 interface Course { id: string; title: string; description?: string; instructor?: string; level: string; status: string; enrolledCount: number; completedCount: number; classroomUrl?: string; thumbnailUrl?: string; category?: string }
 interface LMSMember { id: string; fullName: string }
@@ -150,11 +152,7 @@ export function LMSPage() {
                   {course.category && <p style={{ color: '#7c6bff', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', margin: '0 0 4px' }}>{course.category}</p>}
                   <h3 style={{ color: 'white', fontWeight: 700, fontSize: 15, margin: '0 0 4px' }}>{course.title}</h3>
                   {course.instructor && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: '0 0 8px' }}>by {course.instructor}</p>}
-                  {course.description && (
-                    <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: '0 0 12px', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical' as const, WebkitLineClamp: 2 }}>
-                      {course.description}
-                    </p>
-                  )}
+                  {course.description && <RichTextDisplay html={course.description} clamp={2} style={{ margin: '0 0 12px' }} />}
                   <div style={{ marginBottom: 12 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                       <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{course.enrolledCount} enrolled · {course.completedCount} completed</span>
@@ -191,7 +189,7 @@ export function LMSPage() {
       <Drawer open={!!editCourse} onClose={() => setEditCourse(null)} title="Edit Course"
         footer={<><button onClick={() => setEditCourse(null)} style={outlineBtn}>Cancel</button><button onClick={() => editCourseMut.mutate()} disabled={!editCourseForm.title || editCourseMut.isPending} style={gradientBtn}>{editCourseMut.isPending ? 'Saving...' : 'Save Changes'}</button></>}>
         <div><label style={labelStyle}>COURSE TITLE <span style={{ color: '#f87171' }}>*</span></label><input type="text" value={editCourseForm.title} onChange={e => setEditCourseForm(f => ({ ...f, title: e.target.value }))} style={inputStyle} /></div>
-        <div><label style={labelStyle}>DESCRIPTION</label><textarea rows={3} value={editCourseForm.description} onChange={e => setEditCourseForm(f => ({ ...f, description: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+        <div><label style={labelStyle}>DESCRIPTION</label><RichTextEditor value={editCourseForm.description} onChange={v => setEditCourseForm(f => ({ ...f, description: v }))} placeholder="Course description..." minHeight={100} /></div>
         <div><label style={labelStyle}>INSTRUCTOR <span style={{ color: '#f87171' }}>*</span></label><input type="text" value={editCourseForm.instructor} onChange={e => setEditCourseForm(f => ({ ...f, instructor: e.target.value }))} style={inputStyle} /></div>
         <div><label style={labelStyle}>CATEGORY</label><input type="text" value={editCourseForm.category} onChange={e => setEditCourseForm(f => ({ ...f, category: e.target.value }))} placeholder="e.g. Bible Study, Leadership" style={inputStyle} /></div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -211,7 +209,7 @@ export function LMSPage() {
       <Drawer open={courseDrawer} onClose={() => setCourseDrawer(false)} title="New Course"
         footer={<><button onClick={() => setCourseDrawer(false)} style={outlineBtn}>Cancel</button><button onClick={() => createCourse.mutate()} disabled={!courseForm.title || createCourse.isPending} style={gradientBtn}>{createCourse.isPending ? 'Creating...' : 'Create Course'}</button></>}>
         <div><label style={labelStyle}>COURSE TITLE <span style={{ color: '#f87171' }}>*</span></label><input type="text" value={courseForm.title} onChange={e => setCourseForm(f => ({ ...f, title: e.target.value }))} style={inputStyle} /></div>
-        <div><label style={labelStyle}>DESCRIPTION</label><textarea rows={3} value={courseForm.description} onChange={e => setCourseForm(f => ({ ...f, description: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+        <div><label style={labelStyle}>DESCRIPTION</label><RichTextEditor value={courseForm.description} onChange={v => setCourseForm(f => ({ ...f, description: v }))} placeholder="Course description..." minHeight={100} /></div>
         <div><label style={labelStyle}>INSTRUCTOR</label><input type="text" value={courseForm.instructor} onChange={e => setCourseForm(f => ({ ...f, instructor: e.target.value }))} style={inputStyle} /></div>
         <div><label style={labelStyle}>CATEGORY</label><input type="text" value={courseForm.category} onChange={e => setCourseForm(f => ({ ...f, category: e.target.value }))} placeholder="e.g. Bible Study, Leadership" style={inputStyle} /></div>
         <div><label style={labelStyle}>LEVEL</label>

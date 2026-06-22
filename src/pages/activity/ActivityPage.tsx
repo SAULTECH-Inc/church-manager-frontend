@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { Plus, Trash2, X } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
+import { RichTextEditor } from '@/components/editor/RichTextEditor'
 
 interface Activity { id: string; title: string; activityType: string; targetAudience?: string; location?: string; activityDate: string; endDate?: string; leaderName?: string; budget?: number; participantCount?: number }
 interface Participant { id: string; activityTitle?: string; memberName?: string; name?: string; phone?: string; role?: string; attended: boolean; notes?: string; activityId: string }
@@ -220,7 +221,7 @@ export function ActivityPage() {
           </select></div>
         <div><label style={labelStyle}>LEADER NAME (OVERRIDE)</label><input type="text" value={actForm.leaderName} onChange={e => setActForm(f => ({ ...f, leaderName: e.target.value }))} style={inputStyle} /></div>
         <div><label style={labelStyle}>BUDGET</label><input type="number" min="0" step="0.01" value={actForm.budget} onChange={e => setActForm(f => ({ ...f, budget: e.target.value }))} style={inputStyle} /></div>
-        <div><label style={labelStyle}>DESCRIPTION</label><textarea rows={3} value={actForm.description} onChange={e => setActForm(f => ({ ...f, description: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+        <div><label style={labelStyle}>DESCRIPTION</label><RichTextEditor value={actForm.description} onChange={v => setActForm(f => ({ ...f, description: v }))} placeholder="Describe this activity..." minHeight={100} /></div>
       </Drawer>
 
       <Drawer open={parDrawer} onClose={() => setParDrawer(false)} title="Add Participant"

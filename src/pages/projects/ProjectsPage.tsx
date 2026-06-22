@@ -3,6 +3,8 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { Plus, X, ChevronDown, ChevronUp, Trash2, CheckCircle, Circle, DollarSign } from 'lucide-react'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
+import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import { RichTextDisplay } from '@/components/editor/RichTextDisplay'
 
 interface Project {
   id: string; name: string; projectType: string; description?: string; location?: string
@@ -173,7 +175,7 @@ export function ProjectsPage() {
                       <span style={{ backgroundColor: `${STATUS_COLORS[p.status] ?? '#94a3b8'}20`, color: STATUS_COLORS[p.status] ?? '#94a3b8', borderRadius: 6, padding: '2px 8px', fontSize: 11, fontWeight: 700 }}>{p.status.replace('_', ' ')}</span>
                     </div>
                     <h3 style={{ color: 'white', fontWeight: 700, fontSize: 16, margin: '4px 0' }}>{p.name}</h3>
-                    {p.description && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: '4px 0 0' }}>{p.description}</p>}
+                    {p.description && <RichTextDisplay html={p.description} clamp={2} style={{ margin: '4px 0 0' }} />}
                     <div className="flex flex-wrap gap-4 mt-2">
                       {p.location      && <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12 }}>📍 {p.location}</span>}
                       {p.projectManager && <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12 }}>👤 {p.projectManager}</span>}
@@ -320,7 +322,7 @@ function ProjectForm({ form, setForm }: { form: typeof EMPTY_FORM; setForm: Reac
             {['PLANNING','ACTIVE','ON_HOLD','COMPLETED','CANCELLED'].map(s => <option key={s}>{s}</option>)}
           </select></div>
       </div>
-      <div><label style={labelStyle}>DESCRIPTION</label><textarea rows={3} value={form.description} onChange={e => set('description', e.target.value)} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+      <div><label style={labelStyle}>DESCRIPTION</label><RichTextEditor value={form.description ?? ''} onChange={v => set('description', v)} placeholder="Project description, objectives..." minHeight={100} /></div>
       <div><label style={labelStyle}>LOCATION</label><input value={form.location} onChange={e => set('location', e.target.value)} style={inputStyle} /></div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         <div><label style={labelStyle}>START DATE</label><input type="date" value={form.startDate} onChange={e => set('startDate', e.target.value)} style={inputStyle} /></div>
@@ -334,7 +336,7 @@ function ProjectForm({ form, setForm }: { form: typeof EMPTY_FORM; setForm: Reac
         <div><label style={labelStyle}>CONTRACTOR NAME</label><input value={form.contractorName} onChange={e => set('contractorName', e.target.value)} style={inputStyle} /></div>
         <div><label style={labelStyle}>CONTRACTOR CONTACT</label><input value={form.contractorContact} onChange={e => set('contractorContact', e.target.value)} style={inputStyle} /></div>
       </div>
-      <div><label style={labelStyle}>NOTES</label><textarea rows={2} value={form.notes} onChange={e => set('notes', e.target.value)} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
+      <div><label style={labelStyle}>NOTES</label><RichTextEditor value={form.notes ?? ''} onChange={v => set('notes', v)} placeholder="Additional notes..." minHeight={80} /></div>
     </>
   )
 }
