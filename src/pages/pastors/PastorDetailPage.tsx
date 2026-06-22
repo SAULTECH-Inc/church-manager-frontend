@@ -25,7 +25,7 @@ interface Pastor {
 
 const labelStyle: React.CSSProperties = {
   display: 'block',
-  color: 'rgba(255,255,255,0.5)',
+  color: 'rgb(var(--inv) / 0.5)',
   fontSize: 10,
   fontWeight: 700,
   textTransform: 'uppercase',
@@ -34,9 +34,9 @@ const labelStyle: React.CSSProperties = {
 }
 
 const inputStyle: React.CSSProperties = {
-  backgroundColor: '#1e2248',
-  border: '1px solid rgba(255,255,255,0.10)',
-  color: 'white',
+  backgroundColor: 'var(--input-bg)',
+  border: '1px solid rgb(var(--inv) / 0.10)',
+  color: 'var(--text-primary)',
   borderRadius: 12,
   width: '100%',
   padding: '10px 14px',
@@ -45,9 +45,9 @@ const inputStyle: React.CSSProperties = {
 }
 
 const outlineButtonStyle: React.CSSProperties = {
-  border: '1px solid rgba(255,255,255,0.15)',
+  border: '1px solid rgb(var(--inv) / 0.15)',
   backgroundColor: 'transparent',
-  color: 'white',
+  color: 'var(--text-primary)',
   borderRadius: 12,
   padding: '10px 20px',
   cursor: 'pointer',
@@ -104,38 +104,38 @@ export function PastorDetailPage() {
 
   if (isLoading) {
     return (
-      <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+      <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 24, marginTop: 24 }}>
           <div
             style={{
-              backgroundColor: '#13152e',
+              backgroundColor: 'var(--card-bg)',
               borderRadius: 20,
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid rgb(var(--inv) / 0.08)',
               padding: 24,
             }}
           >
             <div
               className="animate-pulse"
-              style={{ width: 80, height: 80, borderRadius: 16, backgroundColor: '#1e2248' }}
+              style={{ width: 80, height: 80, borderRadius: 16, backgroundColor: 'var(--input-bg)' }}
             />
             <div
               className="animate-pulse"
-              style={{ width: '70%', height: 20, borderRadius: 8, backgroundColor: '#1e2248', marginTop: 16 }}
+              style={{ width: '70%', height: 20, borderRadius: 8, backgroundColor: 'var(--input-bg)', marginTop: 16 }}
             />
             <div
               className="animate-pulse"
-              style={{ width: '50%', height: 14, borderRadius: 8, backgroundColor: '#1e2248', marginTop: 10 }}
+              style={{ width: '50%', height: 14, borderRadius: 8, backgroundColor: 'var(--input-bg)', marginTop: 10 }}
             />
             <div
               className="animate-pulse"
-              style={{ width: '60%', height: 14, borderRadius: 8, backgroundColor: '#1e2248', marginTop: 8 }}
+              style={{ width: '60%', height: 14, borderRadius: 8, backgroundColor: 'var(--input-bg)', marginTop: 8 }}
             />
           </div>
           <div
             style={{
-              backgroundColor: '#13152e',
+              backgroundColor: 'var(--card-bg)',
               borderRadius: 20,
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid rgb(var(--inv) / 0.08)',
               padding: 28,
             }}
           >
@@ -144,11 +144,11 @@ export function PastorDetailPage() {
                 <div key={i}>
                   <div
                     className="animate-pulse"
-                    style={{ width: '40%', height: 10, borderRadius: 6, backgroundColor: '#1e2248', marginBottom: 8 }}
+                    style={{ width: '40%', height: 10, borderRadius: 6, backgroundColor: 'var(--input-bg)', marginBottom: 8 }}
                   />
                   <div
                     className="animate-pulse"
-                    style={{ width: '80%', height: 16, borderRadius: 6, backgroundColor: '#1e2248' }}
+                    style={{ width: '80%', height: 16, borderRadius: 6, backgroundColor: 'var(--input-bg)' }}
                   />
                 </div>
               ))}
@@ -161,8 +161,8 @@ export function PastorDetailPage() {
 
   if (isError || !data) {
     return (
-      <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
-        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>
+      <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
+        <p style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 14 }}>
           Failed to load pastor details. Please try again.
         </p>
       </div>
@@ -173,16 +173,16 @@ export function PastorDetailPage() {
   const member = pastor.member
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div>
-          <Link to="/pastors" style={{ color: '#7c6bff', textDecoration: 'none', fontSize: 14 }}>
+          <Link to="/pastors" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: 14 }}>
             ← Pastoral Leadership
           </Link>
           <h1
             style={{
-              color: 'white',
+              color: 'var(--text-primary)',
               fontWeight: 700,
               fontSize: 24,
               margin: '4px 0 0 0',
@@ -190,7 +190,7 @@ export function PastorDetailPage() {
           >
             {member.fullName}
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, margin: '4px 0 0 0' }}>
+          <p style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 14, margin: '4px 0 0 0' }}>
             {pastor.title}
           </p>
         </div>
@@ -241,9 +241,9 @@ export function PastorDetailPage() {
         {/* Left: Profile Card */}
         <div
           style={{
-            backgroundColor: '#13152e',
+            backgroundColor: 'var(--card-bg)',
             borderRadius: 20,
-            border: '1px solid rgba(255,255,255,0.08)',
+            border: '1px solid rgb(var(--inv) / 0.08)',
             padding: 24,
           }}
         >
@@ -253,11 +253,11 @@ export function PastorDetailPage() {
               width: 80,
               height: 80,
               borderRadius: 16,
-              background: 'linear-gradient(135deg, #7c6bff, #6456e8)',
+              background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'white',
+              color: 'var(--text-primary)',
               fontWeight: 700,
               fontSize: 24,
             }}
@@ -266,20 +266,20 @@ export function PastorDetailPage() {
           </div>
 
           {/* Name */}
-          <p style={{ color: 'white', fontWeight: 700, fontSize: 18, margin: '12px 0 0 0' }}>
+          <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18, margin: '12px 0 0 0' }}>
             {member.fullName}
           </p>
 
           {/* Email */}
           {member.email && (
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, margin: '4px 0 0 0' }}>
+            <p style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13, margin: '4px 0 0 0' }}>
               {member.email}
             </p>
           )}
 
           {/* Phone */}
           {member.phoneNumber && (
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, margin: '4px 0 0 0' }}>
+            <p style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13, margin: '4px 0 0 0' }}>
               {member.phoneNumber}
             </p>
           )}
@@ -308,9 +308,9 @@ export function PastorDetailPage() {
                 backgroundColor:
                   pastor.status === 'ACTIVE'
                     ? 'rgba(16,185,129,0.15)'
-                    : 'rgba(255,255,255,0.08)',
+                    : 'rgb(var(--inv) / 0.08)',
                 color:
-                  pastor.status === 'ACTIVE' ? '#34d399' : 'rgba(255,255,255,0.5)',
+                  pastor.status === 'ACTIVE' ? '#34d399' : 'rgb(var(--inv) / 0.5)',
                 borderRadius: 999,
                 padding: '4px 12px',
                 fontSize: 12,
@@ -325,7 +325,7 @@ export function PastorDetailPage() {
           {/* Stats */}
           <div
             style={{
-              borderTop: '1px solid rgba(255,255,255,0.08)',
+              borderTop: '1px solid rgb(var(--inv) / 0.08)',
               marginTop: 16,
               paddingTop: 16,
               display: 'grid',
@@ -338,7 +338,7 @@ export function PastorDetailPage() {
                 style={{
                   fontSize: 10,
                   textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.4)',
+                  color: 'rgb(var(--inv) / 0.4)',
                   fontWeight: 700,
                   letterSpacing: '0.08em',
                   margin: 0,
@@ -346,7 +346,7 @@ export function PastorDetailPage() {
               >
                 Ordination Date
               </p>
-              <p style={{ color: 'white', fontSize: 13, fontWeight: 500, margin: '4px 0 0 0' }}>
+              <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 500, margin: '4px 0 0 0' }}>
                 {pastor.ordinationDate ? formatDate(pastor.ordinationDate) : '—'}
               </p>
             </div>
@@ -355,7 +355,7 @@ export function PastorDetailPage() {
                 style={{
                   fontSize: 10,
                   textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.4)',
+                  color: 'rgb(var(--inv) / 0.4)',
                   fontWeight: 700,
                   letterSpacing: '0.08em',
                   margin: 0,
@@ -363,14 +363,14 @@ export function PastorDetailPage() {
               >
                 Appointment Date
               </p>
-              <p style={{ color: 'white', fontSize: 13, fontWeight: 500, margin: '4px 0 0 0' }}>
+              <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 500, margin: '4px 0 0 0' }}>
                 {pastor.appointmentDate ? formatDate(pastor.appointmentDate) : '—'}
               </p>
             </div>
             <div style={{ gridColumn: '1 / -1' }}>
               <Link
                 to={`/members/${member.id}`}
-                style={{ color: '#7c6bff', fontSize: 13, textDecoration: 'none' }}
+                style={{ color: 'var(--accent)', fontSize: 13, textDecoration: 'none' }}
               >
                 View Member Profile
               </Link>
@@ -381,9 +381,9 @@ export function PastorDetailPage() {
         {/* Right: Detail Panel */}
         <div
           style={{
-            backgroundColor: '#13152e',
+            backgroundColor: 'var(--card-bg)',
             borderRadius: 20,
-            border: '1px solid rgba(255,255,255,0.08)',
+            border: '1px solid rgb(var(--inv) / 0.08)',
             padding: 28,
           }}
         >
@@ -395,7 +395,7 @@ export function PastorDetailPage() {
                   fontSize: 10,
                   fontWeight: 700,
                   textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.4)',
+                  color: 'rgb(var(--inv) / 0.4)',
                   letterSpacing: '0.1em',
                   margin: '0 0 16px 0',
                 }}
@@ -434,7 +434,7 @@ export function PastorDetailPage() {
                       style={{
                         fontSize: 10,
                         textTransform: 'uppercase',
-                        color: 'rgba(255,255,255,0.4)',
+                        color: 'rgb(var(--inv) / 0.4)',
                         fontWeight: 700,
                         letterSpacing: '0.08em',
                       }}
@@ -443,7 +443,7 @@ export function PastorDetailPage() {
                     </dt>
                     <dd
                       style={{
-                        color: 'white',
+                        color: 'var(--text-primary)',
                         fontSize: 14,
                         fontWeight: 500,
                         marginTop: 2,
@@ -457,11 +457,11 @@ export function PastorDetailPage() {
               </dl>
 
               {/* Member Profile link */}
-              <div style={{ marginTop: 24, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 16 }}>
-                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>Member Profile — </span>
+              <div style={{ marginTop: 24, borderTop: '1px solid rgb(var(--inv) / 0.08)', paddingTop: 16 }}>
+                <span style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12 }}>Member Profile — </span>
                 <Link
                   to={`/members/${member.id}`}
-                  style={{ color: '#7c6bff', fontSize: 12, textDecoration: 'none' }}
+                  style={{ color: 'var(--accent)', fontSize: 12, textDecoration: 'none' }}
                 >
                   View full member profile
                 </Link>
@@ -472,7 +472,7 @@ export function PastorDetailPage() {
             <div>
               <p
                 style={{
-                  color: 'white',
+                  color: 'var(--text-primary)',
                   fontWeight: 600,
                   fontSize: 16,
                   margin: '0 0 16px 0',
@@ -557,7 +557,7 @@ export function PastorDetailPage() {
                   gap: 12,
                   justifyContent: 'flex-end',
                   marginTop: 28,
-                  borderTop: '1px solid rgba(255,255,255,0.08)',
+                  borderTop: '1px solid rgb(var(--inv) / 0.08)',
                   paddingTop: 20,
                 }}
               >
@@ -571,8 +571,8 @@ export function PastorDetailPage() {
                   onClick={() => editMutation.mutate()}
                   disabled={editMutation.isPending}
                   style={{
-                    background: 'linear-gradient(135deg, #7c6bff, #6456e8)',
-                    color: 'white',
+                    background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))',
+                    color: 'var(--text-primary)',
                     border: 'none',
                     borderRadius: 12,
                     padding: '10px 24px',
@@ -598,17 +598,17 @@ export function PastorDetailPage() {
         >
           <div
             style={{
-              backgroundColor: '#1a1b3a',
+              backgroundColor: 'var(--drawer-bg)',
               borderRadius: 20,
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid rgb(var(--inv) / 0.08)',
               width: 400,
               padding: 32,
             }}
           >
-            <h3 style={{ color: 'white', fontWeight: 700, fontSize: 18, marginBottom: 8 }}>
+            <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18, marginBottom: 8 }}>
               Remove Pastor?
             </h3>
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, marginBottom: 24 }}>
+            <p style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 14, marginBottom: 24 }}>
               This will remove {pastor?.member.fullName} from the pastoral registry. Their member
               profile will remain intact.
             </p>

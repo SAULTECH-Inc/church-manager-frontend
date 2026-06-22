@@ -17,7 +17,7 @@ const SelectTrigger = React.forwardRef<
       'flex h-10 w-full items-center justify-between rounded-xl px-3 py-2 text-sm text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
       className
     )}
-    style={{ backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', ...style }}
+    style={{ backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', ...style }}
     {...props}
   >
     {children}
@@ -60,7 +60,7 @@ const SelectContent = React.forwardRef<
         position === 'popper' && 'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
         className
       )}
-      style={{ backgroundColor: '#1a1b3a', border: '1px solid rgba(255,255,255,0.10)', ...style }}
+      style={{ backgroundColor: 'var(--drawer-bg)', border: '1px solid rgb(var(--inv) / 0.10)', ...style }}
       position={position}
       {...props}
     >

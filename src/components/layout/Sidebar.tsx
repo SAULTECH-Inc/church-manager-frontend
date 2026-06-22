@@ -116,9 +116,9 @@ const NAV: NavEntry[] = [
   ]},
 ]
 
-const SIDEBAR_BG = '#0d0f23'
+const SIDEBAR_BG = 'var(--sidebar-bg)'
 const ACTIVE_BG = 'rgba(124, 107, 255, 0.18)'
-const HOVER_BG = 'rgba(255, 255, 255, 0.05)'
+const HOVER_BG = 'rgb(var(--inv) / 0.05)'
 const ACCENT = '#7c6bff'
 
 export function Sidebar() {
@@ -146,24 +146,24 @@ export function Sidebar() {
       style={{
         width: collapsed ? 64 : 256,
         backgroundColor: SIDEBAR_BG,
-        borderColor: 'rgba(255,255,255,0.06)',
+        borderColor: 'rgb(var(--inv) / 0.06)',
       }}
     >
       {/* Brand */}
-      <div className="flex items-center justify-between p-4 border-b shrink-0" style={{ borderColor: 'rgba(255,255,255,0.06)', minHeight: 64 }}>
+      <div className="flex items-center justify-between p-4 border-b shrink-0" style={{ borderColor: 'rgb(var(--inv) / 0.06)', minHeight: 64 }}>
         {!collapsed && (
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #7c6bff, #6456e8)' }}>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))' }}>
               <Compass size={18} color="white" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-bold text-white leading-tight">ChurchOS</p>
-              <p className="text-[10px] leading-tight" style={{ color: 'rgba(255,255,255,0.45)' }}>ADMIN</p>
+              <p className="text-sm font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>ChurchOS</p>
+              <p className="text-[10px] leading-tight" style={{ color: 'rgb(var(--inv) / 0.45)' }}>ADMIN</p>
             </div>
           </div>
         )}
         {collapsed && (
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center mx-auto shrink-0" style={{ background: 'linear-gradient(135deg, #7c6bff, #6456e8)' }}>
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center mx-auto shrink-0" style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))' }}>
             <Compass size={18} color="white" />
           </div>
         )}
@@ -171,7 +171,7 @@ export function Sidebar() {
           <button
             onClick={() => setCollapsed(true)}
             className="rounded-lg p-1 transition-colors shrink-0"
-            style={{ color: 'rgba(255,255,255,0.4)' }}
+            style={{ color: 'rgb(var(--inv) / 0.4)' }}
             onMouseEnter={e => (e.currentTarget.style.backgroundColor = HOVER_BG)}
             onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
           >
@@ -186,7 +186,7 @@ export function Sidebar() {
           if (entry.type === 'section') {
             if (collapsed) return null
             return (
-              <p key={i} className="text-[10px] font-semibold tracking-widest px-2 pt-4 pb-1" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              <p key={i} className="text-[10px] font-semibold tracking-widest px-2 pt-4 pb-1" style={{ color: 'rgb(var(--inv) / 0.3)' }}>
                 {entry.label}
               </p>
             )
@@ -203,7 +203,7 @@ export function Sidebar() {
                 className="flex items-center gap-2.5 rounded-xl mb-0.5 transition-colors text-sm font-medium"
                 style={({ isActive }) => ({
                   backgroundColor: isActive ? ACTIVE_BG : 'transparent',
-                  color: isActive ? ACCENT : 'rgba(255,255,255,0.75)',
+                  color: isActive ? ACCENT : 'rgb(var(--inv) / 0.75)',
                   padding: collapsed ? '8px' : '8px 10px',
                   justifyContent: collapsed ? 'center' : 'flex-start',
                 })}
@@ -226,7 +226,7 @@ export function Sidebar() {
                 <div key={entry.label} className="relative group mb-0.5">
                   <button
                     className="flex items-center justify-center w-full rounded-xl p-2 transition-colors"
-                    style={{ backgroundColor: isActive ? ACTIVE_BG : 'transparent', color: isActive ? ACCENT : 'rgba(255,255,255,0.65)' }}
+                    style={{ backgroundColor: isActive ? ACTIVE_BG : 'transparent', color: isActive ? ACCENT : 'rgb(var(--inv) / 0.65)' }}
                     onMouseEnter={e => { if (!isActive) e.currentTarget.style.backgroundColor = HOVER_BG }}
                     onMouseLeave={e => { if (!isActive) e.currentTarget.style.backgroundColor = 'transparent' }}
                   >
@@ -243,7 +243,7 @@ export function Sidebar() {
                   className="flex items-center gap-2.5 w-full rounded-xl px-2.5 py-2 text-sm transition-colors text-left"
                   style={{
                     backgroundColor: isActive && !isOpen ? ACTIVE_BG : 'transparent',
-                    color: isActive ? ACCENT : 'rgba(255,255,255,0.75)',
+                    color: isActive ? ACCENT : 'rgb(var(--inv) / 0.75)',
                   }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = HOVER_BG}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = (isActive && !isOpen) ? ACTIVE_BG : 'transparent'}
@@ -253,7 +253,7 @@ export function Sidebar() {
                   <ChevronDown
                     size={14}
                     style={{
-                      color: 'rgba(255,255,255,0.4)',
+                      color: 'rgb(var(--inv) / 0.4)',
                       transform: isOpen ? 'rotate(180deg)' : 'rotate(0)',
                       transition: 'transform 0.2s',
                     }}
@@ -268,12 +268,12 @@ export function Sidebar() {
                         className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm transition-colors"
                         style={({ isActive }) => ({
                           backgroundColor: isActive ? ACTIVE_BG : 'transparent',
-                          color: isActive ? ACCENT : 'rgba(255,255,255,0.6)',
+                          color: isActive ? ACCENT : 'rgb(var(--inv) / 0.6)',
                         })}
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = HOVER_BG}
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
                       >
-                        <span className="w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.3)' }} />
+                        <span className="w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: 'rgb(var(--inv) / 0.3)' }} />
                         {item.label}
                       </NavLink>
                     ))}
@@ -287,7 +287,7 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="shrink-0 border-t p-3" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+      <div className="shrink-0 border-t p-3" style={{ borderColor: 'rgb(var(--inv) / 0.06)' }}>
         {collapsed ? (
           <div className="flex flex-col items-center gap-2">
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: 'rgba(124,107,255,0.2)', color: ACCENT }}>
@@ -296,7 +296,7 @@ export function Sidebar() {
             <button
               onClick={() => setCollapsed(false)}
               className="rounded-lg p-1.5 transition-colors"
-              style={{ color: 'rgba(255,255,255,0.4)' }}
+              style={{ color: 'rgb(var(--inv) / 0.4)' }}
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = HOVER_BG)}
               onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
             >
@@ -309,11 +309,11 @@ export function Sidebar() {
               {(user?.displayName ?? user?.email ?? 'A')[0].toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold truncate text-white">{user?.displayName ?? user?.email ?? 'Admin'}</p>
-              <p className="text-[10px] truncate" style={{ color: 'rgba(255,255,255,0.4)' }}>{user?.role ?? 'ROLE_ADMIN'}</p>
+              <p className="text-xs font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{user?.displayName ?? user?.email ?? 'Admin'}</p>
+              <p className="text-[10px] truncate" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{user?.role ?? 'ROLE_ADMIN'}</p>
             </div>
             <NavLink to="/settings" className="rounded-lg p-1.5 transition-colors flex items-center"
-              style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}
+              style={{ color: 'rgb(var(--inv) / 0.4)', textDecoration: 'none' }}
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = HOVER_BG)}
               onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}>
               <Settings size={14} />

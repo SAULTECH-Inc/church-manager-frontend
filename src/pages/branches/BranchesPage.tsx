@@ -3,14 +3,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { Trash2 } from 'lucide-react'
 import { api } from '@/api/client'
 
 // Design system constants
-const PAGE_BG = '#131326'
-const CARD = '#13152e'
-const DRAWER_BG = '#1a1b3a'
-const INPUT_BG = '#1e2248'
-const BORDER = 'rgba(255,255,255,0.08)'
+const PAGE_BG = 'var(--page-bg)'
+const CARD = 'var(--card-bg)'
+const DRAWER_BG = 'var(--drawer-bg)'
+const INPUT_BG = 'var(--input-bg)'
+const BORDER = 'rgb(var(--inv) / 0.08)'
 const ACCENT = '#7c6bff'
 const ACCENT_DARK = '#6456e8'
 const TEXT = '#e2e8f0'
@@ -136,6 +137,11 @@ export function BranchesPage() {
     },
   })
 
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => api.post(`/api/branches/${id}/delete`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['branches'] }),
+  })
+
   const createForm = useForm<FormData>({ resolver: zodResolver(schema) })
   const editForm = useForm<FormData>({ resolver: zodResolver(schema) })
 
@@ -221,7 +227,7 @@ export function BranchesPage() {
         <div style={{ overflowX: 'auto', borderRadius: '12px', border: `1px solid ${BORDER}` }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '900px' }}>
             <thead>
-              <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: `1px solid ${BORDER}` }}>
+              <tr style={{ background: 'rgb(var(--inv) / 0.03)', borderBottom: `1px solid ${BORDER}` }}>
                 {['Office / Jurisdiction', 'Level', 'Overseer / Bishop', 'Parent Jurisdiction', 'Roster Size', 'Total Givings', 'Actions'].map(col => (
                   <th
                     key={col}
@@ -247,7 +253,7 @@ export function BranchesPage() {
                   key={b.id}
                   style={{
                     background: CARD,
-                    borderBottom: i < filtered.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                    borderBottom: i < filtered.length - 1 ? '1px solid rgb(var(--inv) / 0.05)' : 'none',
                     transition: 'background 0.15s',
                   }}
                   onMouseEnter={e => (e.currentTarget.style.background = '#171934')}
@@ -278,21 +284,29 @@ export function BranchesPage() {
                     ₦{(b.totalGivings ?? 0).toLocaleString()}
                   </td>
                   <td style={{ padding: '14px 16px' }}>
-                    <button
-                      onClick={() => openEdit(b)}
-                      style={{
-                        background: 'rgba(124,107,255,0.12)',
-                        color: '#a5b4fc',
-                        border: '1px solid rgba(124,107,255,0.25)',
-                        borderRadius: '6px',
-                        padding: '5px 14px',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Edit
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <button
+                        onClick={() => openEdit(b)}
+                        style={{
+                          background: 'rgba(124,107,255,0.12)',
+                          color: '#a5b4fc',
+                          border: '1px solid rgba(124,107,255,0.25)',
+                          borderRadius: '6px',
+                          padding: '5px 14px',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => { if (confirm(`Delete "${b.name}"?`)) deleteMutation.mutate(b.id) }}
+                        style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -308,7 +322,7 @@ export function BranchesPage() {
         style={{
           backgroundColor: DRAWER_BG,
           borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh',
-          border: `1px solid rgba(255,255,255,0.1)`,
+          border: `1px solid rgb(var(--inv) / 0.1)`,
           display: 'flex', flexDirection: 'column', overflow: 'hidden',
           pointerEvents: 'auto',
         }}
@@ -378,7 +392,7 @@ export function BranchesPage() {
               onClick={() => { setCreateOpen(false); createForm.reset() }}
               style={{
                 flex: 1,
-                background: 'rgba(255,255,255,0.06)',
+                background: 'rgb(var(--inv) / 0.06)',
                 color: TEXT_MUTED,
                 border: `1px solid ${BORDER}`,
                 borderRadius: '8px',
@@ -420,7 +434,7 @@ export function BranchesPage() {
         style={{
           backgroundColor: DRAWER_BG,
           borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh',
-          border: `1px solid rgba(255,255,255,0.1)`,
+          border: `1px solid rgb(var(--inv) / 0.1)`,
           display: 'flex', flexDirection: 'column', overflow: 'hidden',
           pointerEvents: 'auto',
         }}
@@ -492,7 +506,7 @@ export function BranchesPage() {
               onClick={() => { setEditBranch(null); editForm.reset() }}
               style={{
                 flex: 1,
-                background: 'rgba(255,255,255,0.06)',
+                background: 'rgb(var(--inv) / 0.06)',
                 color: TEXT_MUTED,
                 border: `1px solid ${BORDER}`,
                 borderRadius: '8px',

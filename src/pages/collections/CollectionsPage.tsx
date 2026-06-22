@@ -8,10 +8,10 @@ interface Contribution { id: string; donorName?: string; type: string; paymentMe
 interface Pledge { id: string; purpose: string; targetAmount: number; amountPaid: number; balance: number; dueDate: string; status: string; member?: { fullName: string } }
 interface Member { id: string; fullName: string }
 
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const inputStyle: React.CSSProperties = { backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const outlineBtn: React.CSSProperties = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const inputStyle: React.CSSProperties = { backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const outlineBtn: React.CSSProperties = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
 
 interface DrawerProps { open: boolean; onClose: () => void; title: string; children: React.ReactNode; footer: React.ReactNode }
 function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
@@ -20,13 +20,13 @@ function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
     <>
       <div className="fixed inset-0 z-40" style={{ backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ padding: 20, pointerEvents: 'none' }}>
-        <div className="flex flex-col overflow-hidden" style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', pointerEvents: 'auto' }}>
-          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', padding: 4 }}><X size={20} /></button>
+        <div className="flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', pointerEvents: 'auto' }}>
+          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer', padding: 4 }}><X size={20} /></button>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-5">{children}</div>
-          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -38,7 +38,7 @@ const pledgeStatusColor = (s: string) => {
   if (s === 'OVERDUE') return { color: '#f87171', bg: 'rgba(248,113,113,0.15)' }
   return { color: '#60a5fa', bg: 'rgba(96,165,250,0.15)' }
 }
-const fmt = (n: number) => `₦${n.toLocaleString()}`
+const fmt = (n?: number | null) => n != null ? `₦${n.toLocaleString()}` : '—'
 
 export function CollectionsPage() {
   const [tab, setTab] = useState<'income' | 'pledges'>('income')
@@ -51,19 +51,19 @@ export function CollectionsPage() {
   const [exportMenu, setExportMenu] = useState(false)
   const [stmtOpen, setStmtOpen] = useState(false)
   const [stmtForm, setStmtForm] = useState({ memberId: '', startDate: '', endDate: '' })
-  const [logForm, setLogForm] = useState({ isAnonymous: false, memberId: '', donorName: '', type: 'TITHE', paymentMethod: 'CASH', amount: '', givingDateStr: '', notes: '' })
+  const [logForm, setLogForm] = useState({ isAnonymous: false, memberId: '', donorName: '', type: 'TITHES', paymentMethod: 'CASH', amount: '', givingDateStr: '', notes: '' })
   const [pledgeForm, setPledgeForm] = useState({ memberId: '', purpose: '', targetAmount: '', dueDateStr: '' })
   const [payForm, setPayForm] = useState({ paymentAmount: '', paymentMethod: 'CASH' })
 
   const { data, isLoading } = useQuery({
     queryKey: ['collections'],
-    queryFn: () => api.get('/api/collections').then(r => r.data as { contributions: Contribution[], pledges: Pledge[], members: Member[], stats: Record<string, number> }),
+    queryFn: () => api.get('/api/collections').then(r => r.data as { collections: Contribution[], pledges: Pledge[], members: Member[], totalCollections: string, totalTithes: string, totalOfferings: string, totalBuildingFund: string, totalPledgingTarget: string, totalPledgesPaid: string }),
   })
 
   const toQS = (obj: Record<string, unknown>) => { const p = new URLSearchParams(); Object.entries(obj).forEach(([k, v]) => { if (v !== '' && v !== null && v !== undefined) p.append(k, String(v)) }); return p.toString() }
   const logMutation = useMutation({
     mutationFn: () => api.post(`/api/collections?${toQS(logForm as unknown as Record<string, unknown>)}`),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['collections'] }); setLogDrawer(false); setLogForm({ isAnonymous: false, memberId: '', donorName: '', type: 'TITHE', paymentMethod: 'CASH', amount: '', givingDateStr: '', notes: '' }) },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['collections'] }); setLogDrawer(false); setLogForm({ isAnonymous: false, memberId: '', donorName: '', type: 'TITHES', paymentMethod: 'CASH', amount: '', givingDateStr: '', notes: '' }) },
   })
   const pledgeMutation = useMutation({
     mutationFn: () => api.post(`/api/collections/pledges?${toQS(pledgeForm)}`),
@@ -81,17 +81,16 @@ export function CollectionsPage() {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['collections'] }); setImportOpen(false); setImportFile(null) },
   })
 
-  const contributions = data?.contributions ?? []
+  const contributions = data?.collections ?? []
   const pledges = data?.pledges ?? []
   const members = data?.members ?? []
-  const stats = data?.stats ?? {}
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Collections</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Income Register · Pledges · Contributions</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Collections</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Income Register · Pledges · Contributions</p>
         </div>
         <div className="flex items-center gap-2">
           <div style={{ position: 'relative' }}>
@@ -99,10 +98,10 @@ export function CollectionsPage() {
               <Download size={14} /> Export <ChevronDown size={13} />
             </button>
             {exportMenu && (
-              <div style={{ position: 'absolute', top: '110%', right: 0, backgroundColor: '#1a1b3a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: 6, zIndex: 100, minWidth: 100 }}>
+              <div style={{ position: 'absolute', top: '110%', right: 0, backgroundColor: 'var(--drawer-bg)', border: '1px solid rgb(var(--inv) / 0.1)', borderRadius: 12, padding: 6, zIndex: 100, minWidth: 100 }}>
                 {['xlsx', 'csv', 'pdf'].map(fmt => (
                   <button key={fmt} onClick={() => { window.location.href = `/api/collections/export?format=${fmt}`; setExportMenu(false) }}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '7px 12px', background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', cursor: 'pointer', borderRadius: 8, fontSize: 13 }}>
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '7px 12px', background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.7)', cursor: 'pointer', borderRadius: 8, fontSize: 13 }}>
                     {fmt.toUpperCase()}
                   </button>
                 ))}
@@ -122,48 +121,48 @@ export function CollectionsPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
         {[
-          { label: 'Total Income', value: fmt(stats.totalIncome ?? 0), color: '#34d399' },
-          { label: 'Total Pledges', value: fmt(stats.totalPledges ?? 0), color: '#7c6bff' },
-          { label: 'Cash & Transfer', value: fmt(stats.cashTransferTotal ?? 0), color: '#60a5fa' },
-          { label: 'Online & Other', value: fmt(stats.onlineOtherTotal ?? 0), color: '#f59e0b' },
+          { label: 'Total Collections', value: data?.totalCollections ?? '—', color: '#34d399' },
+          { label: 'Tithes', value: data?.totalTithes ?? '—', color: 'var(--accent)' },
+          { label: 'Offerings', value: data?.totalOfferings ?? '—', color: '#60a5fa' },
+          { label: 'Building Fund', value: data?.totalBuildingFund ?? '—', color: '#f59e0b' },
         ].map(k => (
-          <div key={k.label} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 20 }}>
+          <div key={k.label} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 20 }}>
             <p style={{ color: k.color, fontWeight: 700, fontSize: 22, margin: '0 0 4px' }}>{k.value}</p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="flex gap-1 mb-6" style={{ backgroundColor: '#13152e', borderRadius: 14, padding: 4, width: 'fit-content', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="flex gap-1 mb-6" style={{ backgroundColor: 'var(--card-bg)', borderRadius: 14, padding: 4, width: 'fit-content', border: '1px solid rgb(var(--inv) / 0.06)' }}>
         {(['income', 'pledges'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)}
-            style={{ padding: '8px 20px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, backgroundColor: tab === t ? '#7c6bff' : 'transparent', color: tab === t ? 'white' : 'rgba(255,255,255,0.5)' }}>
+            style={{ padding: '8px 20px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, backgroundColor: tab === t ? '#7c6bff' : 'transparent', color: tab === t ? 'white' : 'rgb(var(--inv) / 0.5)' }}>
             {t === 'income' ? '💰 Income Register' : '🤝 Pledges'}
           </button>
         ))}
       </div>
 
-      {isLoading && <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading...</p></div>}
+      {isLoading && <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading...</p></div>}
 
       {!isLoading && tab === 'income' && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="border-b" style={{ borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+              <thead><tr className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                 {['DONOR', 'TYPE', 'METHOD', 'AMOUNT', 'DATE', 'NOTE', 'ACTIONS'].map(col => (
-                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                 ))}
               </tr></thead>
               <tbody>
-                {contributions.length === 0 && <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>No contributions logged yet</td></tr>}
+                {contributions.length === 0 && <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: 'rgb(var(--inv) / 0.4)' }}>No contributions logged yet</td></tr>}
                 {contributions.map(c => (
-                  <tr key={c.id} className="border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
-                    <td className="px-5 py-4" style={{ color: 'white', fontWeight: 500 }}>{c.member?.fullName ?? c.donorName ?? 'Anonymous'}</td>
-                    <td className="px-5 py-4"><span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: '#7c6bff', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{c.type}</span></td>
-                    <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{c.paymentMethod}</td>
+                  <tr key={c.id} className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.04)' }}>
+                    <td className="px-5 py-4" style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{c.member?.fullName ?? c.donorName ?? 'Anonymous'}</td>
+                    <td className="px-5 py-4"><span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: 'var(--accent)', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{c.type}</span></td>
+                    <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{c.paymentMethod}</td>
                     <td className="px-5 py-4" style={{ color: '#34d399', fontWeight: 700 }}>{fmt(c.amount)}</td>
-                    <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{new Date(c.givingDate).toLocaleDateString()}</td>
-                    <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.notes || '—'}</td>
+                    <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{new Date(c.givingDate).toLocaleDateString()}</td>
+                    <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 13, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.notes || '—'}</td>
                     <td className="px-5 py-4"></td>
                   </tr>
                 ))}
@@ -174,26 +173,26 @@ export function CollectionsPage() {
       )}
 
       {!isLoading && tab === 'pledges' && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="border-b" style={{ borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+              <thead><tr className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                 {['MEMBER', 'PURPOSE', 'TARGET', 'PAID', 'BALANCE', 'DUE DATE', 'STATUS', 'ACTIONS'].map(col => (
-                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                 ))}
               </tr></thead>
               <tbody>
-                {pledges.length === 0 && <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>No pledges registered yet</td></tr>}
+                {pledges.length === 0 && <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'rgb(var(--inv) / 0.4)' }}>No pledges registered yet</td></tr>}
                 {pledges.map(p => {
                   const sc = pledgeStatusColor(p.status)
                   return (
-                    <tr key={p.id} className="border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
-                      <td className="px-5 py-4" style={{ color: 'white', fontWeight: 500 }}>{p.member?.fullName ?? '—'}</td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.7)' }}>{p.purpose}</td>
-                      <td className="px-5 py-4" style={{ color: 'white', fontWeight: 600 }}>{fmt(p.targetAmount)}</td>
+                    <tr key={p.id} className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.04)' }}>
+                      <td className="px-5 py-4" style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{p.member?.fullName ?? '—'}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.7)' }}>{p.purpose}</td>
+                      <td className="px-5 py-4" style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{fmt(p.targetAmount)}</td>
                       <td className="px-5 py-4" style={{ color: '#34d399', fontWeight: 600 }}>{fmt(p.amountPaid)}</td>
                       <td className="px-5 py-4" style={{ color: p.balance > 0 ? '#f59e0b' : '#34d399', fontWeight: 600 }}>{fmt(p.balance)}</td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{new Date(p.dueDate).toLocaleDateString()}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{new Date(p.dueDate).toLocaleDateString()}</td>
                       <td className="px-5 py-4"><span style={{ backgroundColor: sc.bg, color: sc.color, borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{p.status}</span></td>
                       <td className="px-5 py-4">
                         <button onClick={() => { setPayPledgeId(p.id); setPayDrawer(true) }}
@@ -223,7 +222,7 @@ export function CollectionsPage() {
             <Download size={14} style={{ display: 'inline', marginRight: 6 }} /> Download PDF
           </button>
         </>}>
-        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: '0 0 4px' }}>Generate a personalised giving statement for a member — useful for tax receipts and annual summaries.</p>
+        <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: '0 0 4px' }}>Generate a personalised giving statement for a member — useful for tax receipts and annual summaries.</p>
         <div><label style={labelStyle}>MEMBER *</label>
           <select value={stmtForm.memberId} onChange={e => setStmtForm(f => ({ ...f, memberId: e.target.value }))} style={inputStyle}>
             <option value="">— Select member —</option>
@@ -233,7 +232,7 @@ export function CollectionsPage() {
           <div><label style={labelStyle}>FROM DATE</label><input type="date" value={stmtForm.startDate} onChange={e => setStmtForm(f => ({ ...f, startDate: e.target.value }))} style={inputStyle} /></div>
           <div><label style={labelStyle}>TO DATE</label><input type="date" value={stmtForm.endDate} onChange={e => setStmtForm(f => ({ ...f, endDate: e.target.value }))} style={inputStyle} /></div>
         </div>
-        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, margin: 0 }}>Leave dates blank to include all contributions.</p>
+        <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 12, margin: 0 }}>Leave dates blank to include all contributions.</p>
       </Drawer>
 
       <Drawer open={importOpen} onClose={() => setImportOpen(false)} title="Import Contributions"
@@ -241,12 +240,12 @@ export function CollectionsPage() {
           <button onClick={() => setImportOpen(false)} style={outlineBtn}>Cancel</button>
           <button onClick={() => importMut.mutate()} disabled={!importFile || importMut.isPending} style={gradientBtn}>{importMut.isPending ? 'Importing...' : 'Import'}</button>
         </>}>
-        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, margin: '0 0 16px' }}>Upload a CSV or Excel file to bulk-import contribution records.</p>
+        <p style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13, margin: '0 0 16px' }}>Upload a CSV or Excel file to bulk-import contribution records.</p>
         <div><label style={labelStyle}>FILE (CSV / XLSX)</label>
           <input type="file" accept=".csv,.xlsx" onChange={e => setImportFile(e.target.files?.[0] ?? null)} style={inputStyle} /></div>
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, marginTop: 12 }}>
+        <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, marginTop: 12 }}>
           Need a template?{' '}
-          <a href="/api/collections/import/template" style={{ color: '#7c6bff', textDecoration: 'none', fontWeight: 600 }}>Download Template</a>
+          <a href="/api/collections/import/template" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Download Template</a>
         </p>
       </Drawer>
 
@@ -255,10 +254,10 @@ export function CollectionsPage() {
           <button onClick={() => setLogDrawer(false)} style={outlineBtn}>Cancel</button>
           <button onClick={() => logMutation.mutate()} disabled={!logForm.amount || !logForm.givingDateStr || logMutation.isPending} style={gradientBtn}>{logMutation.isPending ? 'Logging...' : 'Log Contribution'}</button>
         </>}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '12px 16px' }}>
-          <div><p style={{ color: 'white', fontWeight: 600, fontSize: 14, margin: 0 }}>Anonymous Donation</p><p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: '2px 0 0' }}>Hide donor identity</p></div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'rgb(var(--inv) / 0.04)', borderRadius: 12, padding: '12px 16px' }}>
+          <div><p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 14, margin: 0 }}>Anonymous Donation</p><p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: '2px 0 0' }}>Hide donor identity</p></div>
           <button onClick={() => setLogForm(f => ({ ...f, isAnonymous: !f.isAnonymous }))}
-            style={{ width: 44, height: 24, borderRadius: 12, border: 'none', cursor: 'pointer', backgroundColor: logForm.isAnonymous ? '#7c6bff' : 'rgba(255,255,255,0.1)', position: 'relative' }}>
+            style={{ width: 44, height: 24, borderRadius: 12, border: 'none', cursor: 'pointer', backgroundColor: logForm.isAnonymous ? '#7c6bff' : 'rgb(var(--inv) / 0.1)', position: 'relative' }}>
             <span style={{ position: 'absolute', top: 3, width: 18, height: 18, borderRadius: '50%', backgroundColor: 'white', left: logForm.isAnonymous ? 23 : 3 }} />
           </button>
         </div>
@@ -271,11 +270,11 @@ export function CollectionsPage() {
           <input type="text" value={logForm.donorName} onChange={e => setLogForm(f => ({ ...f, donorName: e.target.value }))} placeholder="Optional" style={inputStyle} /></div>}
         <div><label style={labelStyle}>TYPE <span style={{ color: '#f87171' }}>*</span></label>
           <select value={logForm.type} onChange={e => setLogForm(f => ({ ...f, type: e.target.value }))} style={inputStyle}>
-            {['TITHE', 'OFFERING', 'DONATION', 'BUILDING_FUND', 'WELFARE', 'PROJECT', 'SPECIAL', 'OTHER'].map(t => <option key={t}>{t}</option>)}
+            {['TITHES', 'OFFERING', 'FIRST_FRUITS', 'THANKSGIVING', 'PLEDGE', 'BUILDING_FUND', 'MISSION_FUND'].map(t => <option key={t}>{t}</option>)}
           </select></div>
         <div><label style={labelStyle}>PAYMENT METHOD</label>
           <select value={logForm.paymentMethod} onChange={e => setLogForm(f => ({ ...f, paymentMethod: e.target.value }))} style={inputStyle}>
-            {['CASH', 'BANK_TRANSFER', 'CARD', 'CHEQUE', 'ONLINE', 'OTHER'].map(m => <option key={m}>{m}</option>)}
+            {['CASH', 'BANK_TRANSFER', 'POS', 'MOBILE_MONEY', 'CARD', 'ONLINE'].map(m => <option key={m}>{m}</option>)}
           </select></div>
         <div><label style={labelStyle}>AMOUNT <span style={{ color: '#f87171' }}>*</span></label>
           <input type="number" min="0" step="0.01" value={logForm.amount} onChange={e => setLogForm(f => ({ ...f, amount: e.target.value }))} style={inputStyle} /></div>
@@ -317,7 +316,7 @@ export function CollectionsPage() {
           <input type="number" min="0" step="0.01" value={payForm.paymentAmount} onChange={e => setPayForm(f => ({ ...f, paymentAmount: e.target.value }))} style={inputStyle} /></div>
         <div><label style={labelStyle}>METHOD</label>
           <select value={payForm.paymentMethod} onChange={e => setPayForm(f => ({ ...f, paymentMethod: e.target.value }))} style={inputStyle}>
-            {['CASH', 'BANK_TRANSFER', 'CARD', 'CHEQUE', 'ONLINE', 'OTHER'].map(m => <option key={m}>{m}</option>)}
+            {['CASH', 'BANK_TRANSFER', 'POS', 'MOBILE_MONEY', 'CARD', 'ONLINE'].map(m => <option key={m}>{m}</option>)}
           </select></div>
       </Drawer>
     </div>

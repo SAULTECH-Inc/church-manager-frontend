@@ -12,12 +12,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
         className
       )}
       style={{
-        backgroundColor: '#1e2248',
-        border: '1px solid rgba(255,255,255,0.10)',
+        backgroundColor: 'var(--input-bg)',
+        border: '1px solid rgb(var(--inv) / 0.10)',
         ...style,
       }}
       onFocus={e => { e.currentTarget.style.borderColor = 'rgba(124,107,255,0.6)'; e.currentTarget.style.boxShadow = '0 0 0 1px rgba(124,107,255,0.3)' }}
-      onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.10)'; e.currentTarget.style.boxShadow = 'none' }}
+      onBlur={e => { e.currentTarget.style.borderColor = 'rgb(var(--inv) / 0.10)'; e.currentTarget.style.boxShadow = 'none' }}
       ref={ref}
       {...props}
     />

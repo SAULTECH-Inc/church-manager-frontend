@@ -15,16 +15,16 @@ interface Reservation {
 }
 interface Stats { totalPlots: number; available: number; occupied: number; reserved: number; pendingReservations: number }
 
-const PAGE_BG   = '#131326'
-const CARD      = '#13152e'
-const DRAWER_BG = '#1a1b3a'
-const INPUT_BG  = '#1e2248'
+const PAGE_BG   = 'var(--page-bg)'
+const CARD      = 'var(--card-bg)'
+const DRAWER_BG = 'var(--drawer-bg)'
+const INPUT_BG  = 'var(--input-bg)'
 const ACCENT    = '#7c6bff'
 
-const inputStyle: React.CSSProperties = { backgroundColor: INPUT_BG, border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg,#7c6bff,#6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
-const outlineBtn: React.CSSProperties  = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const inputStyle: React.CSSProperties = { backgroundColor: INPUT_BG, border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg,var(--accent),var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const outlineBtn: React.CSSProperties  = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
 
 const PLOT_STATUS_COLORS: Record<string, string> = {
   AVAILABLE: '#10b981', OCCUPIED: '#ef4444', RESERVED: '#f59e0b'
@@ -39,13 +39,13 @@ function Drawer({ open, onClose, title, children, footer }: { open: boolean; onC
     <>
       <div className="fixed inset-0 z-40" style={{ backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ padding: 20, pointerEvents: 'none' }}>
-        <div className="flex flex-col overflow-hidden" style={{ backgroundColor: DRAWER_BG, borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', pointerEvents: 'auto' }}>
-          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}><X size={20} /></button>
+        <div className="flex flex-col overflow-hidden" style={{ backgroundColor: DRAWER_BG, borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', pointerEvents: 'auto' }}>
+          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer' }}><X size={20} /></button>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-5">{children}</div>
-          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -107,8 +107,8 @@ export function CemeteryPage() {
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Cemetery Management</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Burial Plots · Reservations · Denominational Register</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Cemetery Management</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Burial Plots · Reservations · Denominational Register</p>
         </div>
         <div className="flex gap-2">
           <button onClick={() => setReserveOpen(true)} style={{ ...outlineBtn, fontSize: 13 }}>Reserve Plot</button>
@@ -119,31 +119,31 @@ export function CemeteryPage() {
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 16, marginBottom: 24 }}>
         {[
-          { label: 'Total Plots',     value: stats?.totalPlots          ?? 0, color: '#7c6bff' },
+          { label: 'Total Plots',     value: stats?.totalPlots          ?? 0, color: 'var(--accent)' },
           { label: 'Available',       value: stats?.available           ?? 0, color: '#10b981' },
           { label: 'Occupied',        value: stats?.occupied            ?? 0, color: '#ef4444' },
           { label: 'Reserved',        value: stats?.reserved            ?? 0, color: '#f59e0b' },
           { label: 'Pending Reserv.', value: stats?.pendingReservations ?? 0, color: '#60a5fa' },
         ].map(k => (
-          <div key={k.label} style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 20 }}>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 22, margin: '0 0 4px' }}>{k.value}</p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
+          <div key={k.label} style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 20 }}>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 22, margin: '0 0 4px' }}>{k.value}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
           </div>
         ))}
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 4, marginBottom: 20, borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: 0 }}>
+      <div style={{ display: 'flex', gap: 4, marginBottom: 20, borderBottom: '1px solid rgb(var(--inv) / 0.08)', paddingBottom: 0 }}>
         {(['plots', 'reservations'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)} style={{
             padding: '10px 20px', border: 'none', background: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14,
-            color: tab === t ? ACCENT : 'rgba(255,255,255,0.4)',
+            color: tab === t ? ACCENT : 'rgb(var(--inv) / 0.4)',
             borderBottom: `2px solid ${tab === t ? ACCENT : 'transparent'}`,
           }}>{t === 'plots' ? 'Burial Plots' : 'Reservations'}</button>
         ))}
       </div>
 
-      {isLoading && <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading...</p></div>}
+      {isLoading && <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading...</p></div>}
 
       {/* Plots tab */}
       {!isLoading && tab === 'plots' && (
@@ -153,35 +153,35 @@ export function CemeteryPage() {
             {['ALL', 'AVAILABLE', 'OCCUPIED', 'RESERVED'].map(s => (
               <button key={s} onClick={() => setFilterStatus(s)} style={{
                 padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                border: `1px solid ${filterStatus === s ? ACCENT : 'rgba(255,255,255,0.1)'}`,
-                backgroundColor: filterStatus === s ? 'rgba(124,107,255,0.15)' : 'rgba(255,255,255,0.04)',
-                color: filterStatus === s ? ACCENT : 'rgba(255,255,255,0.5)',
+                border: `1px solid ${filterStatus === s ? ACCENT : 'rgb(var(--inv) / 0.1)'}`,
+                backgroundColor: filterStatus === s ? 'rgba(124,107,255,0.15)' : 'rgb(var(--inv) / 0.04)',
+                color: filterStatus === s ? ACCENT : 'rgb(var(--inv) / 0.5)',
               }}>{s}</button>
             ))}
           </div>
 
-          <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+          <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
             {filteredPlots.length === 0 ? (
-              <div style={{ padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>No plots found.</p></div>
+              <div style={{ padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>No plots found.</p></div>
             ) : (
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead><tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <thead><tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.06)' }}>
                   {['Plot #', 'Section', 'Row', 'Type', 'Status', 'Occupant / Reserved', 'Burial Date', 'Actions'].map(h => (
-                    <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: 'rgba(255,255,255,0.4)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{h}</th>
+                    <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: 'rgb(var(--inv) / 0.4)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{h}</th>
                   ))}
                 </tr></thead>
                 <tbody>
                   {filteredPlots.map(p => (
-                    <tr key={p.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                      <td style={{ padding: '12px 16px', color: 'white', fontWeight: 700, fontSize: 14 }}>{p.plotNumber}</td>
-                      <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{p.section ?? '—'}</td>
-                      <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{p.rowNumber ?? '—'}</td>
-                      <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{p.graveType}</td>
+                    <tr key={p.id} style={{ borderBottom: '1px solid rgb(var(--inv) / 0.04)' }}>
+                      <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 700, fontSize: 14 }}>{p.plotNumber}</td>
+                      <td style={{ padding: '12px 16px', color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{p.section ?? '—'}</td>
+                      <td style={{ padding: '12px 16px', color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{p.rowNumber ?? '—'}</td>
+                      <td style={{ padding: '12px 16px', color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{p.graveType}</td>
                       <td style={{ padding: '12px 16px' }}>
                         <span style={{ backgroundColor: `${PLOT_STATUS_COLORS[p.status] ?? '#94a3b8'}20`, color: PLOT_STATUS_COLORS[p.status] ?? '#94a3b8', borderRadius: 8, padding: '3px 10px', fontSize: 11, fontWeight: 700 }}>{p.status}</span>
                       </td>
-                      <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{p.occupantName ?? '—'}</td>
-                      <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{p.dateOfBurial ?? '—'}</td>
+                      <td style={{ padding: '12px 16px', color: 'rgb(var(--inv) / 0.7)', fontSize: 13 }}>{p.occupantName ?? '—'}</td>
+                      <td style={{ padding: '12px 16px', color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>{p.dateOfBurial ?? '—'}</td>
                       <td style={{ padding: '12px 16px' }}>
                         <div className="flex gap-2">
                           {p.status === 'AVAILABLE' && (
@@ -204,23 +204,23 @@ export function CemeteryPage() {
 
       {/* Reservations tab */}
       {!isLoading && tab === 'reservations' && (
-        <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           {reservations.length === 0 ? (
-            <div style={{ padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>No reservations yet.</p></div>
+            <div style={{ padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>No reservations yet.</p></div>
           ) : (
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead><tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+              <thead><tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.06)' }}>
                 {['Plot', 'Reserved For', 'Date', 'Amount Paid', 'Status', 'Actions'].map(h => (
-                  <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: 'rgba(255,255,255,0.4)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{h}</th>
+                  <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: 'rgb(var(--inv) / 0.4)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{h}</th>
                 ))}
               </tr></thead>
               <tbody>
                 {reservations.map(r => (
-                  <tr key={r.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <td style={{ padding: '12px 16px', color: 'white', fontWeight: 700, fontSize: 14 }}>{r.plot?.plotNumber ?? '—'}{r.plot?.section ? ` (${r.plot.section})` : ''}</td>
-                    <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{r.reservedForName ?? '—'}</td>
-                    <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{r.reservedDate}</td>
-                    <td style={{ padding: '12px 16px', color: r.amountPaid ? '#10b981' : 'rgba(255,255,255,0.3)', fontSize: 13, fontWeight: 600 }}>{r.amountPaid ? `₦${r.amountPaid.toLocaleString()}` : '—'}</td>
+                  <tr key={r.id} style={{ borderBottom: '1px solid rgb(var(--inv) / 0.04)' }}>
+                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 700, fontSize: 14 }}>{r.plot?.plotNumber ?? '—'}{r.plot?.section ? ` (${r.plot.section})` : ''}</td>
+                    <td style={{ padding: '12px 16px', color: 'rgb(var(--inv) / 0.7)', fontSize: 13 }}>{r.reservedForName ?? '—'}</td>
+                    <td style={{ padding: '12px 16px', color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>{r.reservedDate}</td>
+                    <td style={{ padding: '12px 16px', color: r.amountPaid ? '#10b981' : 'rgb(var(--inv) / 0.3)', fontSize: 13, fontWeight: 600 }}>{r.amountPaid ? `₦${r.amountPaid.toLocaleString()}` : '—'}</td>
                     <td style={{ padding: '12px 16px' }}>
                       <span style={{ backgroundColor: `${RESERVATION_STATUS_COLORS[r.status] ?? '#94a3b8'}20`, color: RESERVATION_STATUS_COLORS[r.status] ?? '#94a3b8', borderRadius: 8, padding: '3px 10px', fontSize: 11, fontWeight: 700 }}>{r.status}</span>
                     </td>

@@ -17,26 +17,26 @@ interface Volunteer {
 interface Member { id: string; fullName: string }
 
 const labelStyle: React.CSSProperties = {
-  display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10,
+  display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10,
   fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6,
 }
 const inputStyle: React.CSSProperties = {
-  backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white',
+  backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)',
   borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none',
 }
 const outlineBtn: React.CSSProperties = {
-  border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white',
+  border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)',
   borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14,
 }
 const gradientBtn: React.CSSProperties = {
-  background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white',
+  background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)',
   border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14,
 }
 
 function statusDot(status: string) {
   if (status === 'ACTIVE') return { color: '#34d399', label: 'Active', dot: '#10b981' }
   if (status === 'ON_LEAVE') return { color: '#60a5fa', label: 'On Leave', dot: '#3b82f6' }
-  return { color: 'rgba(255,255,255,0.5)', label: 'Inactive', dot: 'rgba(255,255,255,0.3)' }
+  return { color: 'rgb(var(--inv) / 0.5)', label: 'Inactive', dot: 'rgb(var(--inv) / 0.3)' }
 }
 
 interface DrawerProps {
@@ -49,15 +49,15 @@ function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
     <>
       <div style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-        <div style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}>
+        <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer' }}>
               <X size={20} />
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-5">{children}</div>
-          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>
             {footer}
           </div>
         </div>
@@ -132,33 +132,33 @@ export function VolunteersPage() {
   const kpiCards = [
     { label: 'Total Volunteers', value: volunteers.length, iconColor: '#7c6bff', iconBg: 'rgba(124,107,255,0.1)', Icon: HandHeart },
     { label: 'Active', value: active, iconColor: '#34d399', iconBg: 'rgba(16,185,129,0.1)', Icon: Users },
-    { label: 'Inactive', value: inactive, iconColor: 'rgba(255,255,255,0.5)', iconBg: 'rgba(255,255,255,0.06)', Icon: Users },
+    { label: 'Inactive', value: inactive, iconColor: 'rgb(var(--inv) / 0.5)', iconBg: 'rgb(var(--inv) / 0.06)', Icon: Users },
     { label: 'On Leave', value: onLeave, iconColor: '#60a5fa', iconBg: 'rgba(59,130,246,0.1)', Icon: Users },
   ]
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Volunteer Register</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Member Volunteers · Ministry Areas · Availability Tracking</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Volunteer Register</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Member Volunteers · Ministry Areas · Availability Tracking</p>
         </div>
         <div className="flex items-center gap-3">
           {/* Export dropdown */}
           <div style={{ position: 'relative' }}>
             <button onClick={() => setExportMenuOpen(v => !v)}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: 12, padding: '9px 14px', cursor: 'pointer', fontSize: 14 }}>
+              style={{ display: 'flex', alignItems: 'center', gap: 6, backgroundColor: 'rgb(var(--inv) / 0.06)', border: '1px solid rgb(var(--inv) / 0.1)', color: 'var(--text-primary)', borderRadius: 12, padding: '9px 14px', cursor: 'pointer', fontSize: 14 }}>
               <Download size={15} /> Export <ChevronDown size={14} />
             </button>
             {exportMenuOpen && (
-              <div style={{ position: 'absolute', top: '110%', right: 0, backgroundColor: '#1a1b3a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, zIndex: 20, minWidth: 140, overflow: 'hidden' }}
+              <div style={{ position: 'absolute', top: '110%', right: 0, backgroundColor: 'var(--drawer-bg)', border: '1px solid rgb(var(--inv) / 0.08)', borderRadius: 12, zIndex: 20, minWidth: 140, overflow: 'hidden' }}
                 onMouseLeave={() => setExportMenuOpen(false)}>
                 {['XLSX', 'CSV', 'DOCX', 'JPEG', 'PDF'].map(fmt => (
                   <button key={fmt}
                     onClick={() => { window.location.href = `/api/volunteers/export?format=${fmt.toLowerCase()}`; setExportMenuOpen(false) }}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px', background: 'none', border: 'none', color: 'rgba(255,255,255,0.8)', cursor: 'pointer', fontSize: 14 }}
-                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)')}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px', background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.8)', cursor: 'pointer', fontSize: 14 }}
+                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.06)')}
                     onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}>
                     {fmt}
                   </button>
@@ -182,24 +182,24 @@ export function VolunteersPage() {
       {/* KPI Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
         {kpiCards.map(({ label, value, iconColor, iconBg, Icon }) => (
-          <div key={label} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 20 }}>
+          <div key={label} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 20 }}>
             <div style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
               <Icon size={18} style={{ color: iconColor }} />
             </div>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 28, margin: 0 }}>{value}</p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, marginTop: 4 }}>{label}</p>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 28, margin: 0 }}>{value}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, marginTop: 4 }}>{label}</p>
           </div>
         ))}
       </div>
 
       {/* Loading */}
       {isLoading && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           {[1,2,3,4].map(i => (
-            <div key={i} className="animate-pulse flex items-center gap-4 px-5 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
-              <div style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.06)' }} />
-              <div style={{ flex: 1, height: 14, borderRadius: 6, backgroundColor: 'rgba(255,255,255,0.06)' }} />
-              <div style={{ width: 80, height: 14, borderRadius: 6, backgroundColor: 'rgba(255,255,255,0.06)' }} />
+            <div key={i} className="animate-pulse flex items-center gap-4 px-5 py-4 border-b" style={{ borderColor: 'rgb(var(--inv) / 0.04)' }}>
+              <div style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: 'rgb(var(--inv) / 0.06)' }} />
+              <div style={{ flex: 1, height: 14, borderRadius: 6, backgroundColor: 'rgb(var(--inv) / 0.06)' }} />
+              <div style={{ width: 80, height: 14, borderRadius: 6, backgroundColor: 'rgb(var(--inv) / 0.06)' }} />
             </div>
           ))}
         </div>
@@ -207,53 +207,53 @@ export function VolunteersPage() {
 
       {/* Empty state */}
       {!isLoading && volunteers.length === 0 && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 60, textAlign: 'center' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 60, textAlign: 'center' }}>
           <div style={{ width: 64, height: 64, borderRadius: 20, background: 'rgba(124,107,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-            <HandHeart size={28} style={{ color: '#7c6bff' }} />
+            <HandHeart size={28} style={{ color: 'var(--accent)' }} />
           </div>
-          <p style={{ color: 'white', fontWeight: 600, fontSize: 16 }}>No volunteers registered yet</p>
-          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginTop: 4 }}>Register your first volunteer to get started</p>
+          <p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 16 }}>No volunteers registered yet</p>
+          <p style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 14, marginTop: 4 }}>Register your first volunteer to get started</p>
           <button onClick={() => setRegisterDrawerOpen(true)} style={{ marginTop: 16, ...gradientBtn }}>Register Volunteer</button>
         </div>
       )}
 
       {/* Table */}
       {!isLoading && volunteers.length > 0 && (
-        <div className="overflow-hidden rounded-2xl border" style={{ backgroundColor: '#13152e', borderColor: 'rgba(255,255,255,0.08)' }}>
+        <div className="overflow-hidden rounded-2xl border" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'rgb(var(--inv) / 0.08)' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b" style={{ borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+                <tr className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                   {['MEMBER','MINISTRY','SKILLS','AVAILABILITY','STATUS','ACTIONS'].map(col => (
-                    <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                    <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
+              <tbody className="divide-y" style={{ borderColor: 'rgb(var(--inv) / 0.04)' }}>
                 {volunteers.map(v => {
                   const { color, label, dot } = statusDot(v.status)
                   return (
-                    <tr key={v.id} style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
+                    <tr key={v.id} style={{ borderColor: 'rgb(var(--inv) / 0.04)' }}>
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg, #7c6bff, #6456e8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
+                          <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
                             {getInitials(v.member.fullName)}
                           </div>
-                          <span style={{ color: 'white', fontWeight: 500, fontSize: 14 }}>{v.member.fullName}</span>
+                          <span style={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: 14 }}>{v.member.fullName}</span>
                         </div>
                       </td>
                       <td className="px-5 py-4">
                         {v.ministry
                           ? <span style={{ backgroundColor: 'rgba(139,92,246,0.15)', color: '#8b5cf6', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{v.ministry}</span>
-                          : <span style={{ color: 'rgba(255,255,255,0.3)' }}>—</span>}
+                          : <span style={{ color: 'rgb(var(--inv) / 0.3)' }}>—</span>}
                       </td>
                       <td className="px-5 py-4" style={{ maxWidth: 200 }}>
-                        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
+                        <span style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
                           {v.skills || '—'}
                         </span>
                       </td>
                       <td className="px-5 py-4">
-                        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{v.availabilityDays || '—'}</span>
+                        <span style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{v.availabilityDays || '—'}</span>
                       </td>
                       <td className="px-5 py-4">
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color }}>
@@ -264,11 +264,11 @@ export function VolunteersPage() {
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-2">
                           <button onClick={() => openEdit(v)} title="Edit"
-                            style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: 'rgba(255,255,255,0.6)', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            style={{ background: 'rgb(var(--inv) / 0.06)', border: 'none', color: 'rgb(var(--inv) / 0.6)', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Edit2 size={13} />
                           </button>
                           <button onClick={() => toggleMutation.mutate(v.id)} title="Toggle status" disabled={toggleMutation.isPending}
-                            style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: 'rgba(255,255,255,0.6)', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            style={{ background: 'rgb(var(--inv) / 0.06)', border: 'none', color: 'rgb(var(--inv) / 0.6)', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <ToggleLeft size={13} />
                           </button>
                           <button onClick={() => { if (confirm('Delete this volunteer?')) deleteMutation.mutate(v.id) }} title="Delete" disabled={deleteMutation.isPending}
@@ -360,15 +360,15 @@ export function VolunteersPage() {
       {/* Import Modal */}
       {importOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
-          <div style={{ backgroundColor: '#1a1b3a', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', width: 440, padding: 32 }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18, marginBottom: 8 }}>Import Volunteers</h2>
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, marginBottom: 16 }}>
+          <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', width: 440, padding: 32 }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18, marginBottom: 8 }}>Import Volunteers</h2>
+            <p style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 14, marginBottom: 16 }}>
               Download our template to format your data correctly.{' '}
-              <a href="/api/volunteers/import/template" style={{ color: '#7c6bff', textDecoration: 'none' }}>Download Template</a>
+              <a href="/api/volunteers/import/template" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Download Template</a>
             </p>
             <input type="file" accept=".csv,.xlsx,.xls"
               onChange={e => setImportFile(e.target.files?.[0] ?? null)}
-              style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, marginBottom: 4 }} />
+              style={{ color: 'rgb(var(--inv) / 0.7)', fontSize: 14, marginBottom: 4 }} />
             <div style={{ display: 'flex', gap: 12, marginTop: 24, justifyContent: 'flex-end' }}>
               <button onClick={() => setImportOpen(false)} style={outlineBtn}>Cancel</button>
               <button onClick={handleImport} disabled={!importFile} style={gradientBtn}>Import Volunteers</button>

@@ -29,15 +29,15 @@ interface CounselingRecord {
 
 interface Member { id: string; fullName: string }
 
-const PAGE_BG = '#131326'
-const CARD = '#13152e'
-const CARD_INNER = '#1a1b3a'
+const PAGE_BG = 'var(--page-bg)'
+const CARD = 'var(--card-bg)'
+const CARD_INNER = 'var(--drawer-bg)'
 const ACCENT = '#7c6bff'
 
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const inputStyle: React.CSSProperties = { backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const outlineBtn: React.CSSProperties = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const inputStyle: React.CSSProperties = { backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const outlineBtn: React.CSSProperties = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
 
 const toQS = (obj: Record<string, string | boolean | undefined>) => {
   const p = new URLSearchParams()
@@ -52,13 +52,13 @@ function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
     <>
       <div style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-        <div style={{ backgroundColor: CARD_INNER, borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18, margin: 0 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}><X size={20} /></button>
+        <div style={{ backgroundColor: CARD_INNER, borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', borderBottom: '1px solid rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18, margin: 0 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer' }}><X size={20} /></button>
           </div>
           <div style={{ flex: 1, overflowY: 'auto', padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>{children}</div>
-          <div style={{ display: 'flex', gap: 10, padding: '16px 24px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div style={{ display: 'flex', gap: 10, padding: '16px 24px', borderTop: '1px solid rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -112,8 +112,8 @@ export function PastoralPage() {
     const s = status ?? 'PENDING'
     const greenStatuses = ['CONVERTED', 'JOINED_MEMBERSHIP']
     const yellowStatuses = ['CONTACTED']
-    const bg = greenStatuses.includes(s) ? 'rgba(34,197,94,0.15)' : yellowStatuses.includes(s) ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.06)'
-    const color = greenStatuses.includes(s) ? '#22c55e' : yellowStatuses.includes(s) ? '#f59e0b' : 'rgba(255,255,255,0.5)'
+    const bg = greenStatuses.includes(s) ? 'rgba(34,197,94,0.15)' : yellowStatuses.includes(s) ? 'rgba(245,158,11,0.15)' : 'rgb(var(--inv) / 0.06)'
+    const color = greenStatuses.includes(s) ? '#22c55e' : yellowStatuses.includes(s) ? '#f59e0b' : 'rgb(var(--inv) / 0.5)'
     return <span style={{ backgroundColor: bg, color, borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{s}</span>
   }
 
@@ -121,8 +121,8 @@ export function PastoralPage() {
     <motion.div variants={container} initial="hidden" animate="show" style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: PAGE_BG }}>
       <motion.div variants={item} style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24 }}>
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Pastoral Care</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Visitors, counseling &amp; welfare</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Pastoral Care</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Visitors, counseling &amp; welfare</p>
         </div>
         <button
           onClick={() => tab === 'visitors' ? setVisitorDrawer(true) : setCounselDrawer(true)}
@@ -132,11 +132,11 @@ export function PastoralPage() {
         </button>
       </motion.div>
 
-      <motion.div variants={item} style={{ display: 'flex', gap: 4, borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: 24 }}>
+      <motion.div variants={item} style={{ display: 'flex', gap: 4, borderBottom: '1px solid rgb(var(--inv) / 0.08)', marginBottom: 24 }}>
         {(['visitors', 'counseling'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)} style={{
             padding: '10px 20px', fontSize: 14, fontWeight: 500, cursor: 'pointer', border: 'none', background: 'none',
-            color: tab === t ? ACCENT : 'rgba(255,255,255,0.4)',
+            color: tab === t ? ACCENT : 'rgb(var(--inv) / 0.4)',
             borderBottom: tab === t ? `2px solid ${ACCENT}` : '2px solid transparent',
             marginBottom: -1, display: 'flex', alignItems: 'center', gap: 8,
           }}>
@@ -148,37 +148,37 @@ export function PastoralPage() {
 
       {tab === 'visitors' && (
         <motion.div variants={item}>
-          {isLoading && <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading...</p></div>}
+          {isLoading && <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading...</p></div>}
           {!isLoading && visitors.length === 0 && (
-            <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 60, textAlign: 'center' }}>
+            <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 60, textAlign: 'center' }}>
               <UserCheck size={32} style={{ color: ACCENT, margin: '0 auto 12px' }} />
-              <p style={{ color: 'white', fontWeight: 600 }}>No visitors recorded</p>
+              <p style={{ color: 'var(--text-primary)', fontWeight: 600 }}>No visitors recorded</p>
               <button onClick={() => setVisitorDrawer(true)} style={{ marginTop: 12, ...gradientBtn }}>Add Visitor</button>
             </div>
           )}
           {!isLoading && visitors.length > 0 && (
-            <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+            <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', fontSize: 14, borderCollapse: 'collapse' }}>
                   <thead>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+                    <tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                       {['NAME', 'CONTACT', 'VISIT DATE', 'FOLLOW-UP', 'ACTIONS'].map(col => (
-                        <th key={col} style={{ textAlign: 'left', padding: '12px 20px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                        <th key={col} style={{ textAlign: 'left', padding: '12px 20px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {visitors.map(v => (
-                      <tr key={v.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                      <tr key={v.id} style={{ borderBottom: '1px solid rgb(var(--inv) / 0.04)' }}>
                         <td style={{ padding: '16px 20px' }}>
-                          <p style={{ color: 'white', fontWeight: 600, margin: 0 }}>{v.fullName}</p>
-                          {v.invitedBy && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: 0 }}>Invited by: {v.invitedBy}</p>}
+                          <p style={{ color: 'var(--text-primary)', fontWeight: 600, margin: 0 }}>{v.fullName}</p>
+                          {v.invitedBy && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: 0 }}>Invited by: {v.invitedBy}</p>}
                         </td>
-                        <td style={{ padding: '16px 20px', color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>
+                        <td style={{ padding: '16px 20px', color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>
                           <p style={{ margin: 0 }}>{v.phoneNumber ?? '-'}</p>
                           <p style={{ margin: 0, fontSize: 12 }}>{v.email ?? ''}</p>
                         </td>
-                        <td style={{ padding: '16px 20px', color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{formatDate(v.visitDate)}</td>
+                        <td style={{ padding: '16px 20px', color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>{formatDate(v.visitDate)}</td>
                         <td style={{ padding: '16px 20px' }}>{statusBadge(v.followUpStatus)}</td>
                         <td style={{ padding: '16px 20px' }}>
                           <button
@@ -201,18 +201,18 @@ export function PastoralPage() {
 
       {tab === 'counseling' && (
         <motion.div variants={item}>
-          {isLoading && <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading...</p></div>}
+          {isLoading && <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading...</p></div>}
           {!isLoading && counselingRecords.length === 0 && (
-            <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 60, textAlign: 'center' }}>
+            <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 60, textAlign: 'center' }}>
               <MessageSquare size={32} style={{ color: ACCENT, margin: '0 auto 12px' }} />
-              <p style={{ color: 'white', fontWeight: 600 }}>No counseling sessions recorded</p>
+              <p style={{ color: 'var(--text-primary)', fontWeight: 600 }}>No counseling sessions recorded</p>
               <button onClick={() => setCounselDrawer(true)} style={{ marginTop: 12, ...gradientBtn }}>New Session</button>
             </div>
           )}
           {!isLoading && counselingRecords.length > 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {counselingRecords.map(r => (
-                <div key={r.id} style={{ backgroundColor: CARD, borderRadius: 16, border: '1px solid rgba(255,255,255,0.08)', padding: 20 }}>
+                <div key={r.id} style={{ backgroundColor: CARD, borderRadius: 16, border: '1px solid rgb(var(--inv) / 0.08)', padding: 20 }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
@@ -223,12 +223,12 @@ export function PastoralPage() {
                           <span style={{ backgroundColor: r.status === 'RESOLVED' ? 'rgba(34,197,94,0.15)' : 'rgba(245,158,11,0.15)', color: r.status === 'RESOLVED' ? '#22c55e' : '#f59e0b', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{r.status}</span>
                         )}
                       </div>
-                      <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>
+                      <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: 0 }}>
                         {r.member && <span>Member: {r.member.fullName} · </span>}
                         {r.pastor && <span>Pastor: {r.pastor.fullName} · </span>}
                         {formatDate(r.sessionDate)}
                       </p>
-                      {r.notes && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, marginTop: 6 }}>{r.notes}</p>}
+                      {r.notes && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 13, marginTop: 6 }}>{r.notes}</p>}
                     </div>
                   </div>
                 </div>

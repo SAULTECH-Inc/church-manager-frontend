@@ -68,10 +68,10 @@ interface DashboardData {
 
 // ─── Colour tokens ───────────────────────────────────────────────────────────
 
-const PAGE_BG    = '#131326'
-const CARD       = '#13152e'
-const CARD_INNER = '#1a1b3a'
-const BORDER     = 'rgba(255,255,255,0.07)'
+const PAGE_BG    = 'var(--page-bg)'
+const CARD       = 'var(--card-bg)'
+const CARD_INNER = 'var(--drawer-bg)'
+const BORDER     = 'rgb(var(--inv) / 0.07)'
 const ACCENT     = '#7c6bff'
 const GREEN      = '#10b981'
 const AMBER      = '#f59e0b'
@@ -106,7 +106,7 @@ function BarChart({ months, income, expenses }: { months: string[]; income: numb
     <svg width="100%" viewBox={`0 0 ${total} ${H + 36}`} preserveAspectRatio="none" style={{ display: 'block', overflow: 'visible' }}>
       {[0, 0.25, 0.5, 0.75, 1].map(p => (
         <line key={p} x1={0} y1={H * (1 - p)} x2={total} y2={H * (1 - p)}
-          stroke="rgba(255,255,255,0.05)" strokeWidth={1} />
+          stroke="rgb(var(--inv) / 0.05)" strokeWidth={1} />
       ))}
       {months.map((m, i) => {
         const x = i * (W + GAP)
@@ -116,7 +116,7 @@ function BarChart({ months, income, expenses }: { months: string[]; income: numb
           <g key={m}>
             <rect x={x} y={H - iH} width={24} height={iH} fill={ACCENT} rx={4} opacity={0.85} />
             <rect x={x + 28} y={H - eH} width={24} height={eH} fill={GREEN} rx={4} opacity={0.75} />
-            <text x={x + W / 2} y={H + 16} textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize={10} fontFamily="inherit">{m}</text>
+            <text x={x + W / 2} y={H + 16} textAnchor="middle" fill="rgb(var(--inv) / 0.4)" fontSize={10} fontFamily="inherit">{m}</text>
           </g>
         )
       })}
@@ -146,13 +146,13 @@ function HorizBar({ label, value, max, color, sub }: { label: string; value: num
   return (
     <div style={{ marginBottom: 12 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-        <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>{label}</span>
-        <span style={{ color: 'white', fontSize: 12, fontWeight: 600 }}>{value.toLocaleString()} <span style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>({pct}%)</span></span>
+        <span style={{ color: 'rgb(var(--inv) / 0.7)', fontSize: 12 }}>{label}</span>
+        <span style={{ color: 'var(--text-primary)', fontSize: 12, fontWeight: 600 }}>{value.toLocaleString()} <span style={{ color: 'rgb(var(--inv) / 0.35)', fontWeight: 400 }}>({pct}%)</span></span>
       </div>
-      <div style={{ height: 6, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.07)' }}>
+      <div style={{ height: 6, borderRadius: 4, backgroundColor: 'rgb(var(--inv) / 0.07)' }}>
         <div style={{ height: '100%', borderRadius: 4, backgroundColor: color, width: `${pct}%`, transition: 'width 0.6s ease' }} />
       </div>
-      {sub && <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, marginTop: 3 }}>{sub}</p>}
+      {sub && <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 10, marginTop: 3 }}>{sub}</p>}
     </div>
   )
 }
@@ -182,8 +182,8 @@ function StatCard({
           <span style={{ backgroundColor: `${color}22`, color, borderRadius: 20, padding: '2px 8px', fontSize: 10, fontWeight: 700 }}>{badge}</span>
         )}
       </div>
-      <p style={{ color: 'white', fontSize: 22, fontWeight: 700, margin: '0 0 2px' }}>{value}</p>
-      <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, margin: 0 }}>{label}</p>
+      <p style={{ color: 'var(--text-primary)', fontSize: 22, fontWeight: 700, margin: '0 0 2px' }}>{value}</p>
+      <p style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 12, margin: 0 }}>{label}</p>
       {(sub || trend) && (
         <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
           {trend && !trendFlat && (
@@ -192,8 +192,8 @@ function StatCard({
               {Math.abs(trend.pct)}%
             </span>
           )}
-          {trend && trendFlat && <Minus size={11} color="rgba(255,255,255,0.3)" />}
-          {sub && <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11 }}>{sub}</span>}
+          {trend && trendFlat && <Minus size={11} color="rgb(var(--inv) / 0.3)" />}
+          {sub && <span style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 11 }}>{sub}</span>}
         </div>
       )}
     </div>
@@ -215,7 +215,7 @@ export function DashboardPage() {
       <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 40, marginBottom: 16 }}>⛪</div>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>Loading dashboard…</p>
+          <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14 }}>Loading dashboard…</p>
         </div>
       </div>
     )
@@ -234,7 +234,7 @@ export function DashboardPage() {
   const memberTypeColors: Record<string, string> = {
     REGULAR_MEMBER: ACCENT, WORKER: GREEN, VOLUNTEER: AMBER, MINISTER: BLUE, PASTOR: PINK,
     EVANGELIST: '#fb923c', MISSIONARY: '#34d399', ELDER: '#a78bfa',
-    DEACON: '#f87171', DEACONESS: '#e879f9', VISITOR: 'rgba(255,255,255,0.4)',
+    DEACON: '#f87171', DEACONESS: '#e879f9', VISITOR: 'rgb(var(--inv) / 0.4)',
   }
   const memberTypeLabels: Record<string, string> = {
     REGULAR_MEMBER: 'Regular Member', WORKER: 'Worker', VOLUNTEER: 'Volunteer',
@@ -253,8 +253,8 @@ export function DashboardPage() {
       {/* ── Header ─────────────────────────────────────────────────── */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 28, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h1 style={{ color: 'white', fontSize: 22, fontWeight: 700, margin: 0 }}>Dashboard</h1>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, marginTop: 3 }}>{todayLabel()}</p>
+          <h1 style={{ color: 'var(--text-primary)', fontSize: 22, fontWeight: 700, margin: 0 }}>Dashboard</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 13, marginTop: 3 }}>{todayLabel()}</p>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {[
@@ -264,7 +264,7 @@ export function DashboardPage() {
           ].map(({ label, icon: Icon, path }) => (
             <button key={label} onClick={() => navigate(path)} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 10,
-              background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white',
+              background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)',
               border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600,
             }}>
               <Icon size={14} />{label}
@@ -328,8 +328,8 @@ export function DashboardPage() {
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = BORDER}
           >
             <p style={{ color: m.color, fontSize: 22, fontWeight: 700, margin: '0 0 2px' }}>{m.value.toLocaleString()}</p>
-            <p style={{ color: 'white', fontSize: 12, fontWeight: 600, margin: '0 0 2px' }}>{m.label}</p>
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, margin: 0 }}>{m.sub}</p>
+            <p style={{ color: 'var(--text-primary)', fontSize: 12, fontWeight: 600, margin: '0 0 2px' }}>{m.label}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 11, margin: 0 }}>{m.sub}</p>
           </div>
         ))}
       </div>
@@ -341,12 +341,12 @@ export function DashboardPage() {
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
             <div>
-              <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: 0 }}>Income vs Expenses</h3>
-              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, marginTop: 3 }}>6-month financial trend</p>
+              <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: 0 }}>Income vs Expenses</h3>
+              <p style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 12, marginTop: 3 }}>6-month financial trend</p>
             </div>
             <div style={{ display: 'flex', gap: 16 }}>
               {[{ label: 'Income', color: ACCENT }, { label: 'Expenses', color: GREEN }].map(l => (
-                <span key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>
+                <span key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'rgb(var(--inv) / 0.45)' }}>
                   <span style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: l.color, display: 'inline-block' }} />
                   {l.label}
                 </span>
@@ -356,7 +356,7 @@ export function DashboardPage() {
           {(d?.incomeData?.some(v => v > 0) || d?.expenseData?.some(v => v > 0)) ? (
             <BarChart months={d.chartMonths ?? []} income={d.incomeData ?? []} expenses={d.expenseData ?? []} />
           ) : (
-            <div style={{ height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.2)', fontSize: 13 }}>
+            <div style={{ height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgb(var(--inv) / 0.2)', fontSize: 13 }}>
               No financial data recorded yet
             </div>
           )}
@@ -367,7 +367,7 @@ export function DashboardPage() {
               { label: 'Net Surplus', value: d?.netSurplus ?? '₦0', color: surplusPositive ? GREEN : RED },
             ].map(s => (
               <div key={s.label}>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '0 0 2px' }}>{s.label}</p>
+                <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: '0 0 2px' }}>{s.label}</p>
                 <p style={{ color: s.color, fontSize: 15, fontWeight: 700, margin: 0 }}>{s.value}</p>
               </div>
             ))}
@@ -376,21 +376,21 @@ export function DashboardPage() {
 
         {/* Collection by fund type */}
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
-          <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: '0 0 4px' }}>Collections by Fund</h3>
-          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, margin: '0 0 20px' }}>All time totals</p>
+          <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: '0 0 4px' }}>Collections by Fund</h3>
+          <p style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 12, margin: '0 0 20px' }}>All time totals</p>
           {Object.keys(d?.collectionByType ?? {}).length === 0 ? (
-            <div style={{ color: 'rgba(255,255,255,0.2)', fontSize: 13, textAlign: 'center', paddingTop: 40 }}>No collections recorded</div>
+            <div style={{ color: 'rgb(var(--inv) / 0.2)', fontSize: 13, textAlign: 'center', paddingTop: 40 }}>No collections recorded</div>
           ) : (
             Object.entries(d?.collectionByType ?? {}).map(([type, amount]) => (
               <div key={type} style={{ marginBottom: 14 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgb(var(--inv) / 0.7)', fontSize: 12 }}>
                     <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: FUND_COLORS[type] ?? ACCENT, display: 'inline-block', flexShrink: 0 }} />
                     {FUND_LABELS[type] ?? type}
                   </span>
-                  <span style={{ color: 'white', fontSize: 12, fontWeight: 600 }}>{amount}</span>
+                  <span style={{ color: 'var(--text-primary)', fontSize: 12, fontWeight: 600 }}>{amount}</span>
                 </div>
-                <div style={{ height: 5, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.07)' }}>
+                <div style={{ height: 5, borderRadius: 3, backgroundColor: 'rgb(var(--inv) / 0.07)' }}>
                   <div style={{ height: '100%', borderRadius: 3, backgroundColor: FUND_COLORS[type] ?? ACCENT, width: '70%' }} />
                 </div>
               </div>
@@ -404,23 +404,23 @@ export function DashboardPage() {
 
         {/* Member growth sparkline */}
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
-          <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: '0 0 4px' }}>Member Growth</h3>
-          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, margin: '0 0 16px' }}>New members per month (6 months)</p>
+          <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: '0 0 4px' }}>Member Growth</h3>
+          <p style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 12, margin: '0 0 16px' }}>New members per month (6 months)</p>
           <SparkLine values={d?.memberGrowth ?? []} color={ACCENT} />
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12 }}>
             {(d?.growthMonths ?? []).map((m, i) => (
-              <span key={m} style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, textAlign: 'center' }}>
-                {m}<br /><span style={{ color: 'white', fontWeight: 600 }}>{d?.memberGrowth[i] ?? 0}</span>
+              <span key={m} style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 10, textAlign: 'center' }}>
+                {m}<br /><span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{d?.memberGrowth[i] ?? 0}</span>
               </span>
             ))}
           </div>
           <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${BORDER}`, display: 'flex', justifyContent: 'space-between' }}>
             <div>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '0 0 2px' }}>This Month</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: '0 0 2px' }}>This Month</p>
               <p style={{ color: ACCENT, fontSize: 18, fontWeight: 700, margin: 0 }}>+{d?.newThisMonth ?? 0}</p>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '0 0 2px' }}>Last Month</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: '0 0 2px' }}>Last Month</p>
               <p style={{ color: GREEN, fontSize: 18, fontWeight: 700, margin: 0 }}>+{d?.newLastMonth ?? 0}</p>
             </div>
           </div>
@@ -428,13 +428,13 @@ export function DashboardPage() {
 
         {/* Gender + Age groups */}
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
-          <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: '0 0 16px' }}>Demographics</h3>
+          <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: '0 0 16px' }}>Demographics</h3>
 
-          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 10px' }}>Gender</p>
+          <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 10px' }}>Gender</p>
           <HorizBar label="Female" value={d?.femaleCount ?? 0} max={d?.totalMembersRaw ?? 1} color={PINK} />
           <HorizBar label="Male" value={d?.maleCount ?? 0} max={d?.totalMembersRaw ?? 1} color={BLUE} />
 
-          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '16px 0 10px' }}>Age Groups</p>
+          <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '16px 0 10px' }}>Age Groups</p>
           {[
             { label: 'Youth (18–35)', pct: d?.youthPercent ?? 0, color: ACCENT },
             { label: 'Adults (36–50)', pct: d?.adultPercent ?? 0, color: GREEN },
@@ -443,16 +443,16 @@ export function DashboardPage() {
           ].map(g => (
             <div key={g.label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 7 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: g.color, flexShrink: 0 }} />
-              <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12, flex: 1 }}>{g.label}</span>
-              <span style={{ color: 'white', fontSize: 12, fontWeight: 600 }}>{g.pct}%</span>
+              <span style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 12, flex: 1 }}>{g.label}</span>
+              <span style={{ color: 'var(--text-primary)', fontSize: 12, fontWeight: 600 }}>{g.pct}%</span>
             </div>
           ))}
         </div>
 
         {/* Membership type breakdown */}
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
-          <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: '0 0 4px' }}>Membership Types</h3>
-          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, margin: '0 0 16px' }}>Classification breakdown</p>
+          <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: '0 0 4px' }}>Membership Types</h3>
+          <p style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 12, margin: '0 0 16px' }}>Classification breakdown</p>
           {Object.entries(d?.membershipTypeBreakdown ?? {}).map(([type, count]) => (
             <HorizBar
               key={type}
@@ -465,12 +465,12 @@ export function DashboardPage() {
           <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${BORDER}` }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '0 0 2px' }}>Active</p>
+                <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: '0 0 2px' }}>Active</p>
                 <p style={{ color: GREEN, fontSize: 16, fontWeight: 700, margin: 0 }}>{d?.activeMembers ?? '0'}</p>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '0 0 2px' }}>Inactive</p>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16, fontWeight: 700, margin: 0 }}>{d?.inactiveMembers ?? 0}</p>
+                <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: '0 0 2px' }}>Inactive</p>
+                <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 16, fontWeight: 700, margin: 0 }}>{d?.inactiveMembers ?? 0}</p>
               </div>
             </div>
           </div>
@@ -483,21 +483,21 @@ export function DashboardPage() {
         {/* Branch performance */}
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: 0 }}>Branch Performance</h3>
+            <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: 0 }}>Branch Performance</h3>
             <button onClick={() => navigate('/branches')} style={{ background: 'none', border: 'none', color: ACCENT, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>See all</button>
           </div>
           {(d?.branchStats ?? []).length === 0 ? (
-            <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: 13, textAlign: 'center', paddingTop: 30 }}>No branches configured</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.2)', fontSize: 13, textAlign: 'center', paddingTop: 30 }}>No branches configured</p>
           ) : (
             <div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: '6px 12px', marginBottom: 8 }}>
                 {['Branch', 'Members', 'Giving'].map(h => (
-                  <span key={h} style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</span>
+                  <span key={h} style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</span>
                 ))}
               </div>
               {(d?.branchStats ?? []).map((b, i) => (
                 <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: '6px 12px', padding: '9px 0', borderTop: `1px solid ${BORDER}` }}>
-                  <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, fontWeight: 500 }}>{b.name}</span>
+                  <span style={{ color: 'rgb(var(--inv) / 0.8)', fontSize: 12, fontWeight: 500 }}>{b.name}</span>
                   <span style={{ color: BLUE, fontSize: 12, fontWeight: 600 }}>{b.memberCount}</span>
                   <span style={{ color: GREEN, fontSize: 12, fontWeight: 600 }}>{b.giving}</span>
                 </div>
@@ -509,11 +509,11 @@ export function DashboardPage() {
         {/* Upcoming events */}
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: 0 }}>Upcoming Events</h3>
+            <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: 0 }}>Upcoming Events</h3>
             <button onClick={() => navigate('/events')} style={{ background: 'none', border: 'none', color: ACCENT, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>See all</button>
           </div>
           {(d?.upcomingEvents ?? []).length === 0 ? (
-            <div style={{ paddingTop: 30, textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: 13 }}>No upcoming events</div>
+            <div style={{ paddingTop: 30, textAlign: 'center', color: 'rgb(var(--inv) / 0.2)', fontSize: 13 }}>No upcoming events</div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {(d?.upcomingEvents ?? []).slice(0, 5).map(e => {
@@ -527,8 +527,8 @@ export function DashboardPage() {
                       <span style={{ color: 'rgba(245,158,11,0.6)', fontSize: 8, fontWeight: 700 }}>{mon}</span>
                     </div>
                     <div style={{ minWidth: 0 }}>
-                      <p style={{ color: 'white', fontSize: 12, fontWeight: 600, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.name}</p>
-                      <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, margin: '2px 0 0' }}>{e.location ?? formatDate(e.startDate)}</p>
+                      <p style={{ color: 'var(--text-primary)', fontSize: 12, fontWeight: 600, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.name}</p>
+                      <p style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 11, margin: '2px 0 0' }}>{e.location ?? formatDate(e.startDate)}</p>
                     </div>
                   </div>
                 )
@@ -540,26 +540,26 @@ export function DashboardPage() {
         {/* Recent members */}
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: 0 }}>Recent Members</h3>
+            <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: 0 }}>Recent Members</h3>
             <button onClick={() => navigate('/members')} style={{ background: 'none', border: 'none', color: ACCENT, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>View all</button>
           </div>
           {(d?.recentMembers ?? []).length === 0 ? (
-            <div style={{ paddingTop: 30, textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: 13 }}>No members yet</div>
+            <div style={{ paddingTop: 30, textAlign: 'center', color: 'rgb(var(--inv) / 0.2)', fontSize: 13 }}>No members yet</div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {(d?.recentMembers ?? []).slice(0, 5).map(m => (
                 <div key={m.id} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, #7c6bff, #6456e8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
+                  <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
                     {getInitials(m.fullName)}
                   </div>
                   <div style={{ minWidth: 0, flex: 1 }}>
-                    <p style={{ color: 'white', fontSize: 12, fontWeight: 600, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.fullName}</p>
-                    <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, margin: '1px 0 0' }}>{formatDate(m.createdAt)}</p>
+                    <p style={{ color: 'var(--text-primary)', fontSize: 12, fontWeight: 600, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.fullName}</p>
+                    <p style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 11, margin: '1px 0 0' }}>{formatDate(m.createdAt)}</p>
                   </div>
                   <span style={{
                     fontSize: 10, fontWeight: 600, padding: '2px 7px', borderRadius: 20, flexShrink: 0,
-                    backgroundColor: m.membershipStatus === 'ACTIVE' ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.07)',
-                    color: m.membershipStatus === 'ACTIVE' ? GREEN : 'rgba(255,255,255,0.4)',
+                    backgroundColor: m.membershipStatus === 'ACTIVE' ? 'rgba(16,185,129,0.15)' : 'rgb(var(--inv) / 0.07)',
+                    color: m.membershipStatus === 'ACTIVE' ? GREEN : 'rgb(var(--inv) / 0.4)',
                   }}>{m.membershipStatus}</span>
                 </div>
               ))}
@@ -574,33 +574,33 @@ export function DashboardPage() {
         {/* Prayer requests */}
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: 0 }}>Prayer Requests</h3>
+            <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: 0 }}>Prayer Requests</h3>
             <button onClick={() => navigate('/prayer')} style={{ background: 'none', border: 'none', color: ACCENT, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>See all</button>
           </div>
 
           <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
             <div style={{ flex: 1, backgroundColor: CARD_INNER, borderRadius: 10, padding: '10px 14px', textAlign: 'center' }}>
               <p style={{ color: RED, fontSize: 20, fontWeight: 700, margin: 0 }}>{d?.openPrayerCount ?? 0}</p>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '2px 0 0' }}>Open</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: '2px 0 0' }}>Open</p>
             </div>
             <div style={{ flex: 1, backgroundColor: CARD_INNER, borderRadius: 10, padding: '10px 14px', textAlign: 'center' }}>
               <p style={{ color: GREEN, fontSize: 20, fontWeight: 700, margin: 0 }}>{d?.answeredPrayers ?? 0}</p>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '2px 0 0' }}>Answered</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: '2px 0 0' }}>Answered</p>
             </div>
           </div>
 
           {(d?.openPrayers ?? []).length === 0 ? (
-            <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: 13, textAlign: 'center', paddingTop: 10 }}>No open prayer requests</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.2)', fontSize: 13, textAlign: 'center', paddingTop: 10 }}>No open prayer requests</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {(d?.openPrayers ?? []).slice(0, 4).map(p => (
                 <div key={p.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                   <span style={{
                     fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, flexShrink: 0, marginTop: 1,
-                    backgroundColor: p.urgency === 'CRITICAL' ? 'rgba(239,68,68,0.2)' : p.urgency === 'URGENT' ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.07)',
-                    color: p.urgency === 'CRITICAL' ? RED : p.urgency === 'URGENT' ? AMBER : 'rgba(255,255,255,0.45)',
+                    backgroundColor: p.urgency === 'CRITICAL' ? 'rgba(239,68,68,0.2)' : p.urgency === 'URGENT' ? 'rgba(245,158,11,0.2)' : 'rgb(var(--inv) / 0.07)',
+                    color: p.urgency === 'CRITICAL' ? RED : p.urgency === 'URGENT' ? AMBER : 'rgb(var(--inv) / 0.45)',
                   }}>{p.urgency}</span>
-                  <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</p>
+                  <p style={{ color: 'rgb(var(--inv) / 0.75)', fontSize: 12, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</p>
                 </div>
               ))}
             </div>
@@ -610,7 +610,7 @@ export function DashboardPage() {
         {/* Pending approvals */}
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: 0 }}>Pending Expenses</h3>
+            <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: 0 }}>Pending Expenses</h3>
             <button onClick={() => navigate('/expenses')} style={{ background: 'none', border: 'none', color: ACCENT, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>Review</button>
           </div>
 
@@ -620,22 +620,22 @@ export function DashboardPage() {
             </div>
             <div>
               <p style={{ color: AMBER, fontSize: 18, fontWeight: 700, margin: 0 }}>{d?.pendingExpenseCount ?? 0}</p>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '1px 0 0' }}>awaiting approval</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: '1px 0 0' }}>awaiting approval</p>
             </div>
           </div>
 
           {(d?.pendingExpenses ?? []).length === 0 ? (
             <div style={{ paddingTop: 16, textAlign: 'center' }}>
               <p style={{ color: GREEN, fontSize: 13, margin: 0 }}>✓ All clear</p>
-              <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 12 }}>No pending items</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.25)', fontSize: 12 }}>No pending items</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {(d?.pendingExpenses ?? []).slice(0, 4).map(e => (
                 <div key={e.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, fontWeight: 500, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.description ?? 'Expense'}</p>
-                    <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, margin: '1px 0 0' }}>{e.category}</p>
+                    <p style={{ color: 'rgb(var(--inv) / 0.8)', fontSize: 12, fontWeight: 500, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.description ?? 'Expense'}</p>
+                    <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 11, margin: '1px 0 0' }}>{e.category}</p>
                   </div>
                   <span style={{ color: AMBER, fontSize: 12, fontWeight: 700, flexShrink: 0, marginLeft: 10 }}>₦{e.amount.toLocaleString()}</span>
                 </div>
@@ -646,7 +646,7 @@ export function DashboardPage() {
 
         {/* Quick stats summary */}
         <div style={{ backgroundColor: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 20 }}>
-          <h3 style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: '0 0 16px' }}>Ministry Overview</h3>
+          <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: '0 0 16px' }}>Ministry Overview</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
               { label: 'Members in Fellowship Groups', value: d?.membersInGroups ?? 0, total: d?.totalMembersRaw ?? 1, color: BLUE, suffix: '' },
@@ -657,10 +657,10 @@ export function DashboardPage() {
               return (
                 <div key={s.label}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                    <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>{s.label}</span>
-                    <span style={{ color: 'white', fontSize: 12, fontWeight: 600 }}>{s.value.toLocaleString()} <span style={{ color: 'rgba(255,255,255,0.3)', fontWeight: 400 }}>({pct}%)</span></span>
+                    <span style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 12 }}>{s.label}</span>
+                    <span style={{ color: 'var(--text-primary)', fontSize: 12, fontWeight: 600 }}>{s.value.toLocaleString()} <span style={{ color: 'rgb(var(--inv) / 0.3)', fontWeight: 400 }}>({pct}%)</span></span>
                   </div>
-                  <div style={{ height: 6, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.07)' }}>
+                  <div style={{ height: 6, borderRadius: 3, backgroundColor: 'rgb(var(--inv) / 0.07)' }}>
                     <div style={{ height: '100%', borderRadius: 3, backgroundColor: s.color, width: `${pct}%` }} />
                   </div>
                 </div>
@@ -669,13 +669,13 @@ export function DashboardPage() {
           </div>
 
           <div style={{ marginTop: 20, paddingTop: 16, borderTop: `1px solid ${BORDER}` }}>
-            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 12px' }}>Giving per Active Member</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 12px' }}>Giving per Active Member</p>
             <p style={{ color: AMBER, fontSize: 22, fontWeight: 700, margin: 0 }}>
               {(d?.activeMembersRaw ?? 0) > 0 && (d?.monthlyIncomeRaw ?? 0) > 0
                 ? `₦${Math.round((d.monthlyIncomeRaw) / d.activeMembersRaw).toLocaleString()}`
                 : '₦0'}
             </p>
-            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, margin: '3px 0 0' }}>average this month</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 11, margin: '3px 0 0' }}>average this month</p>
           </div>
         </div>
       </div>

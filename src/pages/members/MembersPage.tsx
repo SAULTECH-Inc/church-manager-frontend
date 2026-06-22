@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
-import { Search, Download, Upload, Plus, Users, X, ChevronRight, ChevronDown } from 'lucide-react'
+import { Search, Download, Upload, Plus, Users, X, ChevronRight, ChevronDown, Trash2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { api } from '@/api/client'
 import { queryClient } from '@/lib/queryClient'
@@ -45,9 +45,9 @@ const defaultForm = {
 
 function statusBadgeStyle(status: string): React.CSSProperties {
   if (status === 'ACTIVE') return { backgroundColor: 'rgba(16,185,129,0.15)', color: '#34d399' }
-  if (status === 'INACTIVE') return { backgroundColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)' }
+  if (status === 'INACTIVE') return { backgroundColor: 'rgb(var(--inv) / 0.08)', color: 'rgb(var(--inv) / 0.5)' }
   if (status === 'PENDING') return { backgroundColor: 'rgba(245,158,11,0.15)', color: '#fbbf24' }
-  return { backgroundColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)' }
+  return { backgroundColor: 'rgb(var(--inv) / 0.08)', color: 'rgb(var(--inv) / 0.5)' }
 }
 
 const badgeBase: React.CSSProperties = {
@@ -59,10 +59,10 @@ const badgeBase: React.CSSProperties = {
 }
 
 const inputStyle: React.CSSProperties = {
-  backgroundColor: '#1e2248',
-  border: '1px solid rgba(255,255,255,0.10)',
+  backgroundColor: 'var(--input-bg)',
+  border: '1px solid rgb(var(--inv) / 0.10)',
   borderRadius: 10,
-  color: 'white',
+  color: 'var(--text-primary)',
   padding: '8px 12px',
   width: '100%',
   fontSize: 14,
@@ -70,7 +70,7 @@ const inputStyle: React.CSSProperties = {
 }
 
 const labelStyle: React.CSSProperties = {
-  color: 'rgba(255,255,255,0.3)',
+  color: 'rgb(var(--inv) / 0.3)',
   fontSize: 12,
   fontWeight: 600,
   display: 'block',
@@ -111,6 +111,11 @@ export function MembersPage() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['members'] }),
   })
 
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => api.post(`/api/members/${id}/delete`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['members'] }),
+  })
+
   const handleImport = async () => {
     if (!importFile) return
     const fd = new FormData()
@@ -142,19 +147,19 @@ export function MembersPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#131326', padding: '32px 24px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--page-bg)', padding: '32px 24px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', marginBottom: 24 }}>
         <div>
-          <h1 style={{ color: 'white', fontSize: 24, fontWeight: 700, margin: 0 }}>Members Directory</h1>
-          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginTop: 4 }}>
+          <h1 style={{ color: 'var(--text-primary)', fontSize: 24, fontWeight: 700, margin: 0 }}>Members Directory</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 14, marginTop: 4 }}>
             Manage church membership, track baptisms and confirmations
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
           {/* Search */}
           <div style={{ position: 'relative' }}>
-            <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.4)' }} />
+            <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'rgb(var(--inv) / 0.4)' }} />
             <input
               type="text"
               placeholder="Search members..."
@@ -184,10 +189,10 @@ export function MembersPage() {
               <Download size={14} /> Export <ChevronDown size={13} />
             </button>
             {exportMenu && (
-              <div style={{ position: 'absolute', right: 0, top: '110%', backgroundColor: '#1a1b3a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, overflow: 'hidden', zIndex: 50, minWidth: 130 }}>
+              <div style={{ position: 'absolute', right: 0, top: '110%', backgroundColor: 'var(--drawer-bg)', border: '1px solid rgb(var(--inv) / 0.1)', borderRadius: 10, overflow: 'hidden', zIndex: 50, minWidth: 130 }}>
                 {['xlsx', 'csv', 'pdf'].map(fmt => (
                   <button key={fmt} onClick={() => { window.location.href = `/api/members/export?format=${fmt}`; setExportMenu(false) }}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', background: 'none', border: 'none', color: 'white', fontSize: 13, cursor: 'pointer' }}>
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', background: 'none', border: 'none', color: 'var(--text-primary)', fontSize: 13, cursor: 'pointer' }}>
                     {fmt.toUpperCase()}
                   </button>
                 ))}
@@ -212,7 +217,7 @@ export function MembersPage() {
             onClick={() => setAddOpen(true)}
             style={{
               display: 'flex', alignItems: 'center', gap: 6,
-              background: 'linear-gradient(135deg, #7c6bff, #6456e8)',
+              background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))',
               color: '#fff',
               border: 'none',
               borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontSize: 13, fontWeight: 600,
@@ -224,7 +229,7 @@ export function MembersPage() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: 24 }}>
+      <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid rgb(var(--inv) / 0.08)', marginBottom: 24 }}>
         {(['members', 'baptism'] as const).map(tab => (
           <button
             key={tab}
@@ -233,7 +238,7 @@ export function MembersPage() {
               background: 'none',
               border: 'none',
               borderBottom: activeTab === tab ? '2px solid #7c6bff' : '2px solid transparent',
-              color: activeTab === tab ? 'white' : 'rgba(255,255,255,0.5)',
+              color: activeTab === tab ? 'white' : 'rgb(var(--inv) / 0.5)',
               fontWeight: activeTab === tab ? 600 : 400,
               fontSize: 14,
               padding: '10px 20px',
@@ -248,23 +253,23 @@ export function MembersPage() {
       </div>
 
       {/* Table */}
-      <div style={{ backgroundColor: '#13152e', borderRadius: 16, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+      <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 16, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
         {isLoading ? (
           <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[0, 1, 2, 3].map(i => (
-              <div key={i} className="animate-pulse" style={{ height: 52, backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 10 }} />
+              <div key={i} className="animate-pulse" style={{ height: 52, backgroundColor: 'rgb(var(--inv) / 0.06)', borderRadius: 10 }} />
             ))}
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-20 text-center">
             <div style={{ width: 64, height: 64, borderRadius: 20, background: 'rgba(124,107,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-              <Users size={28} style={{ color: '#7c6bff' }} />
+              <Users size={28} style={{ color: 'var(--accent)' }} />
             </div>
-            <p style={{ color: 'white', fontWeight: 600, fontSize: 16 }}>No members yet</p>
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginTop: 4 }}>Add your first member to get started</p>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 16 }}>No members yet</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 14, marginTop: 4 }}>Add your first member to get started</p>
             <button
               onClick={() => setAddOpen(true)}
-              style={{ marginTop: 16, background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600 }}
+              style={{ marginTop: 16, background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600 }}
             >
               Add First Member
             </button>
@@ -274,7 +279,7 @@ export function MembersPage() {
             {activeTab === 'members' ? (
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+                  <tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.08)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                     <th style={{ padding: '12px 16px', textAlign: 'left', width: 36 }}>
                       <input
                         type="checkbox"
@@ -284,7 +289,7 @@ export function MembersPage() {
                       />
                     </th>
                     {['Name', 'Contact Details', 'Gender & Category', 'Role & Status', 'Joined Date', ''].map(col => (
-                      <th key={col} style={{ padding: '12px 16px', textAlign: 'left', color: 'rgba(255,255,255,0.3)', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+                      <th key={col} style={{ padding: '12px 16px', textAlign: 'left', color: 'rgb(var(--inv) / 0.3)', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
                         {col}
                       </th>
                     ))}
@@ -294,8 +299,8 @@ export function MembersPage() {
                   {filtered.map(m => (
                     <tr
                       key={m.id}
-                      style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'background 0.15s' }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)')}
+                      style={{ borderBottom: '1px solid rgb(var(--inv) / 0.05)', transition: 'background 0.15s' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.03)')}
                       onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
                     >
                       <td style={{ padding: '14px 16px' }}>
@@ -308,34 +313,40 @@ export function MembersPage() {
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                          <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #7c6bff, #6456e8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
+                          <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
                             {getInitials(m.fullName)}
                           </div>
                           <div>
-                            <div style={{ color: 'white', fontWeight: 600 }}>{m.fullName}</div>
-                            {m.occupation && <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 11, marginTop: 2 }}>{m.occupation}</div>}
+                            <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{m.fullName}</div>
+                            {m.occupation && <div style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 11, marginTop: 2 }}>{m.occupation}</div>}
                           </div>
                         </div>
                       </td>
                       <td style={{ padding: '14px 16px' }}>
-                        <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{m.email || '—'}</div>
-                        {m.phoneNumber && <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, marginTop: 2 }}>{m.phoneNumber}</div>}
+                        <div style={{ color: 'rgb(var(--inv) / 0.7)', fontSize: 13 }}>{m.email || '—'}</div>
+                        {m.phoneNumber && <div style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 12, marginTop: 2 }}>{m.phoneNumber}</div>}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
-                        <div style={{ color: 'rgba(255,255,255,0.7)' }}>{m.gender || '—'}</div>
-                        {m.memberCategory && <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 11, marginTop: 2 }}>{m.memberCategory}</div>}
+                        <div style={{ color: 'rgb(var(--inv) / 0.7)' }}>{m.gender || '—'}</div>
+                        {m.memberCategory && <div style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 11, marginTop: 2 }}>{m.memberCategory}</div>}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
-                        <div style={{ color: 'rgba(255,255,255,0.7)', marginBottom: 4, fontSize: 12 }}>{m.membershipType || '—'}</div>
+                        <div style={{ color: 'rgb(var(--inv) / 0.7)', marginBottom: 4, fontSize: 12 }}>{m.membershipType || '—'}</div>
                         <span style={{ ...badgeBase, ...statusBadgeStyle(m.membershipStatus) }}>{m.membershipStatus}</span>
                       </td>
-                      <td style={{ padding: '14px 16px', color: 'rgba(255,255,255,0.45)', whiteSpace: 'nowrap' }}>
+                      <td style={{ padding: '14px 16px', color: 'rgb(var(--inv) / 0.45)', whiteSpace: 'nowrap' }}>
                         {formatDate(m.dateJoined ?? m.createdAt)}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
-                        <Link to={`/members/${m.id}`} style={{ color: '#7c6bff', fontSize: 13, fontWeight: 500, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 2 }}>
-                          View <ChevronRight size={13} />
-                        </Link>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <Link to={`/members/${m.id}`} style={{ color: 'var(--accent)', fontSize: 13, fontWeight: 500, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 2 }}>
+                            View <ChevronRight size={13} />
+                          </Link>
+                          <button onClick={() => { if (confirm(`Delete ${m.fullName}?`)) deleteMutation.mutate(m.id) }}
+                            style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -344,12 +355,12 @@ export function MembersPage() {
             ) : (
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+                  <tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.08)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                     <th style={{ padding: '12px 16px', textAlign: 'left', width: 36 }}>
                       <input type="checkbox" checked={allSelected} onChange={toggleAll} style={{ accentColor: '#7c6bff', cursor: 'pointer' }} />
                     </th>
                     {['Name', 'Baptism Date', 'Baptism Type', 'Confirmation Date', 'Status', ''].map(col => (
-                      <th key={col} style={{ padding: '12px 16px', textAlign: 'left', color: 'rgba(255,255,255,0.3)', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+                      <th key={col} style={{ padding: '12px 16px', textAlign: 'left', color: 'rgb(var(--inv) / 0.3)', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
                         {col}
                       </th>
                     ))}
@@ -359,8 +370,8 @@ export function MembersPage() {
                   {filtered.map(m => (
                     <tr
                       key={m.id}
-                      style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'background 0.15s' }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)')}
+                      style={{ borderBottom: '1px solid rgb(var(--inv) / 0.05)', transition: 'background 0.15s' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.03)')}
                       onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
                     >
                       <td style={{ padding: '14px 16px' }}>
@@ -368,13 +379,13 @@ export function MembersPage() {
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                          <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #7c6bff, #6456e8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
+                          <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
                             {getInitials(m.fullName)}
                           </div>
-                          <span style={{ color: 'white', fontWeight: 600 }}>{m.fullName}</span>
+                          <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{m.fullName}</span>
                         </div>
                       </td>
-                      <td style={{ padding: '14px 16px', color: 'rgba(255,255,255,0.7)' }}>
+                      <td style={{ padding: '14px 16px', color: 'rgb(var(--inv) / 0.7)' }}>
                         {m.baptismDate ? formatDate(m.baptismDate) : '—'}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
@@ -387,18 +398,24 @@ export function MembersPage() {
                           }}>
                             {m.baptismType === 'WATER' ? 'Water' : 'Holy Ghost'}
                           </span>
-                        ) : <span style={{ color: 'rgba(255,255,255,0.3)' }}>—</span>}
+                        ) : <span style={{ color: 'rgb(var(--inv) / 0.3)' }}>—</span>}
                       </td>
-                      <td style={{ padding: '14px 16px', color: 'rgba(255,255,255,0.7)' }}>
+                      <td style={{ padding: '14px 16px', color: 'rgb(var(--inv) / 0.7)' }}>
                         {m.confirmationDate ? formatDate(m.confirmationDate) : '—'}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <span style={{ ...badgeBase, ...statusBadgeStyle(m.membershipStatus) }}>{m.membershipStatus}</span>
                       </td>
                       <td style={{ padding: '14px 16px' }}>
-                        <Link to={`/members/${m.id}`} style={{ color: '#7c6bff', fontSize: 13, fontWeight: 500, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 2 }}>
-                          View <ChevronRight size={13} />
-                        </Link>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <Link to={`/members/${m.id}`} style={{ color: 'var(--accent)', fontSize: 13, fontWeight: 500, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 2 }}>
+                            View <ChevronRight size={13} />
+                          </Link>
+                          <button onClick={() => { if (confirm(`Delete ${m.fullName}?`)) deleteMutation.mutate(m.id) }}
+                            style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -413,12 +430,12 @@ export function MembersPage() {
       {selected.length > 0 && (
         <div style={{
           position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 30,
-          backgroundColor: '#1a1b3a',
-          borderTop: '1px solid rgba(255,255,255,0.08)',
+          backgroundColor: 'var(--drawer-bg)',
+          borderTop: '1px solid rgb(var(--inv) / 0.08)',
           padding: '14px 24px',
           display: 'flex', alignItems: 'center', gap: 12,
         }}>
-          <span style={{ color: 'white', fontWeight: 600, fontSize: 14, flex: 1 }}>
+          <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 14, flex: 1 }}>
             {selected.length} selected
           </span>
           <button
@@ -435,9 +452,9 @@ export function MembersPage() {
           <button
             onClick={() => setSelected([])}
             style={{
-              backgroundColor: 'rgba(255,255,255,0.08)',
-              color: 'rgba(255,255,255,0.7)',
-              border: '1px solid rgba(255,255,255,0.12)',
+              backgroundColor: 'rgb(var(--inv) / 0.08)',
+              color: 'rgb(var(--inv) / 0.7)',
+              border: '1px solid rgb(var(--inv) / 0.12)',
               borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontWeight: 600, fontSize: 13,
             }}
           >
@@ -451,10 +468,10 @@ export function MembersPage() {
         <>
           <div style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={() => setAddOpen(false)} />
           <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-            <div style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth: 560, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)', flexShrink: 0 }}>
-                <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18, margin: 0 }}>Add New Member</h2>
-                <button onClick={() => setAddOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center' }}>
+            <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 24, width: '100%', maxWidth: 560, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid rgb(var(--inv) / 0.08)', flexShrink: 0 }}>
+                <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18, margin: 0 }}>Add New Member</h2>
+                <button onClick={() => setAddOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgb(var(--inv) / 0.5)', display: 'flex', alignItems: 'center' }}>
                   <X size={20} />
                 </button>
               </div>
@@ -548,17 +565,17 @@ export function MembersPage() {
                   </div>
                 </div>
               </div>
-              <div style={{ padding: '16px 24px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', gap: 12, justifyContent: 'flex-end', flexShrink: 0 }}>
+              <div style={{ padding: '16px 24px', borderTop: '1px solid rgb(var(--inv) / 0.08)', display: 'flex', gap: 12, justifyContent: 'flex-end', flexShrink: 0 }}>
                 <button
                   onClick={() => { setAddOpen(false); setForm(defaultForm) }}
-                  style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: 'white', borderRadius: 10, padding: '9px 18px', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}
+                  style={{ background: 'transparent', border: '1px solid rgb(var(--inv) / 0.15)', color: 'var(--text-primary)', borderRadius: 10, padding: '9px 18px', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}
                 >
                   Cancel
                 </button>
                 <button
                   disabled={createMutation.isPending}
                   onClick={() => createMutation.mutate(form)}
-                  style={{ background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 10, padding: '9px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 13, opacity: createMutation.isPending ? 0.7 : 1 }}
+                  style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 10, padding: '9px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 13, opacity: createMutation.isPending ? 0.7 : 1 }}
                 >
                   {createMutation.isPending ? 'Saving...' : 'Save Member'}
                 </button>
@@ -571,16 +588,16 @@ export function MembersPage() {
       {/* Import Modal */}
       {importOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
-          <div style={{ backgroundColor: '#1a1b3a', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', width: 440, padding: 32 }}>
+          <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', width: 440, padding: 32 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-              <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18, margin: 0 }}>Import Members</h2>
-              <button onClick={() => setImportOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center' }}>
+              <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18, margin: 0 }}>Import Members</h2>
+              <button onClick={() => setImportOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgb(var(--inv) / 0.5)', display: 'flex', alignItems: 'center' }}>
                 <X size={20} />
               </button>
             </div>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginBottom: 20, lineHeight: 1.5 }}>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginBottom: 20, lineHeight: 1.5 }}>
               Download our template to format your data correctly.{' '}
-              <a href="/api/members/import/template" style={{ color: '#7c6bff', textDecoration: 'none', fontWeight: 600 }}>
+              <a href="/api/members/import/template" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>
                 Download Template
               </a>
             </p>
@@ -593,7 +610,7 @@ export function MembersPage() {
                 style={{ ...inputStyle, cursor: 'pointer' }}
               />
               {importFile && (
-                <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, marginTop: 8 }}>
+                <p style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 12, marginTop: 8 }}>
                   Selected: {importFile.name}
                 </p>
               )}
@@ -601,14 +618,14 @@ export function MembersPage() {
             <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
               <button
                 onClick={() => { setImportOpen(false); setImportFile(null) }}
-                style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: 'white', borderRadius: 10, padding: '9px 18px', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}
+                style={{ background: 'transparent', border: '1px solid rgb(var(--inv) / 0.15)', color: 'var(--text-primary)', borderRadius: 10, padding: '9px 18px', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}
               >
                 Cancel
               </button>
               <button
                 disabled={!importFile}
                 onClick={handleImport}
-                style={{ background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 10, padding: '9px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 13, opacity: !importFile ? 0.5 : 1 }}
+                style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 10, padding: '9px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 13, opacity: !importFile ? 0.5 : 1 }}
               >
                 Import
               </button>

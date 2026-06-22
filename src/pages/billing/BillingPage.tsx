@@ -40,13 +40,18 @@ export function BillingPage() {
   const { data, isLoading } = useQuery({
     queryKey: ['billing'],
     queryFn: async () => {
-      const res = await api.get('/billing/plans')
-      return res.data.data as BillingData
+      const res = await api.get('/api/billing/plans')
+      const d = res.data
+      return {
+        plans: d.plans ?? [],
+        currentPlan: d.currentSubscription?.plan ?? null,
+        billingHistory: [],
+      } as BillingData
     },
   })
 
   const subscribeMutation = useMutation({
-    mutationFn: (planId: string) => api.post('/billing/subscribe', { planId }),
+    mutationFn: (planId: string) => api.post(`/api/billing/subscribe/${planId}`),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['billing'] }),
   })
 
@@ -122,7 +127,7 @@ export function BillingPage() {
                   <CardContent className="space-y-4">
                     {(p.features ?? []).length > 0 && (
                       <ul className="space-y-2">
-                        {p.features!.map(f => (
+                        {(Array.isArray(p.features) ? p.features : []).map(f => (
                           <li key={f} className="flex items-center gap-2 text-sm text-slate-300">
                             <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
                             {f}

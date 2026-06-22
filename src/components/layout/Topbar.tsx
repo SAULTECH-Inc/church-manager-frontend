@@ -98,12 +98,12 @@ export function Topbar() {
   return (
     <header
       className="flex items-center justify-between px-6 shrink-0 border-b"
-      style={{ backgroundColor: 'var(--sidebar-bg, #0d0f23)', borderColor: 'rgba(255,255,255,0.06)', height: 56 }}
+      style={{ backgroundColor: 'var(--sidebar-bg, #0d0f23)', borderColor: 'rgb(var(--inv) / 0.06)', height: 56 }}
     >
       {/* Left: greeting */}
       <div className="min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-white truncate">Hello! {displayName}</span>
+          <span className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>Hello! {displayName}</span>
           <span
             className="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0"
             style={{ backgroundColor: 'rgba(var(--accent-rgb, 124,107,255),0.2)', color: 'var(--accent, #7c6bff)' }}
@@ -111,26 +111,26 @@ export function Topbar() {
             {(user?.role ?? 'ADMIN').replace('ROLE_', '')}
           </span>
         </div>
-        <p className="text-[11px] mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>{todayString()}</p>
+        <p className="text-[11px] mt-0.5" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{todayString()}</p>
       </div>
 
       {/* Right: search + icons */}
       <div className="flex items-center gap-3">
         {/* Search */}
         <div className="relative hidden md:flex items-center">
-          <Search size={14} className="absolute left-3" style={{ color: 'rgba(255,255,255,0.35)' }} />
+          <Search size={14} className="absolute left-3" style={{ color: 'rgb(var(--inv) / 0.35)' }} />
           <input
             type="text"
             placeholder="Search members, events, branches..."
             className="text-sm rounded-xl pl-9 pr-4 py-2 outline-none focus:ring-1 transition-all"
             style={{
-              backgroundColor: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: 'white',
+              backgroundColor: 'rgb(var(--inv) / 0.06)',
+              border: '1px solid rgb(var(--inv) / 0.08)',
+              color: 'var(--text-primary)',
               width: 280,
             }}
             onFocus={e => (e.currentTarget.style.borderColor = 'rgba(var(--accent-rgb,124,107,255),0.5)')}
-            onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
+            onBlur={e => (e.currentTarget.style.borderColor = 'rgb(var(--inv) / 0.08)')}
             onKeyDown={e => { if (e.key === 'Enter') navigate('/search') }}
           />
         </div>
@@ -139,8 +139,8 @@ export function Topbar() {
         <div className="relative" ref={themeRef}>
           <button
             className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors"
-            style={{ color: 'rgba(255,255,255,0.5)', backgroundColor: themeOpen ? 'rgba(255,255,255,0.06)' : 'transparent' }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)')}
+            style={{ color: 'rgb(var(--inv) / 0.5)', backgroundColor: themeOpen ? 'rgb(var(--inv) / 0.06)' : 'transparent' }}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.06)')}
             onMouseLeave={e => { if (!themeOpen) e.currentTarget.style.backgroundColor = 'transparent' }}
             onClick={() => setThemeOpen(o => !o)}
             title="Change theme"
@@ -151,29 +151,50 @@ export function Topbar() {
             <div style={{
               position: 'absolute', top: 44, right: 0, zIndex: 200, width: 220,
               backgroundColor: 'var(--drawer-bg, #1a1b3a)',
-              border: '1px solid rgba(255,255,255,0.10)',
+              border: '1px solid rgb(var(--inv) / 0.10)',
               borderRadius: 14,
               boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
               overflow: 'hidden',
             }}>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '12px 14px 8px' }}>Theme</p>
-              {THEMES.map(t => {
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '12px 14px 6px' }}>Dark</p>
+              {THEMES.filter(t => t.mode === 'dark').map(t => {
                 const active = themeKey === t.key
                 return (
                   <button key={t.key} onClick={() => { setTheme(t.key); applyTheme(t); setThemeOpen(false) }}
                     style={{
-                      display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '9px 14px',
-                      border: 'none', cursor: 'pointer', backgroundColor: active ? 'rgba(255,255,255,0.06)' : 'transparent',
+                      display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '8px 14px',
+                      border: 'none', cursor: 'pointer', backgroundColor: active ? 'rgb(var(--inv) / 0.06)' : 'transparent',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)')}
-                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = active ? 'rgba(255,255,255,0.06)' : 'transparent')}
+                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.05)')}
+                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = active ? 'rgb(var(--inv) / 0.06)' : 'transparent')}
                   >
-                    {/* Color swatch */}
                     <div style={{ display: 'flex', gap: 3, flexShrink: 0 }}>
-                      <div style={{ width: 12, height: 24, borderRadius: '4px 0 0 4px', backgroundColor: t.sidebarBg }} />
-                      <div style={{ width: 20, height: 24, borderRadius: '0 4px 4px 0', background: `linear-gradient(to bottom, ${t.cardBg} 50%, ${t.accent}44)` }} />
+                      <div style={{ width: 12, height: 22, borderRadius: '4px 0 0 4px', backgroundColor: t.sidebarBg, border: '1px solid rgba(255,255,255,0.08)' }} />
+                      <div style={{ width: 20, height: 22, borderRadius: '0 4px 4px 0', background: `linear-gradient(to bottom, ${t.cardBg} 50%, ${t.accent}44)`, border: '1px solid rgba(255,255,255,0.08)' }} />
                     </div>
-                    <span style={{ color: active ? 'white' : 'rgba(255,255,255,0.65)', fontSize: 13, fontWeight: active ? 600 : 400, flex: 1, textAlign: 'left' }}>{t.name}</span>
+                    <span style={{ color: active ? 'var(--text-primary)' : 'rgb(var(--inv) / 0.65)', fontSize: 13, fontWeight: active ? 600 : 400, flex: 1, textAlign: 'left' }}>{t.name}</span>
+                    {active && <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: t.accent, flexShrink: 0 }} />}
+                  </button>
+                )
+              })}
+              <div style={{ height: 1, backgroundColor: 'rgb(var(--inv) / 0.06)', margin: '4px 0' }} />
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '6px 14px 6px' }}>Light</p>
+              {THEMES.filter(t => t.mode === 'light').map(t => {
+                const active = themeKey === t.key
+                return (
+                  <button key={t.key} onClick={() => { setTheme(t.key); applyTheme(t); setThemeOpen(false) }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '8px 14px',
+                      border: 'none', cursor: 'pointer', backgroundColor: active ? 'rgb(var(--inv) / 0.06)' : 'transparent',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.05)')}
+                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = active ? 'rgb(var(--inv) / 0.06)' : 'transparent')}
+                  >
+                    <div style={{ display: 'flex', gap: 3, flexShrink: 0 }}>
+                      <div style={{ width: 12, height: 22, borderRadius: '4px 0 0 4px', backgroundColor: t.sidebarBg, border: '1px solid rgba(0,0,0,0.1)' }} />
+                      <div style={{ width: 20, height: 22, borderRadius: '0 4px 4px 0', background: `linear-gradient(to bottom, ${t.cardBg} 50%, ${t.accent}44)`, border: '1px solid rgba(0,0,0,0.1)' }} />
+                    </div>
+                    <span style={{ color: active ? 'var(--text-primary)' : 'rgb(var(--inv) / 0.65)', fontSize: 13, fontWeight: active ? 600 : 400, flex: 1, textAlign: 'left' }}>{t.name}</span>
                     {active && <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: t.accent, flexShrink: 0 }} />}
                   </button>
                 )
@@ -185,8 +206,8 @@ export function Topbar() {
         {/* Settings */}
         <button
           className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors"
-          style={{ color: 'rgba(255,255,255,0.5)' }}
-          onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)')}
+          style={{ color: 'rgb(var(--inv) / 0.5)' }}
+          onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.06)')}
           onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
           onClick={() => navigate('/settings')}
         >
@@ -197,16 +218,16 @@ export function Topbar() {
         <div className="relative" ref={panelRef}>
           <button
             className="relative w-9 h-9 rounded-xl flex items-center justify-center transition-colors"
-            style={{ color: 'rgba(255,255,255,0.5)', backgroundColor: notifOpen ? 'rgba(255,255,255,0.06)' : 'transparent' }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)')}
+            style={{ color: 'rgb(var(--inv) / 0.5)', backgroundColor: notifOpen ? 'rgb(var(--inv) / 0.06)' : 'transparent' }}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.06)')}
             onMouseLeave={e => { if (!notifOpen) e.currentTarget.style.backgroundColor = 'transparent' }}
             onClick={() => setNotifOpen(o => !o)}
           >
             <Bell size={16} />
             {unreadCount > 0 && (
               <span
-                className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold text-white"
-                style={{ backgroundColor: '#ef4444' }}
+                className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold"
+                style={{ backgroundColor: '#ef4444', color: 'white' }}
               >
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
@@ -218,15 +239,15 @@ export function Topbar() {
             <div style={{
               position: 'absolute', top: 44, right: 0, width: 360, zIndex: 200,
               backgroundColor: 'var(--drawer-bg, #1a1b3a)',
-              border: '1px solid rgba(255,255,255,0.10)',
+              border: '1px solid rgb(var(--inv) / 0.10)',
               borderRadius: 16,
               boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
               overflow: 'hidden',
             }}>
               {/* Header */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid rgb(var(--inv) / 0.08)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>Notifications</span>
+                  <span style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14 }}>Notifications</span>
                   {unreadCount > 0 && (
                     <span style={{ backgroundColor: 'rgba(var(--accent-rgb,124,107,255),0.2)', color: 'var(--accent,#7c6bff)', borderRadius: 20, padding: '2px 8px', fontSize: 11, fontWeight: 700 }}>
                       {unreadCount} new
@@ -241,7 +262,7 @@ export function Topbar() {
                     </button>
                   )}
                   <button onClick={() => setNotifOpen(false)}
-                    style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', padding: 4, borderRadius: 8 }}>
+                    style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.4)', cursor: 'pointer', padding: 4, borderRadius: 8 }}>
                     <X size={14} />
                   </button>
                 </div>
@@ -252,7 +273,7 @@ export function Topbar() {
                 {notifications.length === 0 ? (
                   <div style={{ padding: '32px 16px', textAlign: 'center' }}>
                     <div style={{ fontSize: 28, marginBottom: 8 }}>🔔</div>
-                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>No notifications yet</p>
+                    <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 13 }}>No notifications yet</p>
                   </div>
                 ) : (
                   notifications.map((n) => (
@@ -263,22 +284,22 @@ export function Topbar() {
                         setNotifOpen(false)
                       }}
                       style={{
-                        padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)',
+                        padding: '12px 16px', borderBottom: '1px solid rgb(var(--inv) / 0.05)',
                         cursor: n.actionUrl ? 'pointer' : 'default',
                         backgroundColor: n.read ? 'transparent' : 'rgba(var(--accent-rgb,124,107,255),0.05)',
                         transition: 'background-color 0.15s',
                       }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.04)')}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.04)')}
                       onMouseLeave={e => (e.currentTarget.style.backgroundColor = n.read ? 'transparent' : 'rgba(var(--accent-rgb,124,107,255),0.05)')}
                     >
                       <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                         <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: SEVERITY_COLOR[n.severity] ?? '#7c6bff', flexShrink: 0, marginTop: 5 }} />
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
-                            <p style={{ color: n.read ? 'rgba(255,255,255,0.7)' : 'white', fontWeight: n.read ? 400 : 600, fontSize: 13, margin: 0, lineHeight: 1.3 }}>{n.title}</p>
-                            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, flexShrink: 0 }}>{timeAgo(n.createdAt)}</span>
+                            <p style={{ color: n.read ? 'rgb(var(--inv) / 0.7)' : 'white', fontWeight: n.read ? 400 : 600, fontSize: 13, margin: 0, lineHeight: 1.3 }}>{n.title}</p>
+                            <span style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 11, flexShrink: 0 }}>{timeAgo(n.createdAt)}</span>
                           </div>
-                          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: '3px 0 0', lineHeight: 1.4 }}>{n.message}</p>
+                          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 12, margin: '3px 0 0', lineHeight: 1.4 }}>{n.message}</p>
                         </div>
                       </div>
                     </div>
@@ -292,9 +313,9 @@ export function Topbar() {
         {/* Logout */}
         <button
           className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors"
-          style={{ color: 'rgba(255,255,255,0.5)' }}
+          style={{ color: 'rgb(var(--inv) / 0.5)' }}
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.1)'; e.currentTarget.style.color = '#ef4444' }}
-          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)' }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgb(var(--inv) / 0.5)' }}
           onClick={() => logoutMutation.mutate()}
           title="Sign Out"
         >

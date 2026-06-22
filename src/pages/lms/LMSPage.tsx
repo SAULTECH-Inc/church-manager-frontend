@@ -9,10 +9,10 @@ import { RichTextDisplay } from '@/components/editor/RichTextDisplay'
 interface Course { id: string; title: string; description?: string; instructor?: string; level: string; status: string; enrolledCount: number; completedCount: number; classroomUrl?: string; thumbnailUrl?: string; category?: string }
 interface LMSMember { id: string; fullName: string }
 
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const inputStyle: React.CSSProperties = { backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const outlineBtn: React.CSSProperties = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const inputStyle: React.CSSProperties = { backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const outlineBtn: React.CSSProperties = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
 
 interface DrawerProps { open: boolean; onClose: () => void; title: string; children: React.ReactNode; footer: React.ReactNode }
 function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
@@ -21,13 +21,13 @@ function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
     <>
       <div style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-        <div style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}><X size={20} /></button>
+        <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer' }}><X size={20} /></button>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-5">{children}</div>
-          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -38,13 +38,13 @@ const statusBadge = (s: string) => {
   if (s === 'ACTIVE') return { color: '#34d399', bg: 'rgba(52,211,153,0.15)' }
   if (s === 'COMPLETED') return { color: '#60a5fa', bg: 'rgba(96,165,250,0.15)' }
   if (s === 'DRAFT') return { color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' }
-  return { color: 'rgba(255,255,255,0.4)', bg: 'rgba(255,255,255,0.08)' }
+  return { color: 'rgb(var(--inv) / 0.4)', bg: 'rgb(var(--inv) / 0.08)' }
 }
 const levelBadge = (l: string) => {
   if (l === 'BEGINNER') return { color: '#34d399', bg: 'rgba(52,211,153,0.12)' }
   if (l === 'INTERMEDIATE') return { color: '#f59e0b', bg: 'rgba(245,158,11,0.12)' }
   if (l === 'ADVANCED') return { color: '#f87171', bg: 'rgba(248,113,113,0.12)' }
-  return { color: 'rgba(255,255,255,0.4)', bg: 'rgba(255,255,255,0.08)' }
+  return { color: 'rgb(var(--inv) / 0.4)', bg: 'rgb(var(--inv) / 0.08)' }
 }
 const LEVEL_GRADIENTS: Record<string, string> = {
   BEGINNER: 'linear-gradient(135deg, #10b981, #34d399)',
@@ -103,11 +103,11 @@ export function LMSPage() {
   const openEnroll = (id: string) => { setEnrollCourseId(id); setEnrollDrawer(true) }
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Learning Management</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Courses · Enrolments · Progress</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Learning Management</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Courses · Enrolments · Progress</p>
         </div>
         <button onClick={() => setCourseDrawer(true)} style={{ ...gradientBtn, display: 'flex', alignItems: 'center', gap: 6 }}><Plus size={15} /> New Course</button>
       </div>
@@ -119,29 +119,29 @@ export function LMSPage() {
           { label: 'Total Enrolments', value: stats.enrolments ?? 0 },
           { label: 'Completions', value: stats.completions ?? 0 },
         ].map(k => (
-          <div key={k.label} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 20 }}>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: '0 0 4px' }}>{k.value}</p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
+          <div key={k.label} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 20 }}>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: '0 0 4px' }}>{k.value}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
           </div>
         ))}
       </div>
 
-      {isLoading && <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading...</p></div>}
+      {isLoading && <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading...</p></div>}
 
       {!isLoading && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
           {courses.length === 0 && (
-            <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center', gridColumn: '1/-1' }}>
-              <p style={{ color: 'rgba(255,255,255,0.4)' }}>No courses yet. Create your first course to get started.</p>
+            <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center', gridColumn: '1/-1' }}>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)' }}>No courses yet. Create your first course to get started.</p>
             </div>
           )}
           {courses.map(course => {
             const sb = statusBadge(course.status)
             const lb = levelBadge(course.level)
-            const grad = LEVEL_GRADIENTS[course.level] ?? 'linear-gradient(135deg, #7c6bff, #6456e8)'
+            const grad = LEVEL_GRADIENTS[course.level] ?? 'linear-gradient(135deg, var(--accent), var(--accent-dark))'
             const completePct = course.enrolledCount > 0 ? Math.round((course.completedCount / course.enrolledCount) * 100) : 0
             return (
-              <div key={course.id} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' as const }}>
+              <div key={course.id} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' as const }}>
                 <div style={{ height: 100, background: course.thumbnailUrl ? `url(${course.thumbnailUrl}) center/cover` : grad, position: 'relative' }}>
                   <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.35)', display: 'flex', alignItems: 'flex-end', padding: '10px 14px', gap: 6 }}>
                     <span style={{ backgroundColor: sb.bg, color: sb.color, borderRadius: 20, padding: '2px 8px', fontSize: 11, fontWeight: 700 }}>{course.status}</span>
@@ -149,24 +149,24 @@ export function LMSPage() {
                   </div>
                 </div>
                 <div style={{ padding: '16px 18px', flex: 1, display: 'flex', flexDirection: 'column' as const }}>
-                  {course.category && <p style={{ color: '#7c6bff', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', margin: '0 0 4px' }}>{course.category}</p>}
-                  <h3 style={{ color: 'white', fontWeight: 700, fontSize: 15, margin: '0 0 4px' }}>{course.title}</h3>
-                  {course.instructor && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: '0 0 8px' }}>by {course.instructor}</p>}
+                  {course.category && <p style={{ color: 'var(--accent)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', margin: '0 0 4px' }}>{course.category}</p>}
+                  <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 15, margin: '0 0 4px' }}>{course.title}</h3>
+                  {course.instructor && <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 12, margin: '0 0 8px' }}>by {course.instructor}</p>}
                   {course.description && <RichTextDisplay html={course.description} clamp={2} style={{ margin: '0 0 12px' }} />}
                   <div style={{ marginBottom: 12 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                      <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{course.enrolledCount} enrolled · {course.completedCount} completed</span>
-                      <span style={{ color: '#7c6bff', fontSize: 12, fontWeight: 700 }}>{completePct}%</span>
+                      <span style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 12 }}>{course.enrolledCount} enrolled · {course.completedCount} completed</span>
+                      <span style={{ color: 'var(--accent)', fontSize: 12, fontWeight: 700 }}>{completePct}%</span>
                     </div>
-                    <div style={{ height: 5, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.08)' }}>
-                      <div style={{ height: '100%', borderRadius: 3, background: 'linear-gradient(135deg, #7c6bff, #6456e8)', width: `${completePct}%` }} />
+                    <div style={{ height: 5, borderRadius: 3, backgroundColor: 'rgb(var(--inv) / 0.08)' }}>
+                      <div style={{ height: '100%', borderRadius: 3, background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', width: `${completePct}%` }} />
                     </div>
                   </div>
                   <div className="flex gap-2 mt-auto">
                     <button onClick={() => openEnroll(course.id)} style={{ ...gradientBtn, flex: 1, padding: '8px 12px', fontSize: 13 }}>Enrol Student</button>
                     {course.classroomUrl && (
                       <a href={course.classroomUrl} target="_blank" rel="noreferrer"
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', borderRadius: 12, padding: '8px 12px', cursor: 'pointer', fontWeight: 500, fontSize: 13, textDecoration: 'none' }}>
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, backgroundColor: 'rgb(var(--inv) / 0.06)', border: '1px solid rgb(var(--inv) / 0.1)', color: 'rgb(var(--inv) / 0.7)', borderRadius: 12, padding: '8px 12px', cursor: 'pointer', fontWeight: 500, fontSize: 13, textDecoration: 'none' }}>
                         <ExternalLink size={13} /> Classroom
                       </a>
                     )}

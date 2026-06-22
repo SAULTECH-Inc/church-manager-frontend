@@ -25,7 +25,7 @@ interface DetailData {
 }
 
 function fieldStyle(): React.CSSProperties {
-  return { backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+  return { backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
 }
 
 function badge(bg: string, color: string, text: string) {
@@ -34,31 +34,31 @@ function badge(bg: string, color: string, text: string) {
 
 function statusBadge(status: string) {
   if (status === 'ACTIVE') return badge('rgba(16,185,129,0.15)', '#34d399', 'ACTIVE')
-  return badge('rgba(255,255,255,0.08)', 'rgba(255,255,255,0.5)', status)
+  return badge('rgb(var(--inv) / 0.08)', 'rgb(var(--inv) / 0.5)', status)
 }
 
 function roleBadge(role?: string) {
   if (role === 'LEADER') return badge('rgba(245,158,11,0.15)', '#fbbf24', role)
   if (role === 'CO_LEADER') return badge('rgba(99,102,241,0.15)', '#818cf8', role)
-  return badge('rgba(255,255,255,0.08)', 'rgba(255,255,255,0.5)', role || 'MEMBER')
+  return badge('rgb(var(--inv) / 0.08)', 'rgb(var(--inv) / 0.5)', role || 'MEMBER')
 }
 
 function urgencyBadge(urgency?: string) {
   if (urgency === 'CRITICAL') return badge('rgba(239,68,68,0.15)', '#f87171', urgency)
   if (urgency === 'URGENT') return badge('rgba(245,158,11,0.15)', '#fbbf24', urgency)
-  return badge('rgba(255,255,255,0.08)', 'rgba(255,255,255,0.5)', urgency || 'NORMAL')
+  return badge('rgb(var(--inv) / 0.08)', 'rgb(var(--inv) / 0.5)', urgency || 'NORMAL')
 }
 
 function prayerStatusBadge(status?: string) {
   if (status === 'ANSWERED') return badge('rgba(16,185,129,0.15)', '#34d399', status)
   if (status === 'IN_PRAYER') return badge('rgba(59,130,246,0.15)', '#60a5fa', status)
-  return badge('rgba(255,255,255,0.08)', 'rgba(255,255,255,0.5)', status || '—')
+  return badge('rgb(var(--inv) / 0.08)', 'rgb(var(--inv) / 0.5)', status || '—')
 }
 
-const cardStyle: React.CSSProperties = { backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 24 }
-const sectionLabel: React.CSSProperties = { fontSize: 10, fontWeight: 700, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 12, letterSpacing: 1 }
-const outlineBtn: React.CSSProperties = { border: '1px solid rgba(255,255,255,0.15)', background: 'transparent', color: 'white', borderRadius: 12, padding: '8px 16px', fontSize: 14, cursor: 'pointer', whiteSpace: 'nowrap' }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '8px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }
+const cardStyle: React.CSSProperties = { backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 24 }
+const sectionLabel: React.CSSProperties = { fontSize: 10, fontWeight: 700, textTransform: 'uppercase', color: 'rgb(var(--inv) / 0.4)', marginBottom: 12, letterSpacing: 1 }
+const outlineBtn: React.CSSProperties = { border: '1px solid rgb(var(--inv) / 0.15)', background: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '8px 16px', fontSize: 14, cursor: 'pointer', whiteSpace: 'nowrap' }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '8px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }
 
 export function MemberDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -98,13 +98,13 @@ export function MemberDetailPage() {
   })
 
   if (isLoading) return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)', color: 'rgb(var(--inv) / 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       Loading member details…
     </div>
   )
 
   if (isError || !data) return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326', color: '#f87171' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)', color: '#f87171' }}>
       Failed to load member data.
     </div>
   )
@@ -120,7 +120,7 @@ export function MemberDetailPage() {
   } = data ?? {}
 
   if (!member) return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326', color: '#f87171' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)', color: '#f87171' }}>
       Member not found.
     </div>
   )
@@ -131,7 +131,7 @@ export function MemberDetailPage() {
   function field(label: string, key: keyof Member, type = 'text') {
     return (
       <div>
-        <label style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', display: 'block', marginBottom: 4 }}>{label}</label>
+        <label style={{ fontSize: 11, color: 'rgb(var(--inv) / 0.5)', display: 'block', marginBottom: 4 }}>{label}</label>
         <input type={type} value={(editForm[key] as string) ?? ''} onChange={e => setEditForm(p => ({ ...p, [key]: e.target.value }))} style={fieldStyle()} />
       </div>
     )
@@ -140,7 +140,7 @@ export function MemberDetailPage() {
   function selectField(label: string, key: keyof Member, options: string[]) {
     return (
       <div>
-        <label style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', display: 'block', marginBottom: 4 }}>{label}</label>
+        <label style={{ fontSize: 11, color: 'rgb(var(--inv) / 0.5)', display: 'block', marginBottom: 4 }}>{label}</label>
         <select value={(editForm[key] as string) ?? ''} onChange={e => setEditForm(p => ({ ...p, [key]: e.target.value }))} style={{ ...fieldStyle(), appearance: 'none' }}>
           <option value="">Select…</option>
           {options.map(o => <option key={o} value={o}>{o}</option>)}
@@ -150,38 +150,38 @@ export function MemberDetailPage() {
   }
 
   const tabBtn = (tab: typeof activeEditTab, label: string) => (
-    <button onClick={() => setActiveEditTab(tab)} style={{ background: activeEditTab === tab ? '#7c6bff' : 'transparent', color: activeEditTab === tab ? 'white' : 'rgba(255,255,255,0.5)', border: 'none', borderRadius: 8, padding: '6px 12px', fontSize: 13, cursor: 'pointer' }}>
+    <button onClick={() => setActiveEditTab(tab)} style={{ background: activeEditTab === tab ? '#7c6bff' : 'transparent', color: activeEditTab === tab ? 'white' : 'rgb(var(--inv) / 0.5)', border: 'none', borderRadius: 8, padding: '6px 12px', fontSize: 13, cursor: 'pointer' }}>
       {label}
     </button>
   )
 
   const infoItem = (label: string, value?: string) => (
     <div>
-      <dt style={{ fontSize: 10, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', letterSpacing: 0.8 }}>{label}</dt>
-      <dd style={{ fontSize: 14, color: 'white', fontWeight: 500, marginTop: 2 }}>{value || '—'}</dd>
+      <dt style={{ fontSize: 10, textTransform: 'uppercase', color: 'rgb(var(--inv) / 0.4)', letterSpacing: 0.8 }}>{label}</dt>
+      <dd style={{ fontSize: 14, color: 'var(--text-primary)', fontWeight: 500, marginTop: 2 }}>{value || '—'}</dd>
     </div>
   )
 
   const uploadBox = (height: number) => (
-    <div style={{ width: '100%', height, backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 12, border: '1px dashed rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Camera size={20} color="rgba(255,255,255,0.3)" />
+    <div style={{ width: '100%', height, backgroundColor: 'rgb(var(--inv) / 0.04)', borderRadius: 12, border: '1px dashed rgb(var(--inv) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Camera size={20} color="rgb(var(--inv) / 0.3)" />
     </div>
   )
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       {/* Breadcrumb + Header */}
-      <div style={{ marginBottom: 6, fontSize: 13, color: 'rgba(255,255,255,0.45)' }}>
-        <Link to="/members" style={{ color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>Members</Link>
+      <div style={{ marginBottom: 6, fontSize: 13, color: 'rgb(var(--inv) / 0.45)' }}>
+        <Link to="/members" style={{ color: 'rgb(var(--inv) / 0.45)', textDecoration: 'none' }}>Members</Link>
         {' / '}
-        <span style={{ color: 'rgba(255,255,255,0.7)' }}>{member.fullName}</span>
+        <span style={{ color: 'rgb(var(--inv) / 0.7)' }}>{member.fullName}</span>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: 'white', margin: 0 }}>{member.fullName}</h1>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>{member.fullName}</h1>
           {(member.membershipType || member.memberCategory) && (
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>
+            <p style={{ fontSize: 13, color: 'rgb(var(--inv) / 0.5)', marginTop: 4 }}>
               {[member.membershipType, member.memberCategory].filter(Boolean).join(' · ')}
             </p>
           )}
@@ -206,17 +206,17 @@ export function MemberDetailPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '280px 240px 1fr', gap: 24, marginTop: 24 }}>
         {/* Profile Card */}
         <div style={cardStyle}>
-          <div style={{ width: 80, height: 80, borderRadius: 20, background: 'linear-gradient(135deg, #7c6bff, #6456e8)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: 'white', fontWeight: 700, fontSize: 24 }}>{getInitials(member.fullName)}</span>
+          <div style={{ width: 80, height: 80, borderRadius: 20, background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 24 }}>{getInitials(member.fullName)}</span>
           </div>
-          <div style={{ fontWeight: 700, fontSize: 17, color: 'white', marginTop: 12 }}>{member.fullName}</div>
-          {member.email && <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, marginTop: 2 }}>{member.email}</div>}
-          {member.phoneNumber && <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, marginTop: 2 }}>{member.phoneNumber}</div>}
+          <div style={{ fontWeight: 700, fontSize: 17, color: 'var(--text-primary)', marginTop: 12 }}>{member.fullName}</div>
+          {member.email && <div style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13, marginTop: 2 }}>{member.email}</div>}
+          {member.phoneNumber && <div style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13, marginTop: 2 }}>{member.phoneNumber}</div>}
           <div style={{ display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
             {statusBadge(member.membershipStatus)}
-            {member.memberCategory && badge('rgba(255,255,255,0.06)', 'rgba(255,255,255,0.6)', member.memberCategory)}
+            {member.memberCategory && badge('rgb(var(--inv) / 0.06)', 'rgb(var(--inv) / 0.6)', member.memberCategory)}
           </div>
-          <div style={{ marginTop: 16, borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 16, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 8px' }}>
+          <div style={{ marginTop: 16, borderTop: '1px solid rgb(var(--inv) / 0.06)', paddingTop: 16, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 8px' }}>
             {[
               ['Joined', formatDate(member.dateJoined || member.createdAt)],
               ['Type', member.membershipType || '—'],
@@ -224,8 +224,8 @@ export function MemberDetailPage() {
               ['Nationality', member.nationality || '—'],
             ].map(([label, value]) => (
               <div key={label}>
-                <div style={{ fontSize: 10, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', letterSpacing: 0.8 }}>{label}</div>
-                <div style={{ fontSize: 13, color: 'white', fontWeight: 500, marginTop: 2 }}>{value}</div>
+                <div style={{ fontSize: 10, textTransform: 'uppercase', color: 'rgb(var(--inv) / 0.4)', letterSpacing: 0.8 }}>{label}</div>
+                <div style={{ fontSize: 13, color: 'var(--text-primary)', fontWeight: 500, marginTop: 2 }}>{value}</div>
               </div>
             ))}
           </div>
@@ -234,12 +234,12 @@ export function MemberDetailPage() {
         {/* Digital Assets */}
         <div style={cardStyle}>
           <div style={sectionLabel}>Digital Assets</div>
-          <div style={{ marginBottom: 6, fontSize: 10, fontWeight: 600, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Passport Photo</div>
+          <div style={{ marginBottom: 6, fontSize: 10, fontWeight: 600, textTransform: 'uppercase', color: 'rgb(var(--inv) / 0.4)' }}>Passport Photo</div>
           {uploadBox(80)}
           <button onClick={() => passportRef.current?.click()} style={{ ...outlineBtn, marginTop: 8, width: '100%', fontSize: 12, padding: '6px 12px' }}>Upload Photo</button>
           <input ref={passportRef} type="file" accept="image/*" style={{ display: 'none' }} />
-          <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', margin: '16px 0' }} />
-          <div style={{ marginBottom: 6, fontSize: 10, fontWeight: 600, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Signature</div>
+          <div style={{ borderTop: '1px solid rgb(var(--inv) / 0.06)', margin: '16px 0' }} />
+          <div style={{ marginBottom: 6, fontSize: 10, fontWeight: 600, textTransform: 'uppercase', color: 'rgb(var(--inv) / 0.4)' }}>Signature</div>
           {uploadBox(56)}
           <button onClick={() => signatureRef.current?.click()} style={{ ...outlineBtn, marginTop: 8, width: '100%', fontSize: 12, padding: '6px 12px' }}>Upload Signature</button>
           <input ref={signatureRef} type="file" accept="image/*" style={{ display: 'none' }} />
@@ -267,7 +267,7 @@ export function MemberDetailPage() {
             </>
           ) : (
             <>
-              <div style={{ display: 'flex', gap: 4, marginBottom: 20, background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: 4, width: 'fit-content' }}>
+              <div style={{ display: 'flex', gap: 4, marginBottom: 20, background: 'rgb(var(--inv) / 0.04)', borderRadius: 10, padding: 4, width: 'fit-content' }}>
                 {tabBtn('personal', 'Personal')}
                 {tabBtn('church', 'Church')}
                 {tabBtn('contact', 'Contact & Emergency')}
@@ -299,7 +299,7 @@ export function MemberDetailPage() {
               {activeEditTab === 'contact' && (
                 <div style={{ display: 'grid', gap: 16 }}>
                   <div>
-                    <label style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', display: 'block', marginBottom: 4 }}>Address</label>
+                    <label style={{ fontSize: 11, color: 'rgb(var(--inv) / 0.5)', display: 'block', marginBottom: 4 }}>Address</label>
                     <textarea rows={3} value={editForm.address ?? ''} onChange={e => setEditForm(p => ({ ...p, address: e.target.value }))} style={{ ...fieldStyle(), resize: 'vertical' }} />
                   </div>
                   {field('Emergency Contact', 'emergencyContact')}
@@ -321,22 +321,22 @@ export function MemberDetailPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginTop: 24 }}>
         {/* Giving History */}
         <div style={cardStyle}>
-          <div style={{ fontWeight: 600, color: 'white', marginBottom: 12 }}>Giving History</div>
+          <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: 12 }}>Giving History</div>
           {givingHistory.length === 0
-            ? <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>No giving records</p>
+            ? <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14 }}>No giving records</p>
             : <>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                   <tbody>
                     {givingHistory.map(g => (
-                      <tr key={g.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <td style={{ padding: '8px 0', color: 'rgba(255,255,255,0.7)' }}>{formatDate(g.givingDate)}</td>
+                      <tr key={g.id} style={{ borderBottom: '1px solid rgb(var(--inv) / 0.05)' }}>
+                        <td style={{ padding: '8px 0', color: 'rgb(var(--inv) / 0.7)' }}>{formatDate(g.givingDate)}</td>
                         <td style={{ padding: '8px 4px' }}>{g.givingType && badge('rgba(124,107,255,0.15)', '#a78bfa', g.givingType)}</td>
                         <td style={{ padding: '8px 0', textAlign: 'right', color: '#34d399', fontWeight: 600 }}>₦{g.amount.toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <div style={{ textAlign: 'right', marginTop: 8, fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>
+                <div style={{ textAlign: 'right', marginTop: 8, fontSize: 13, color: 'rgb(var(--inv) / 0.6)' }}>
                   Total Given: <span style={{ color: '#34d399', fontWeight: 700 }}>₦{totalGiven.toLocaleString()}</span>
                 </div>
               </>
@@ -345,14 +345,14 @@ export function MemberDetailPage() {
 
         {/* Fellowship Groups */}
         <div style={cardStyle}>
-          <div style={{ fontWeight: 600, color: 'white', marginBottom: 12 }}>Fellowship Groups</div>
+          <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: 12 }}>Fellowship Groups</div>
           {fellowshipGroups.length === 0
-            ? <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>No fellowship groups</p>
+            ? <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14 }}>No fellowship groups</p>
             : fellowshipGroups.map(g => (
-                <div key={g.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                <div key={g.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid rgb(var(--inv) / 0.05)' }}>
                   <div>
-                    <div style={{ color: 'white', fontWeight: 500, fontSize: 14 }}>{g.name}</div>
-                    {g.type && <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{g.type}</div>}
+                    <div style={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: 14 }}>{g.name}</div>
+                    {g.type && <div style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 12 }}>{g.type}</div>}
                   </div>
                   <div style={{ display: 'flex', gap: 6 }}>
                     {g.role && roleBadge(g.role)}
@@ -365,23 +365,23 @@ export function MemberDetailPage() {
 
         {/* Bible School */}
         <div style={cardStyle}>
-          <div style={{ fontWeight: 600, color: 'white', marginBottom: 12 }}>Bible School</div>
+          <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: 12 }}>Bible School</div>
           {lmsEnrollments.length === 0
-            ? <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>No enrollments</p>
+            ? <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14 }}>No enrollments</p>
             : lmsEnrollments.map(e => (
-                <div key={e.id} style={{ padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                <div key={e.id} style={{ padding: '8px 0', borderBottom: '1px solid rgb(var(--inv) / 0.05)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                     <div>
-                      <div style={{ color: 'white', fontWeight: 500, fontSize: 14 }}>{e.courseTitle || '—'}</div>
-                      {e.instructorName && <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{e.instructorName}</div>}
+                      <div style={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: 14 }}>{e.courseTitle || '—'}</div>
+                      {e.instructorName && <div style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 12 }}>{e.instructorName}</div>}
                     </div>
                     {e.status && statusBadge(e.status)}
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ flex: 1, height: 6, backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 3, overflow: 'hidden' }}>
+                    <div style={{ flex: 1, height: 6, backgroundColor: 'rgb(var(--inv) / 0.08)', borderRadius: 3, overflow: 'hidden' }}>
                       <div style={{ width: `${e.progressPercent ?? 0}%`, height: '100%', backgroundColor: '#7c6bff', borderRadius: 3 }} />
                     </div>
-                    <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', minWidth: 30 }}>{e.progressPercent ?? 0}%</span>
+                    <span style={{ fontSize: 12, color: 'rgb(var(--inv) / 0.5)', minWidth: 30 }}>{e.progressPercent ?? 0}%</span>
                   </div>
                 </div>
               ))
@@ -390,17 +390,17 @@ export function MemberDetailPage() {
 
         {/* Counseling Records */}
         <div style={cardStyle}>
-          <div style={{ fontWeight: 600, color: 'white', marginBottom: 12 }}>Counseling Records</div>
+          <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: 12 }}>Counseling Records</div>
           {counselingRecords.length === 0
-            ? <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>No counseling records</p>
+            ? <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14 }}>No counseling records</p>
             : counselingRecords.map(c => (
-                <div key={c.id} style={{ padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                <div key={c.id} style={{ padding: '8px 0', borderBottom: '1px solid rgb(var(--inv) / 0.05)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                     {c.type && badge('rgba(124,107,255,0.15)', '#a78bfa', c.type)}
-                    {c.pastorName && <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{c.pastorName}</span>}
-                    {c.sessionDate && <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, marginLeft: 'auto' }}>{formatDate(c.sessionDate)}</span>}
+                    {c.pastorName && <span style={{ color: 'rgb(var(--inv) / 0.7)', fontSize: 13 }}>{c.pastorName}</span>}
+                    {c.sessionDate && <span style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, marginLeft: 'auto' }}>{formatDate(c.sessionDate)}</span>}
                   </div>
-                  {c.notes && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{c.notes}</p>}
+                  {c.notes && <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 12, margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{c.notes}</p>}
                 </div>
               ))
           }
@@ -410,27 +410,27 @@ export function MemberDetailPage() {
       {/* Prayer Requests */}
       <div style={{ ...cardStyle, marginTop: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <span style={{ fontWeight: 600, color: 'white', fontSize: 16 }}>Prayer Requests</span>
+          <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: 16 }}>Prayer Requests</span>
           <span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: '#a78bfa', borderRadius: 20, padding: '2px 10px', fontSize: 12, fontWeight: 600 }}>{prayerRequests.length}</span>
         </div>
         {prayerRequests.length === 0
-          ? <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>No prayer requests</p>
+          ? <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14 }}>No prayer requests</p>
           : <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.06)' }}>
                   {['Title', 'Category', 'Urgency', 'Status', 'Date'].map(h => (
-                    <th key={h} style={{ padding: '6px 8px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>{h}</th>
+                    <th key={h} style={{ padding: '6px 8px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', color: 'rgb(var(--inv) / 0.4)', fontWeight: 600 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {prayerRequests.map(p => (
-                  <tr key={p.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <td style={{ padding: '10px 8px', color: 'white', fontWeight: 500 }}>{p.title}</td>
-                    <td style={{ padding: '10px 8px', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{p.category || '—'}</td>
+                  <tr key={p.id} style={{ borderBottom: '1px solid rgb(var(--inv) / 0.04)' }}>
+                    <td style={{ padding: '10px 8px', color: 'var(--text-primary)', fontWeight: 500 }}>{p.title}</td>
+                    <td style={{ padding: '10px 8px', color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{p.category || '—'}</td>
                     <td style={{ padding: '10px 8px' }}>{urgencyBadge(p.urgencyLevel)}</td>
                     <td style={{ padding: '10px 8px' }}>{prayerStatusBadge(p.status)}</td>
-                    <td style={{ padding: '10px 8px', color: 'rgba(255,255,255,0.5)' }}>{formatDate(p.createdAt)}</td>
+                    <td style={{ padding: '10px 8px', color: 'rgb(var(--inv) / 0.5)' }}>{formatDate(p.createdAt)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -441,23 +441,23 @@ export function MemberDetailPage() {
       {/* Documents & Files */}
       <div style={{ ...cardStyle, marginTop: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-          <span style={{ fontWeight: 600, color: 'white', fontSize: 16 }}>Documents &amp; Files</span>
+          <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: 16 }}>Documents &amp; Files</span>
           <button onClick={() => uploadRef.current?.click()} style={{ ...gradientBtn, padding: '6px 14px', fontSize: 13 }}>Upload File</button>
           <input ref={uploadRef} type="file" style={{ display: 'none' }} onChange={e => {
             const file = e.target.files?.[0]
             if (!file) return
             const fd = new FormData(); fd.append('file', file)
             api.post(`/api/members/${id}/attachments`, fd)
-              .then(() => queryClient.invalidateQueries(['member', id]))
+              .then(() => queryClient.invalidateQueries({ queryKey: ['member', id] }))
           }} />
         </div>
         {attachments.length === 0
-          ? <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>No files uploaded</p>
+          ? <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14 }}>No files uploaded</p>
           : attachments.map(a => (
-              <div key={a.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', justifyContent: 'space-between' }}>
+              <div key={a.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid rgb(var(--inv) / 0.05)', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <FileText size={16} color="#7c6bff" />
-                  <span style={{ color: 'white', fontSize: 14 }}>{a.fileName}</span>
+                  <span style={{ color: 'var(--text-primary)', fontSize: 14 }}>{a.fileName}</span>
                 </div>
                 <button onClick={() => deleteMutation.mutate(a.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
                   <Trash2 size={15} color="rgba(239,68,68,0.7)" />

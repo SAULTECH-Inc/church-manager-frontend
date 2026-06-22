@@ -9,11 +9,11 @@ import { RichTextEditor } from '@/components/editor/RichTextEditor'
 import { RichTextDisplay } from '@/components/editor/RichTextDisplay'
 
 // Design system constants
-const PAGE_BG = '#131326'
-const CARD = '#13152e'
-const DRAWER_BG = '#1a1b3a'
-const INPUT_BG = '#1e2248'
-const BORDER = 'rgba(255,255,255,0.08)'
+const PAGE_BG = 'var(--page-bg)'
+const CARD = 'var(--card-bg)'
+const DRAWER_BG = 'var(--drawer-bg)'
+const INPUT_BG = 'var(--input-bg)'
+const BORDER = 'rgb(var(--inv) / 0.08)'
 const ACCENT = '#7c6bff'
 const ACCENT_DARK = '#6456e8'
 const TEXT = '#e2e8f0'
@@ -231,7 +231,7 @@ export function EventsPage() {
         <div style={{ overflowX: 'auto', borderRadius: '12px', border: `1px solid ${BORDER}` }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '1000px' }}>
             <thead>
-              <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: `1px solid ${BORDER}` }}>
+              <tr style={{ background: 'rgb(var(--inv) / 0.03)', borderBottom: `1px solid ${BORDER}` }}>
                 {['Event Program', 'Type', 'Date & Schedule', 'Location', 'Registrations', 'Budget', 'Actions'].map(col => (
                   <th
                     key={col}
@@ -262,7 +262,7 @@ export function EventsPage() {
                     key={e.id}
                     style={{
                       background: CARD,
-                      borderBottom: i < filtered.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                      borderBottom: i < filtered.length - 1 ? '1px solid rgb(var(--inv) / 0.05)' : 'none',
                       transition: 'background 0.15s',
                     }}
                     onMouseEnter={ev => (ev.currentTarget.style.background = '#171934')}
@@ -324,7 +324,7 @@ export function EventsPage() {
                               ₦{e.budgetAllocated.toLocaleString()}
                             </span>
                           </div>
-                          <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '999px', overflow: 'hidden' }}>
+                          <div style={{ height: '5px', background: 'rgb(var(--inv) / 0.08)', borderRadius: '999px', overflow: 'hidden' }}>
                             <div
                               style={{
                                 height: '100%',
@@ -375,7 +375,7 @@ export function EventsPage() {
       {/* ── Edit Event Modal ── */}
       {!!editEvent && <div onClick={() => { setEditEvent(null); editForm.reset() }} style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} />}
       {!!editEvent && <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-      <div style={{ backgroundColor: DRAWER_BG, borderRadius: 24, width: '100%', maxWidth: 560, maxHeight: '90vh', border: `1px solid rgba(255,255,255,0.1)`, display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+      <div style={{ backgroundColor: DRAWER_BG, borderRadius: 24, width: '100%', maxWidth: 560, maxHeight: '90vh', border: `1px solid rgb(var(--inv) / 0.1)`, display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
         <div style={{ padding: '24px', borderBottom: `1px solid ${BORDER}`, flexShrink: 0 }}>
           <h2 style={{ color: TEXT, fontSize: '18px', fontWeight: 700, margin: 0 }}>Edit Event</h2>
           <p style={{ color: TEXT_MUTED, fontSize: '13px', marginTop: '4px' }}>{editEvent.name}</p>
@@ -406,7 +406,7 @@ export function EventsPage() {
           <div><label style={labelStyle}>Description</label><Controller name="description" control={editForm.control} render={({ field }) => <RichTextEditor value={field.value ?? ''} onChange={field.onChange} placeholder="Event description..." minHeight={100} />} /></div>
           <div style={{ display: 'flex', gap: '12px', marginTop: 'auto', paddingTop: '8px' }}>
             <button type="button" onClick={() => { setEditEvent(null); editForm.reset() }}
-              style={{ flex: 1, background: 'rgba(255,255,255,0.06)', color: TEXT_MUTED, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '10px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>
+              style={{ flex: 1, background: 'rgb(var(--inv) / 0.06)', color: TEXT_MUTED, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '10px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>
               Cancel
             </button>
             <button type="submit" disabled={editMutation.isPending}
@@ -428,7 +428,7 @@ export function EventsPage() {
           width: '100%',
           maxWidth: 560,
           maxHeight: '90vh',
-          border: `1px solid rgba(255,255,255,0.1)`,
+          border: `1px solid rgb(var(--inv) / 0.1)`,
           display: 'flex', flexDirection: 'column',
           overflow: 'hidden',
           pointerEvents: 'auto',
@@ -505,7 +505,7 @@ export function EventsPage() {
               onClick={() => { setDrawerOpen(false); form.reset() }}
               style={{
                 flex: 1,
-                background: 'rgba(255,255,255,0.06)',
+                background: 'rgb(var(--inv) / 0.06)',
                 color: TEXT_MUTED,
                 border: `1px solid ${BORDER}`,
                 borderRadius: '8px',

@@ -9,10 +9,10 @@ interface StaffMember { id: string; fullName: string; email?: string; phone?: st
 interface LeaveRequest { id: string; staffName?: string; staffTitle?: string; leaveType: string; startDate: string; endDate: string; dayCount?: number; reason?: string; status: string }
 interface Member { id: string; fullName: string }
 
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const inputStyle: React.CSSProperties = { backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const outlineBtn: React.CSSProperties = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const inputStyle: React.CSSProperties = { backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const outlineBtn: React.CSSProperties = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
 
 interface DrawerProps { open: boolean; onClose: () => void; title: string; children: React.ReactNode; footer: React.ReactNode }
 function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
@@ -21,13 +21,13 @@ function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
     <>
       <div className="fixed inset-0 z-40" style={{ backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ padding: 20, pointerEvents: 'none' }}>
-        <div className="flex flex-col overflow-hidden" style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', pointerEvents: 'auto' }}>
-          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', padding: 4 }}><X size={20} /></button>
+        <div className="flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', pointerEvents: 'auto' }}>
+          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer', padding: 4 }}><X size={20} /></button>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-5">{children}</div>
-          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -44,7 +44,7 @@ const leaveStatusColor = (s: string) => {
   if (s === 'APPROVED') return { color: '#34d399', bg: 'rgba(52,211,153,0.15)' }
   if (s === 'PENDING') return { color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' }
   if (s === 'REJECTED') return { color: '#f87171', bg: 'rgba(248,113,113,0.15)' }
-  return { color: 'rgba(255,255,255,0.4)', bg: 'rgba(255,255,255,0.06)' }
+  return { color: 'rgb(var(--inv) / 0.4)', bg: 'rgb(var(--inv) / 0.06)' }
 }
 
 function calcTenure(startDate?: string) {
@@ -119,11 +119,11 @@ export function HRPage() {
   ]
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Human Resources</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Staff Management · Leave Requests · Payroll</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Human Resources</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Staff Management · Leave Requests · Payroll</p>
         </div>
         <div className="flex items-center gap-2">
           <div style={{ position: 'relative' }}>
@@ -131,10 +131,10 @@ export function HRPage() {
               <Download size={14} /> Export <ChevronDown size={13} />
             </button>
             {exportMenu && (
-              <div style={{ position: 'absolute', top: '110%', right: 0, backgroundColor: '#1a1b3a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: 6, zIndex: 100, minWidth: 100 }}>
+              <div style={{ position: 'absolute', top: '110%', right: 0, backgroundColor: 'var(--drawer-bg)', border: '1px solid rgb(var(--inv) / 0.1)', borderRadius: 12, padding: 6, zIndex: 100, minWidth: 100 }}>
                 {['xlsx', 'csv', 'pdf'].map(fmt => (
                   <button key={fmt} onClick={() => { window.location.href = `/api/hr/export?format=${fmt}`; setExportMenu(false) }}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '7px 12px', background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', cursor: 'pointer', borderRadius: 8, fontSize: 13 }}>
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '7px 12px', background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.7)', cursor: 'pointer', borderRadius: 8, fontSize: 13 }}>
                     {fmt.toUpperCase()}
                   </button>
                 ))}
@@ -151,17 +151,17 @@ export function HRPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 16, marginBottom: 24 }}>
         {kpis.map(k => (
-          <div key={k.label} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 20 }}>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 24, margin: '0 0 4px' }}>{k.value}</p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0 }}>{k.label}</p>
+          <div key={k.label} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 20 }}>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 24, margin: '0 0 4px' }}>{k.value}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 12, margin: 0 }}>{k.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="flex gap-1 mb-6" style={{ backgroundColor: '#13152e', borderRadius: 14, padding: 4, width: 'fit-content', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="flex gap-1 mb-6" style={{ backgroundColor: 'var(--card-bg)', borderRadius: 14, padding: 4, width: 'fit-content', border: '1px solid rgb(var(--inv) / 0.06)' }}>
         {(['staff', 'leave'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)}
-            style={{ padding: '8px 20px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, backgroundColor: tab === t ? '#7c6bff' : 'transparent', color: tab === t ? 'white' : 'rgba(255,255,255,0.5)' }}>
+            style={{ padding: '8px 20px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, backgroundColor: tab === t ? '#7c6bff' : 'transparent', color: tab === t ? 'white' : 'rgb(var(--inv) / 0.5)' }}>
             {t === 'staff' ? '👔 Staff' : '🏖️ Leave Requests'}
           </button>
         ))}
@@ -176,33 +176,33 @@ export function HRPage() {
               {departments.map(d => <option key={d} value={d!}>{d}</option>)}
             </select>
           </div>
-          <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+          <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="border-b" style={{ borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+                <thead><tr className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                   {['STAFF MEMBER', 'DEPARTMENT', 'JOB TITLE', 'TYPE', 'SALARY', 'TENURE', 'STATUS', 'ACTIONS'].map(col => (
-                    <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                    <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                   ))}
                 </tr></thead>
                 <tbody>
-                  {filteredStaff.length === 0 && <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>No staff yet</td></tr>}
+                  {filteredStaff.length === 0 && <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'rgb(var(--inv) / 0.4)' }}>No staff yet</td></tr>}
                   {filteredStaff.map(s => {
                     const sc = staffStatusColor(s.status)
                     return (
-                      <tr key={s.id} className="border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
+                      <tr key={s.id} className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.04)' }}>
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3">
-                            <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg, #7c6bff, #6456e8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
+                            <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
                               {getInitials(s.fullName)}
                             </div>
-                            <div><p style={{ color: 'white', fontWeight: 500, fontSize: 14, margin: 0 }}>{s.fullName}</p>{s.email && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: 0 }}>{s.email}</p>}</div>
+                            <div><p style={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: 14, margin: 0 }}>{s.fullName}</p>{s.email && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: 0 }}>{s.email}</p>}</div>
                           </div>
                         </td>
-                        <td className="px-5 py-4">{s.department ? <span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: '#7c6bff', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{s.department}</span> : '—'}</td>
-                        <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.7)' }}>{s.jobTitle || '—'}</td>
-                        <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{s.employmentType?.replace('_', ' ') || '—'}</td>
-                        <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{s.salary ? `₦${s.salary.toLocaleString()}/${s.salaryFrequency?.slice(0, 2).toLowerCase() ?? 'mo'}` : '—'}</td>
-                        <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{calcTenure(s.startDate)}</td>
+                        <td className="px-5 py-4">{s.department ? <span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: 'var(--accent)', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{s.department}</span> : '—'}</td>
+                        <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.7)' }}>{s.jobTitle || '—'}</td>
+                        <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{s.employmentType?.replace('_', ' ') || '—'}</td>
+                        <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{s.salary ? `₦${s.salary.toLocaleString()}/${s.salaryFrequency?.slice(0, 2).toLowerCase() ?? 'mo'}` : '—'}</td>
+                        <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{calcTenure(s.startDate)}</td>
                         <td className="px-5 py-4"><span style={{ backgroundColor: sc.bg, color: sc.color, borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{s.status}</span></td>
                         <td className="px-5 py-4">
                           <div className="flex gap-1">
@@ -230,26 +230,26 @@ export function HRPage() {
       )}
 
       {!isLoading && tab === 'leave' && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="border-b" style={{ borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+              <thead><tr className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                 {['STAFF MEMBER', 'TYPE', 'START', 'END', 'DAYS', 'REASON', 'STATUS', 'ACTIONS'].map(col => (
-                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                 ))}
               </tr></thead>
               <tbody>
-                {leaveRequests.length === 0 && <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>No leave requests</td></tr>}
+                {leaveRequests.length === 0 && <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'rgb(var(--inv) / 0.4)' }}>No leave requests</td></tr>}
                 {leaveRequests.map(l => {
                   const sc = leaveStatusColor(l.status)
                   return (
-                    <tr key={l.id} className="border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
-                      <td className="px-5 py-4"><p style={{ color: 'white', fontWeight: 500, margin: 0 }}>{l.staffName || '—'}</p>{l.staffTitle && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: 0 }}>{l.staffTitle}</p>}</td>
+                    <tr key={l.id} className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.04)' }}>
+                      <td className="px-5 py-4"><p style={{ color: 'var(--text-primary)', fontWeight: 500, margin: 0 }}>{l.staffName || '—'}</p>{l.staffTitle && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: 0 }}>{l.staffTitle}</p>}</td>
                       <td className="px-5 py-4"><span style={{ backgroundColor: 'rgba(96,165,250,0.15)', color: '#60a5fa', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{l.leaveType}</span></td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{new Date(l.startDate).toLocaleDateString()}</td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{new Date(l.endDate).toLocaleDateString()}</td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{l.dayCount ?? '—'}</td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{l.reason || '—'}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{new Date(l.startDate).toLocaleDateString()}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{new Date(l.endDate).toLocaleDateString()}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{l.dayCount ?? '—'}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{l.reason || '—'}</td>
                       <td className="px-5 py-4"><span style={{ backgroundColor: sc.bg, color: sc.color, borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{l.status}</span></td>
                       <td className="px-5 py-4">
                         {l.status === 'PENDING' && (
@@ -314,12 +314,12 @@ export function HRPage() {
           <button onClick={() => setImportOpen(false)} style={outlineBtn}>Cancel</button>
           <button onClick={() => importMut.mutate()} disabled={!importFile || importMut.isPending} style={gradientBtn}>{importMut.isPending ? 'Importing...' : 'Import'}</button>
         </>}>
-        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, margin: '0 0 16px' }}>Upload a CSV or Excel file to bulk-import staff records.</p>
+        <p style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13, margin: '0 0 16px' }}>Upload a CSV or Excel file to bulk-import staff records.</p>
         <div><label style={labelStyle}>FILE (CSV / XLSX)</label>
           <input type="file" accept=".csv,.xlsx" onChange={e => setImportFile(e.target.files?.[0] ?? null)} style={inputStyle} /></div>
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, marginTop: 12 }}>
+        <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, marginTop: 12 }}>
           Need a template?{' '}
-          <a href="/api/hr/import/template" style={{ color: '#7c6bff', textDecoration: 'none', fontWeight: 600 }}>Download Template</a>
+          <a href="/api/hr/import/template" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Download Template</a>
         </p>
       </Drawer>
 

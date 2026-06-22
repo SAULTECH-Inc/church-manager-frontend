@@ -41,10 +41,10 @@ const SCAN_STATUS: Record<string, { color: string; bg: string; label: string }> 
   FAILED:     { color: '#f87171', bg: 'rgba(248,113,113,0.12)', label: 'Scan Failed' },
 }
 
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const inputStyle: React.CSSProperties = { backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const outlineBtn: React.CSSProperties = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const inputStyle: React.CSSProperties = { backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const outlineBtn: React.CSSProperties = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
 
 interface DrawerProps { open: boolean; onClose: () => void; title: string; children: React.ReactNode; footer: React.ReactNode; maxWidth?: number }
 function Drawer({ open, onClose, title, children, footer, maxWidth = 520 }: DrawerProps) {
@@ -53,13 +53,13 @@ function Drawer({ open, onClose, title, children, footer, maxWidth = 520 }: Draw
     <>
       <div style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-        <div style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-          <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18, margin: 0 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', padding: 4 }}><X size={20} /></button>
+        <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 24, width: '100%', maxWidth, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+          <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', borderBottom: '1px solid rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18, margin: 0 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer', padding: 4 }}><X size={20} /></button>
           </div>
           <div style={{ flex: 1, overflowY: 'auto', padding: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>{children}</div>
-          <div style={{ flexShrink: 0, display: 'flex', gap: 12, padding: '16px 24px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div style={{ flexShrink: 0, display: 'flex', gap: 12, padding: '16px 24px', borderTop: '1px solid rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -180,12 +180,12 @@ export function TemplatesPage() {
   }, {})
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24 }}>
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Document Templates</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Letters · Certificates · Contracts · Printouts</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Document Templates</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Letters · Certificates · Contracts · Printouts</p>
         </div>
         <button onClick={() => setUploadDrawer(true)} style={{ ...gradientBtn, display: 'flex', alignItems: 'center', gap: 6 }}>
           <Plus size={15} /> Upload Template
@@ -200,9 +200,9 @@ export function TemplatesPage() {
           { label: 'Certificates', value: data?.certificateCount ?? typeCounts['CERTIFICATE'] ?? 0 },
           { label: 'Pending Scans', value: data?.pendingScans ?? 0 },
         ].map(k => (
-          <div key={k.label} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 20 }}>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: '0 0 4px' }}>{k.value}</p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
+          <div key={k.label} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 20 }}>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: '0 0 4px' }}>{k.value}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
           </div>
         ))}
       </div>
@@ -213,9 +213,9 @@ export function TemplatesPage() {
           <button key={tp} onClick={() => setTypeFilter(tp)}
             style={{
               padding: '7px 16px', borderRadius: 20, cursor: 'pointer', fontWeight: 600, fontSize: 13,
-              border: `1px solid ${typeFilter === tp ? '#7c6bff' : 'rgba(255,255,255,0.1)'}`,
-              backgroundColor: typeFilter === tp ? 'rgba(124,107,255,0.15)' : 'rgba(255,255,255,0.04)',
-              color: typeFilter === tp ? '#7c6bff' : 'rgba(255,255,255,0.5)',
+              border: `1px solid ${typeFilter === tp ? '#7c6bff' : 'rgb(var(--inv) / 0.1)'}`,
+              backgroundColor: typeFilter === tp ? 'rgba(124,107,255,0.15)' : 'rgb(var(--inv) / 0.04)',
+              color: typeFilter === tp ? '#7c6bff' : 'rgb(var(--inv) / 0.5)',
             }}>
             {tp === 'ALL' ? 'All' : TYPE_LABELS[tp] ?? tp}{' '}
             <span style={{ opacity: 0.7 }}>{typeCounts[tp] ?? 0}</span>
@@ -225,17 +225,17 @@ export function TemplatesPage() {
 
       {/* Cards */}
       {isLoading && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}>
-          <p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading...</p>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}>
+          <p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading...</p>
         </div>
       )}
 
       {!isLoading && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: 16 }}>
           {filtered.length === 0 && (
-            <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 48, textAlign: 'center', gridColumn: '1/-1' }}>
-              <FileText size={36} style={{ color: 'rgba(255,255,255,0.2)', marginBottom: 12 }} />
-              <p style={{ color: 'rgba(255,255,255,0.4)', margin: 0 }}>No templates in this category yet.</p>
+            <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 48, textAlign: 'center', gridColumn: '1/-1' }}>
+              <FileText size={36} style={{ color: 'rgb(var(--inv) / 0.2)', marginBottom: 12 }} />
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', margin: 0 }}>No templates in this category yet.</p>
             </div>
           )}
           {filtered.map(tmpl => {
@@ -243,14 +243,14 @@ export function TemplatesPage() {
             const scan = SCAN_STATUS[tmpl.aiScanStatus] ?? SCAN_STATUS.PENDING
             const canPreview = tmpl.aiScanStatus === 'DONE' && !!tmpl.htmlContent
             return (
-              <div key={tmpl.id} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+              <div key={tmpl.id} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                 {/* Color stripe */}
                 <div style={{ height: 4, backgroundColor: catColor }} />
                 <div style={{ padding: '16px 18px', flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {/* Title row */}
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: '0 0 5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tmpl.name}</p>
+                      <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: '0 0 5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tmpl.name}</p>
                       <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                         <span style={{ backgroundColor: `${catColor}20`, color: catColor, borderRadius: 6, padding: '2px 7px', fontSize: 11, fontWeight: 600 }}>
                           {TYPE_LABELS[tmpl.templateType] ?? tmpl.templateType}
@@ -269,13 +269,13 @@ export function TemplatesPage() {
 
                   {/* Description */}
                   {tmpl.description && (
-                    <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
+                    <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
                       {tmpl.description}
                     </p>
                   )}
 
                   {/* Actions */}
-                  <div style={{ display: 'flex', gap: 6, marginTop: 'auto', paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: 6, marginTop: 'auto', paddingTop: 10, borderTop: '1px solid rgb(var(--inv) / 0.06)', flexWrap: 'wrap' }}>
                     {/* Preview — only if HTML is ready */}
                     {canPreview && (
                       <button onClick={() => setPreviewTemplate(tmpl)}
@@ -334,10 +334,10 @@ export function TemplatesPage() {
       )}
       {previewTemplate && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', pointerEvents: 'none' }}>
-          <div style={{ backgroundColor: '#1a1b3a', borderRadius: 20, width: '100%', maxWidth: 900, height: '88vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-            <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-              <h2 style={{ color: 'white', fontWeight: 700, fontSize: 16, margin: 0 }}>{previewTemplate.name}</h2>
-              <button onClick={() => setPreviewTemplate(null)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}><X size={20} /></button>
+          <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 20, width: '100%', maxWidth: 900, height: '88vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+            <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid rgb(var(--inv) / 0.08)' }}>
+              <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 16, margin: 0 }}>{previewTemplate.name}</h2>
+              <button onClick={() => setPreviewTemplate(null)} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer' }}><X size={20} /></button>
             </div>
             <div style={{ flex: 1, overflow: 'hidden', backgroundColor: 'white' }}>
               <iframe
@@ -378,7 +378,7 @@ export function TemplatesPage() {
         </div>
         <div style={{ backgroundColor: 'rgba(124,107,255,0.08)', border: '1px solid rgba(124,107,255,0.2)', borderRadius: 12, padding: '12px 16px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
           <FileText size={16} style={{ color: '#a78bfa', flexShrink: 0, marginTop: 1 }} />
-          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, margin: 0 }}>After upload, click "Scan" on the card to extract the template's placeholders with AI.</p>
+          <p style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13, margin: 0 }}>After upload, click "Scan" on the card to extract the template's placeholders with AI.</p>
         </div>
       </Drawer>
 
@@ -414,9 +414,9 @@ export function TemplatesPage() {
             {issuePdfMutation.isPending ? 'Generating...' : 'Download PDF'}
           </button>
         </>}>
-        {!issueData && <p style={{ color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}>Loading fields…</p>}
+        {!issueData && <p style={{ color: 'rgb(var(--inv) / 0.4)', textAlign: 'center' }}>Loading fields…</p>}
         {issueData && issueData.placeholderList.length === 0 && (
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>This template has no fillable placeholders. Click Download PDF to generate it with branding.</p>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>This template has no fillable placeholders. Click Download PDF to generate it with branding.</p>
         )}
         {issueData && issueData.members.length > 0 && (
           <div>

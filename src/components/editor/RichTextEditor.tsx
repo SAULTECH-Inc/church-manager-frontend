@@ -4,7 +4,7 @@ import Underline from '@tiptap/extension-underline'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import TextAlign from '@tiptap/extension-text-align'
-import TextStyle from '@tiptap/extension-text-style'
+import { TextStyle } from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
 import { useEffect } from 'react'
 import {
@@ -24,7 +24,7 @@ interface Props {
 
 const ACCENT = 'var(--accent, #7c6bff)'
 const INPUT_BG = 'var(--input-bg, #1e2248)'
-const BORDER = 'rgba(255,255,255,0.10)'
+const BORDER = 'rgb(var(--inv) / 0.10)'
 const ACTIVE_BG = 'rgba(var(--accent-rgb,124,107,255),0.18)'
 
 function ToolBtn({
@@ -39,11 +39,11 @@ function ToolBtn({
         width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center',
         borderRadius: 6, border: 'none', cursor: 'pointer',
         backgroundColor: active ? ACTIVE_BG : 'transparent',
-        color: active ? ACCENT : 'rgba(255,255,255,0.65)',
+        color: active ? ACCENT : 'rgb(var(--inv) / 0.65)',
         transition: 'all 0.1s',
         flexShrink: 0,
       }}
-      onMouseEnter={e => { if (!active) e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)' }}
+      onMouseEnter={e => { if (!active) e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.07)' }}
       onMouseLeave={e => { if (!active) e.currentTarget.style.backgroundColor = 'transparent' }}
     >
       {children}
@@ -52,7 +52,7 @@ function ToolBtn({
 }
 
 function Divider() {
-  return <div style={{ width: 1, height: 18, backgroundColor: 'rgba(255,255,255,0.12)', flexShrink: 0, margin: '0 2px' }} />
+  return <div style={{ width: 1, height: 18, backgroundColor: 'rgb(var(--inv) / 0.12)', flexShrink: 0, margin: '0 2px' }} />
 }
 
 export function RichTextEditor({ value, onChange, placeholder, minHeight = 160, disabled }: Props) {
@@ -75,7 +75,7 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = 160, 
   useEffect(() => {
     if (!editor) return
     if (editor.getHTML() !== value) {
-      editor.commands.setContent(value || '', false)
+      editor.commands.setContent(value || '', { emitUpdate: false })
     }
   }, [value, editor])
 
@@ -100,7 +100,7 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = 160, 
       <div style={{
         display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2, padding: '6px 8px',
         borderBottom: `1px solid ${BORDER}`,
-        backgroundColor: 'rgba(255,255,255,0.03)',
+        backgroundColor: 'rgb(var(--inv) / 0.03)',
       }}>
         {/* Headings */}
         <ToolBtn onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} active={editor.isActive('heading', { level: 1 })} title="Heading 1"><Heading1 size={14} /></ToolBtn>
@@ -148,28 +148,28 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = 160, 
       {/* Editor body */}
       <EditorContent
         editor={editor}
-        style={{ minHeight, padding: '12px 14px', color: 'rgba(255,255,255,0.9)', fontSize: 14, lineHeight: 1.65 }}
+        style={{ minHeight, padding: '12px 14px', color: 'rgb(var(--inv) / 0.9)', fontSize: 14, lineHeight: 1.65 }}
       />
 
       <style>{`
         .tiptap { outline: none; }
         .tiptap p { margin: 0 0 0.5em; }
         .tiptap p:last-child { margin-bottom: 0; }
-        .tiptap h1 { color: white; font-size: 1.4em; font-weight: 700; margin: 0.8em 0 0.4em; }
-        .tiptap h2 { color: white; font-size: 1.2em; font-weight: 700; margin: 0.8em 0 0.4em; }
-        .tiptap h3 { color: white; font-size: 1.05em; font-weight: 700; margin: 0.8em 0 0.4em; }
+        .tiptap h1 { color: var(--text-primary,white); font-size: 1.4em; font-weight: 700; margin: 0.8em 0 0.4em; }
+        .tiptap h2 { color: var(--text-primary,white); font-size: 1.2em; font-weight: 700; margin: 0.8em 0 0.4em; }
+        .tiptap h3 { color: var(--text-primary,white); font-size: 1.05em; font-weight: 700; margin: 0.8em 0 0.4em; }
         .tiptap ul { list-style: disc; padding-left: 1.5em; margin: 0.4em 0; }
         .tiptap ol { list-style: decimal; padding-left: 1.5em; margin: 0.4em 0; }
         .tiptap li { margin-bottom: 0.25em; }
-        .tiptap blockquote { border-left: 3px solid var(--accent,#7c6bff); padding-left: 12px; margin: 0.6em 0; color: rgba(255,255,255,0.6); font-style: italic; }
-        .tiptap hr { border: none; border-top: 1px solid rgba(255,255,255,0.15); margin: 1em 0; }
+        .tiptap blockquote { border-left: 3px solid var(--accent,#7c6bff); padding-left: 12px; margin: 0.6em 0; color: rgb(var(--inv) / 0.6); font-style: italic; }
+        .tiptap hr { border: none; border-top: 1px solid rgb(var(--inv) / 0.15); margin: 1em 0; }
         .tiptap a { color: var(--accent,#7c6bff); text-decoration: underline; }
-        .tiptap strong { font-weight: 700; color: white; }
-        .tiptap code { background: rgba(255,255,255,0.1); padding: 2px 5px; border-radius: 4px; font-size: 0.88em; font-family: monospace; }
-        .tiptap pre { background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 8px; overflow-x: auto; margin: 0.6em 0; }
+        .tiptap strong { font-weight: 700; color: var(--text-primary,white); }
+        .tiptap code { background: rgb(var(--inv) / 0.1); padding: 2px 5px; border-radius: 4px; font-size: 0.88em; font-family: monospace; }
+        .tiptap pre { background: rgb(var(--inv) / 0.07); padding: 10px 14px; border-radius: 8px; overflow-x: auto; margin: 0.6em 0; }
         .tiptap pre code { background: none; padding: 0; }
-        .tiptap mark { background: rgba(var(--accent-rgb,124,107,255),0.3); color: white; border-radius: 3px; padding: 0 2px; }
-        .tiptap p.is-editor-empty:first-child::before { content: attr(data-placeholder); float: left; color: rgba(255,255,255,0.25); pointer-events: none; height: 0; }
+        .tiptap mark { background: rgba(var(--accent-rgb,124,107,255),0.3); color: var(--text-primary,white); border-radius: 3px; padding: 0 2px; }
+        .tiptap p.is-editor-empty:first-child::before { content: attr(data-placeholder); float: left; color: rgb(var(--inv) / 0.25); pointer-events: none; height: 0; }
       `}</style>
     </div>
   )

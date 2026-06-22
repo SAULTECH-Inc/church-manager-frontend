@@ -10,16 +10,16 @@ interface ApprovalChain { id: string; name: string; description?: string; trigge
 interface ApprovalStep  { id: string; stepOrder: number; approverType: string; staticRole?: string; isRequired: boolean; timeoutHours?: number }
 interface Stats { totalForms: number; activeForms: number; draftForms: number }
 
-const PAGE_BG   = '#131326'
-const CARD      = '#13152e'
-const DRAWER_BG = '#1a1b3a'
-const INPUT_BG  = '#1e2248'
+const PAGE_BG   = 'var(--page-bg)'
+const CARD      = 'var(--card-bg)'
+const DRAWER_BG = 'var(--drawer-bg)'
+const INPUT_BG  = 'var(--input-bg)'
 const ACCENT    = '#7c6bff'
 
-const inputStyle: React.CSSProperties = { backgroundColor: INPUT_BG, border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg,#7c6bff,#6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
-const outlineBtn: React.CSSProperties  = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const inputStyle: React.CSSProperties = { backgroundColor: INPUT_BG, border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg,var(--accent),var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const outlineBtn: React.CSSProperties  = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
 
 const FORM_STATUS_COLORS: Record<string, string> = { DRAFT: '#f59e0b', ACTIVE: '#10b981', ARCHIVED: '#6b7280' }
 const CAT_COLORS: Record<string, string> = { MEMBERSHIP: '#7c6bff', EVENT: '#60a5fa', WELFARE: '#10b981', SURVEY: '#f59e0b', FEEDBACK: '#a78bfa', OTHER: '#94a3b8' }
@@ -34,13 +34,13 @@ function Drawer({ open, onClose, title, children, footer }: { open: boolean; onC
     <>
       <div className="fixed inset-0 z-40" style={{ backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ padding: 20, pointerEvents: 'none' }}>
-        <div className="flex flex-col overflow-hidden" style={{ backgroundColor: DRAWER_BG, borderRadius: 24, width: '100%', maxWidth: 560, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', pointerEvents: 'auto' }}>
-          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}><X size={20} /></button>
+        <div className="flex flex-col overflow-hidden" style={{ backgroundColor: DRAWER_BG, borderRadius: 24, width: '100%', maxWidth: 560, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', pointerEvents: 'auto' }}>
+          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer' }}><X size={20} /></button>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-5">{children}</div>
-          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -127,8 +127,8 @@ export function WorkflowsPage() {
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Workflows & Forms</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Approval Chains · Dynamic Form Builder · Process Automation</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Workflows & Forms</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Approval Chains · Dynamic Form Builder · Process Automation</p>
         </div>
         <button onClick={() => tab === 'forms' ? setCreateForm(true) : setCreateChain(true)}
           style={{ ...gradientBtn, display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -139,44 +139,44 @@ export function WorkflowsPage() {
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginBottom: 24 }}>
         {[
-          { label: 'Total Forms',       value: stats?.totalForms  ?? 0, color: '#7c6bff' },
+          { label: 'Total Forms',       value: stats?.totalForms  ?? 0, color: 'var(--accent)' },
           { label: 'Active Forms',      value: stats?.activeForms ?? 0, color: '#10b981' },
           { label: 'Draft Forms',       value: stats?.draftForms  ?? 0, color: '#f59e0b' },
           { label: 'Approval Chains',   value: chains.length,           color: '#60a5fa' },
         ].map(k => (
-          <div key={k.label} style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 20 }}>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 22, margin: '0 0 4px' }}>{k.value}</p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
+          <div key={k.label} style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 20 }}>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 22, margin: '0 0 4px' }}>{k.value}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
           </div>
         ))}
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 4, marginBottom: 20, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+      <div style={{ display: 'flex', gap: 4, marginBottom: 20, borderBottom: '1px solid rgb(var(--inv) / 0.08)' }}>
         {(['forms', 'chains'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)} style={{
             padding: '10px 20px', border: 'none', background: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14,
-            color: tab === t ? ACCENT : 'rgba(255,255,255,0.4)',
+            color: tab === t ? ACCENT : 'rgb(var(--inv) / 0.4)',
             borderBottom: `2px solid ${tab === t ? ACCENT : 'transparent'}`,
           }}>{t === 'forms' ? 'Form Builder' : 'Approval Chains'}</button>
         ))}
       </div>
 
-      {isLoading && <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading...</p></div>}
+      {isLoading && <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading...</p></div>}
 
       {/* Forms tab */}
       {!isLoading && tab === 'forms' && (
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 12 }}>
           {forms.length === 0 && (
-            <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}>
-              <p style={{ color: 'rgba(255,255,255,0.4)' }}>No forms yet. Create your first dynamic form.</p>
+            <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)' }}>No forms yet. Create your first dynamic form.</p>
             </div>
           )}
           {forms.map(f => {
             const isOpen = expandedForm === f.id
             const fields = f.fields ?? []
             return (
-              <div key={f.id} style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+              <div key={f.id} style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
                 {/* Form header */}
                 <div style={{ padding: '16px 22px' }}>
                   <div className="flex items-center justify-between gap-4">
@@ -186,9 +186,9 @@ export function WorkflowsPage() {
                         <span style={{ backgroundColor: `${FORM_STATUS_COLORS[f.status] ?? '#94a3b8'}20`, color: FORM_STATUS_COLORS[f.status] ?? '#94a3b8', borderRadius: 6, padding: '2px 8px', fontSize: 11, fontWeight: 700 }}>{f.status}</span>
                         {f.isPublic && <span style={{ backgroundColor: 'rgba(96,165,250,0.15)', color: '#60a5fa', borderRadius: 6, padding: '2px 8px', fontSize: 11, fontWeight: 700 }}>PUBLIC</span>}
                       </div>
-                      <p style={{ color: 'white', fontWeight: 700, fontSize: 15, margin: '4px 0' }}>{f.title}</p>
-                      {f.description && <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, margin: 0 }}>{f.description}</p>}
-                      <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, marginTop: 4 }}>{fields.length} field{fields.length !== 1 ? 's' : ''} · {f.submissionCount} submission{f.submissionCount !== 1 ? 's' : ''}</p>
+                      <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 15, margin: '4px 0' }}>{f.title}</p>
+                      {f.description && <p style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 13, margin: 0 }}>{f.description}</p>}
+                      <p style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 12, marginTop: 4 }}>{fields.length} field{fields.length !== 1 ? 's' : ''} · {f.submissionCount} submission{f.submissionCount !== 1 ? 's' : ''}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       {f.status === 'DRAFT'  && <button onClick={() => statusFormMut.mutate({ id: f.id, status: 'ACTIVE' })}   style={{ ...gradientBtn, padding: '5px 12px', fontSize: 12 }}>Publish</button>}
@@ -206,19 +206,19 @@ export function WorkflowsPage() {
 
                 {/* Fields */}
                 {isOpen && (
-                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '16px 22px' }}>
+                  <div style={{ borderTop: '1px solid rgb(var(--inv) / 0.06)', padding: '16px 22px' }}>
                     <div className="flex items-center justify-between mb-3">
-                      <h4 style={{ color: 'white', fontWeight: 700, fontSize: 13, margin: 0 }}>Form Fields</h4>
+                      <h4 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 13, margin: 0 }}>Form Fields</h4>
                       <button onClick={() => setAddFieldFor(f.id)} style={{ ...gradientBtn, padding: '5px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}><Plus size={12} /> Add Field</button>
                     </div>
-                    {fields.length === 0 && <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13 }}>No fields yet. Add your first field.</p>}
+                    {fields.length === 0 && <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 13 }}>No fields yet. Add your first field.</p>}
                     <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 6 }}>
                       {fields.map((ff, i) => (
-                        <div key={ff.id} className="flex items-center justify-between" style={{ padding: '8px 12px', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
+                        <div key={ff.id} className="flex items-center justify-between" style={{ padding: '8px 12px', backgroundColor: 'rgb(var(--inv) / 0.03)', borderRadius: 10, border: '1px solid rgb(var(--inv) / 0.06)' }}>
                           <div className="flex items-center gap-3">
-                            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, fontWeight: 700, minWidth: 20 }}>{i + 1}</span>
+                            <span style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 12, fontWeight: 700, minWidth: 20 }}>{i + 1}</span>
                             <div>
-                              <span style={{ color: 'white', fontSize: 13, fontWeight: 600 }}>{ff.fieldLabel}</span>
+                              <span style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 600 }}>{ff.fieldLabel}</span>
                               {ff.isRequired && <span style={{ color: '#f87171', marginLeft: 4, fontSize: 11 }}>*</span>}
                             </div>
                             <span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: '#a78bfa', borderRadius: 6, padding: '1px 7px', fontSize: 10, fontWeight: 700 }}>{ff.fieldType}</span>
@@ -239,32 +239,32 @@ export function WorkflowsPage() {
       {!isLoading && tab === 'chains' && (
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 12 }}>
           {chains.length === 0 && (
-            <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}>
-              <p style={{ color: 'rgba(255,255,255,0.4)' }}>No approval chains yet. Create one to automate multi-step approvals.</p>
+            <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)' }}>No approval chains yet. Create one to automate multi-step approvals.</p>
             </div>
           )}
           {chains.map(c => {
             const isOpen = expandedChain === c.id
             const steps  = c.steps ?? []
             return (
-              <div key={c.id} style={{ backgroundColor: CARD, borderRadius: 20, border: `1px solid ${c.isActive ? 'rgba(124,107,255,0.2)' : 'rgba(255,255,255,0.08)'}`, overflow: 'hidden' }}>
+              <div key={c.id} style={{ backgroundColor: CARD, borderRadius: 20, border: `1px solid ${c.isActive ? 'rgba(124,107,255,0.2)' : 'rgb(var(--inv) / 0.08)'}`, overflow: 'hidden' }}>
                 <div style={{ padding: '16px 22px' }}>
                   <div className="flex items-center justify-between gap-4">
                     <div style={{ flex: 1 }}>
                       <div className="flex items-center gap-2 mb-1">
                         <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: c.isActive ? '#10b981' : '#6b7280', display: 'inline-block' }} />
-                        <p style={{ color: 'white', fontWeight: 700, fontSize: 15, margin: 0 }}>{c.name}</p>
+                        <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 15, margin: 0 }}>{c.name}</p>
                       </div>
-                      {c.description && <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, margin: '2px 0' }}>{c.description}</p>}
+                      {c.description && <p style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 13, margin: '2px 0' }}>{c.description}</p>}
                       <div className="flex gap-3 mt-1">
-                        {c.triggerModule && <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>Module: <span style={{ color: '#a78bfa' }}>{c.triggerModule}</span></span>}
-                        {c.triggerAction && <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>Action: <span style={{ color: '#60a5fa' }}>{c.triggerAction}</span></span>}
+                        {c.triggerModule && <span style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12 }}>Module: <span style={{ color: '#a78bfa' }}>{c.triggerModule}</span></span>}
+                        {c.triggerAction && <span style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12 }}>Action: <span style={{ color: '#60a5fa' }}>{c.triggerAction}</span></span>}
                       </div>
-                      <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, marginTop: 4 }}>{steps.length} step{steps.length !== 1 ? 's' : ''}</p>
+                      <p style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 12, marginTop: 4 }}>{steps.length} step{steps.length !== 1 ? 's' : ''}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <button onClick={() => toggleChainMut.mutate(c.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                        {c.isActive ? <ToggleRight size={28} color={ACCENT} /> : <ToggleLeft size={28} color="rgba(255,255,255,0.3)" />}
+                        {c.isActive ? <ToggleRight size={28} color={ACCENT} /> : <ToggleLeft size={28} color="rgb(var(--inv) / 0.3)" />}
                       </button>
                       <button onClick={() => setExpandedChain(isOpen ? null : c.id)} style={{ ...outlineBtn, padding: '5px 10px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
                         {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -277,20 +277,20 @@ export function WorkflowsPage() {
 
                 {/* Steps */}
                 {isOpen && (
-                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '16px 22px' }}>
+                  <div style={{ borderTop: '1px solid rgb(var(--inv) / 0.06)', padding: '16px 22px' }}>
                     <div className="flex items-center justify-between mb-3">
-                      <h4 style={{ color: 'white', fontWeight: 700, fontSize: 13, margin: 0 }}>Approval Steps</h4>
+                      <h4 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 13, margin: 0 }}>Approval Steps</h4>
                       <button onClick={() => setAddStepFor(c.id)} style={{ ...gradientBtn, padding: '5px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}><Plus size={12} /> Add Step</button>
                     </div>
-                    {steps.length === 0 && <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13 }}>No steps defined. Add the first approver.</p>}
+                    {steps.length === 0 && <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 13 }}>No steps defined. Add the first approver.</p>}
                     <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 6 }}>
                       {steps.map(s => (
-                        <div key={s.id} className="flex items-center justify-between" style={{ padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
+                        <div key={s.id} className="flex items-center justify-between" style={{ padding: '10px 14px', backgroundColor: 'rgb(var(--inv) / 0.03)', borderRadius: 10, border: '1px solid rgb(var(--inv) / 0.06)' }}>
                           <div className="flex items-center gap-3">
                             <div style={{ width: 26, height: 26, borderRadius: '50%', backgroundColor: 'rgba(124,107,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ACCENT, fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{s.stepOrder}</div>
                             <div>
-                              <p style={{ color: 'white', fontSize: 13, fontWeight: 600, margin: 0 }}>{s.staticRole ?? s.approverType}</p>
-                              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: 0 }}>
+                              <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 600, margin: 0 }}>{s.staticRole ?? s.approverType}</p>
+                              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: 0 }}>
                                 {s.approverType} · {s.isRequired ? 'Required' : 'Optional'}{s.timeoutHours ? ` · ${s.timeoutHours}h timeout` : ''}
                               </p>
                             </div>
@@ -318,7 +318,7 @@ export function WorkflowsPage() {
           </select></div>
         <div className="flex items-center gap-3">
           <input type="checkbox" id="editIsPublic" checked={editFormData.isPublic} onChange={e => setEditFormData(f => ({ ...f, isPublic: e.target.checked }))} />
-          <label htmlFor="editIsPublic" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, cursor: 'pointer' }}>Make this form publicly accessible</label>
+          <label htmlFor="editIsPublic" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 14, cursor: 'pointer' }}>Make this form publicly accessible</label>
         </div>
       </Drawer>
 
@@ -333,7 +333,7 @@ export function WorkflowsPage() {
           </select></div>
         <div className="flex items-center gap-3">
           <input type="checkbox" id="isPublic" checked={formForm.isPublic} onChange={e => setFormForm(f => ({ ...f, isPublic: e.target.checked }))} />
-          <label htmlFor="isPublic" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, cursor: 'pointer' }}>Make this form publicly accessible</label>
+          <label htmlFor="isPublic" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 14, cursor: 'pointer' }}>Make this form publicly accessible</label>
         </div>
       </Drawer>
 
@@ -352,7 +352,7 @@ export function WorkflowsPage() {
         )}
         <div className="flex items-center gap-3">
           <input type="checkbox" id="isRequired" checked={fieldForm.isRequired} onChange={e => setFieldForm(f => ({ ...f, isRequired: e.target.checked }))} />
-          <label htmlFor="isRequired" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, cursor: 'pointer' }}>Required field</label>
+          <label htmlFor="isRequired" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 14, cursor: 'pointer' }}>Required field</label>
         </div>
         <div><label style={labelStyle}>FIELD ORDER</label><input type="number" value={fieldForm.fieldOrder} onChange={e => setFieldForm(f => ({ ...f, fieldOrder: parseInt(e.target.value) || 0 }))} style={inputStyle} /></div>
       </Drawer>
@@ -393,7 +393,7 @@ export function WorkflowsPage() {
         <div><label style={labelStyle}>TIMEOUT (hours)</label><input type="number" value={stepForm.timeoutHours} onChange={e => setStepForm(f => ({ ...f, timeoutHours: e.target.value }))} style={inputStyle} placeholder="Leave blank for no timeout" /></div>
         <div className="flex items-center gap-3">
           <input type="checkbox" id="stepRequired" checked={stepForm.required} onChange={e => setStepForm(f => ({ ...f, required: e.target.checked }))} />
-          <label htmlFor="stepRequired" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, cursor: 'pointer' }}>Required step (must be approved to proceed)</label>
+          <label htmlFor="stepRequired" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 14, cursor: 'pointer' }}>Required step (must be approved to proceed)</label>
         </div>
       </Drawer>
     </div>

@@ -72,7 +72,7 @@ function typeBadge(type: string) {
     MINISTRY: { bg: 'rgba(168,85,247,0.15)', color: '#c084fc', label: 'Ministry' },
     DISCIPLESHIP_CLASS: { bg: 'rgba(124,107,255,0.15)', color: '#a78bfa', label: 'Discipleship Class' },
   }
-  return map[type] ?? { bg: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', label: type }
+  return map[type] ?? { bg: 'rgb(var(--inv) / 0.08)', color: 'rgb(var(--inv) / 0.6)', label: type }
 }
 
 function roleBadge(role: string) {
@@ -80,7 +80,7 @@ function roleBadge(role: string) {
     return { bg: 'rgba(245,158,11,0.15)', color: '#fbbf24', label: 'Leader' }
   if (role === 'CO_LEADER')
     return { bg: 'rgba(99,102,241,0.15)', color: '#818cf8', label: 'Co-Leader' }
-  return { bg: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)', label: 'Member' }
+  return { bg: 'rgb(var(--inv) / 0.08)', color: 'rgb(var(--inv) / 0.5)', label: 'Member' }
 }
 
 // ─── Drawer component ──────────────────────────────────────────────────────────
@@ -103,17 +103,17 @@ function Drawer({
     <>
       <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-        <div style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-          <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18, margin: 0 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.08)', border: 'none', borderRadius: 8, color: 'rgba(255,255,255,0.6)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32 }}>
+        <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+          <div style={{ padding: '20px 24px', borderBottom: '1px solid rgb(var(--inv) / 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18, margin: 0 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'rgb(var(--inv) / 0.08)', border: 'none', borderRadius: 8, color: 'rgb(var(--inv) / 0.6)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32 }}>
               <X size={16} />
             </button>
           </div>
           <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
             {children}
           </div>
-          <div style={{ padding: '16px 24px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', gap: 12, justifyContent: 'flex-end', flexShrink: 0 }}>
+          <div style={{ padding: '16px 24px', borderTop: '1px solid rgb(var(--inv) / 0.08)', display: 'flex', gap: 12, justifyContent: 'flex-end', flexShrink: 0 }}>
             {footer}
           </div>
         </div>
@@ -126,7 +126,7 @@ function Drawer({
 
 const fieldLabel: React.CSSProperties = {
   display: 'block',
-  color: 'rgba(255,255,255,0.5)',
+  color: 'rgb(var(--inv) / 0.5)',
   fontSize: 12,
   fontWeight: 600,
   textTransform: 'uppercase',
@@ -136,11 +136,11 @@ const fieldLabel: React.CSSProperties = {
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  backgroundColor: '#1e2248',
-  border: '1px solid rgba(255,255,255,0.10)',
+  backgroundColor: 'var(--input-bg)',
+  border: '1px solid rgb(var(--inv) / 0.10)',
   borderRadius: 10,
   padding: '10px 14px',
-  color: 'white',
+  color: 'var(--text-primary)',
   fontSize: 14,
   outline: 'none',
   boxSizing: 'border-box',
@@ -165,21 +165,21 @@ function FieldGroup({ label, children }: { label: string; children: React.ReactN
 
 function Skeleton() {
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       <div
         style={{
           height: 16,
           width: 140,
           borderRadius: 8,
-          backgroundColor: 'rgba(255,255,255,0.08)',
+          backgroundColor: 'rgb(var(--inv) / 0.08)',
           marginBottom: 24,
         }}
       />
       <div
         style={{
-          backgroundColor: '#13152e',
+          backgroundColor: 'var(--card-bg)',
           borderRadius: 20,
-          border: '1px solid rgba(255,255,255,0.08)',
+          border: '1px solid rgb(var(--inv) / 0.08)',
           padding: 28,
           marginBottom: 24,
         }}
@@ -191,7 +191,7 @@ function Skeleton() {
               height: i === 1 ? 32 : 14,
               width: w,
               borderRadius: 8,
-              backgroundColor: 'rgba(255,255,255,0.08)',
+              backgroundColor: 'rgb(var(--inv) / 0.08)',
               marginBottom: 16,
             }}
           />
@@ -305,13 +305,13 @@ export function FellowshipDetailPage() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
 
       {/* Back link */}
       <Link
         to="/fellowships"
         style={{
-          color: '#7c6bff',
+          color: 'var(--accent)',
           textDecoration: 'none',
           fontSize: 14,
           display: 'inline-flex',
@@ -327,9 +327,9 @@ export function FellowshipDetailPage() {
       <div
         style={{
           marginTop: 20,
-          backgroundColor: '#13152e',
+          backgroundColor: 'var(--card-bg)',
           borderRadius: 20,
-          border: '1px solid rgba(255,255,255,0.08)',
+          border: '1px solid rgb(var(--inv) / 0.08)',
           padding: 28,
           display: 'flex',
           gap: 32,
@@ -353,7 +353,7 @@ export function FellowshipDetailPage() {
               {badge.label}
             </span>
             {group.createdAt && (
-              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>
+              <span style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>
                 Established {formatDate(group.createdAt)}
               </span>
             )}
@@ -362,7 +362,7 @@ export function FellowshipDetailPage() {
           {/* Group name */}
           <h1
             style={{
-              color: 'white',
+              color: 'var(--text-primary)',
               fontWeight: 700,
               fontSize: 28,
               margin: '10px 0 4px',
@@ -374,7 +374,7 @@ export function FellowshipDetailPage() {
 
           {/* Description */}
           {group.description && (
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, margin: '0 0 16px' }}>
+            <p style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 14, margin: '0 0 16px' }}>
               {group.description}
             </p>
           )}
@@ -391,10 +391,10 @@ export function FellowshipDetailPage() {
             {/* Location */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                <MapPin size={14} color="rgba(255,255,255,0.4)" />
+                <MapPin size={14} color="rgb(var(--inv) / 0.4)" />
                 <span
                   style={{
-                    color: 'rgba(255,255,255,0.4)',
+                    color: 'rgb(var(--inv) / 0.4)',
                     fontSize: 11,
                     fontWeight: 600,
                     textTransform: 'uppercase',
@@ -404,7 +404,7 @@ export function FellowshipDetailPage() {
                   Location
                 </span>
               </div>
-              <p style={{ color: 'white', fontSize: 13, fontWeight: 500, margin: 0 }}>
+              <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 500, margin: 0 }}>
                 {group.meetingLocation || '—'}
               </p>
             </div>
@@ -412,10 +412,10 @@ export function FellowshipDetailPage() {
             {/* Schedule */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                <Calendar size={14} color="rgba(255,255,255,0.4)" />
+                <Calendar size={14} color="rgb(var(--inv) / 0.4)" />
                 <span
                   style={{
-                    color: 'rgba(255,255,255,0.4)',
+                    color: 'rgb(var(--inv) / 0.4)',
                     fontSize: 11,
                     fontWeight: 600,
                     textTransform: 'uppercase',
@@ -425,7 +425,7 @@ export function FellowshipDetailPage() {
                   Schedule
                 </span>
               </div>
-              <p style={{ color: 'white', fontSize: 13, fontWeight: 500, margin: 0 }}>
+              <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 500, margin: 0 }}>
                 {group.meetingDay && group.meetingTime
                   ? `${group.meetingDay} @ ${group.meetingTime}`
                   : group.meetingDay || group.meetingTime || '—'}
@@ -435,10 +435,10 @@ export function FellowshipDetailPage() {
             {/* Leader */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                <UserCheck size={14} color="rgba(255,255,255,0.4)" />
+                <UserCheck size={14} color="rgb(var(--inv) / 0.4)" />
                 <span
                   style={{
-                    color: 'rgba(255,255,255,0.4)',
+                    color: 'rgb(var(--inv) / 0.4)',
                     fontSize: 11,
                     fontWeight: 600,
                     textTransform: 'uppercase',
@@ -448,7 +448,7 @@ export function FellowshipDetailPage() {
                   Leader
                 </span>
               </div>
-              <p style={{ color: 'white', fontSize: 13, fontWeight: 500, margin: 0 }}>
+              <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 500, margin: 0 }}>
                 {group.leader?.fullName || '—'}
               </p>
             </div>
@@ -456,10 +456,10 @@ export function FellowshipDetailPage() {
             {/* Co-Leader */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                <Users size={14} color="rgba(255,255,255,0.4)" />
+                <Users size={14} color="rgb(var(--inv) / 0.4)" />
                 <span
                   style={{
-                    color: 'rgba(255,255,255,0.4)',
+                    color: 'rgb(var(--inv) / 0.4)',
                     fontSize: 11,
                     fontWeight: 600,
                     textTransform: 'uppercase',
@@ -469,7 +469,7 @@ export function FellowshipDetailPage() {
                   Co-Leader
                 </span>
               </div>
-              <p style={{ color: 'white', fontSize: 13, fontWeight: 500, margin: 0 }}>
+              <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 500, margin: 0 }}>
                 {group.coLeader?.fullName || '—'}
               </p>
             </div>
@@ -481,9 +481,9 @@ export function FellowshipDetailPage() {
             style={{
               marginTop: 20,
               backgroundColor: 'transparent',
-              border: '1px solid rgba(255,255,255,0.15)',
+              border: '1px solid rgb(var(--inv) / 0.15)',
               borderRadius: 10,
-              color: 'rgba(255,255,255,0.7)',
+              color: 'rgb(var(--inv) / 0.7)',
               fontSize: 13,
               fontWeight: 500,
               padding: '8px 16px',
@@ -506,12 +506,12 @@ export function FellowshipDetailPage() {
               minWidth: 120,
             }}
           >
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 28, margin: 0 }}>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 28, margin: 0 }}>
               {groupStats.memberCount}
             </p>
             <p
               style={{
-                color: 'rgba(255,255,255,0.5)',
+                color: 'rgb(var(--inv) / 0.5)',
                 fontSize: 11,
                 fontWeight: 600,
                 textTransform: 'uppercase',
@@ -533,12 +533,12 @@ export function FellowshipDetailPage() {
               minWidth: 120,
             }}
           >
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 28, margin: 0 }}>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 28, margin: 0 }}>
               {groupStats.averageAttendanceRate.toFixed(0)}%
             </p>
             <p
               style={{
-                color: 'rgba(255,255,255,0.5)',
+                color: 'rgb(var(--inv) / 0.5)',
                 fontSize: 11,
                 fontWeight: 600,
                 textTransform: 'uppercase',
@@ -560,12 +560,12 @@ export function FellowshipDetailPage() {
               minWidth: 120,
             }}
           >
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 28, margin: 0 }}>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 28, margin: 0 }}>
               {groupStats.sessionsLogged}
             </p>
             <p
               style={{
-                color: 'rgba(255,255,255,0.5)',
+                color: 'rgb(var(--inv) / 0.5)',
                 fontSize: 11,
                 fontWeight: 600,
                 textTransform: 'uppercase',
@@ -586,7 +586,7 @@ export function FellowshipDetailPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          borderBottom: '1px solid rgb(var(--inv) / 0.08)',
           paddingBottom: 0,
         }}
       >
@@ -602,7 +602,7 @@ export function FellowshipDetailPage() {
               background: 'none',
               border: 'none',
               borderBottom: activeTab === 'members' ? '2px solid #7c6bff' : '2px solid transparent',
-              color: activeTab === 'members' ? 'white' : 'rgba(255,255,255,0.5)',
+              color: activeTab === 'members' ? 'white' : 'rgb(var(--inv) / 0.5)',
               fontSize: 14,
               fontWeight: activeTab === 'members' ? 600 : 400,
               cursor: 'pointer',
@@ -623,7 +623,7 @@ export function FellowshipDetailPage() {
               background: 'none',
               border: 'none',
               borderBottom: activeTab === 'attendance' ? '2px solid #7c6bff' : '2px solid transparent',
-              color: activeTab === 'attendance' ? 'white' : 'rgba(255,255,255,0.5)',
+              color: activeTab === 'attendance' ? 'white' : 'rgb(var(--inv) / 0.5)',
               fontSize: 14,
               fontWeight: activeTab === 'attendance' ? 600 : 400,
               cursor: 'pointer',
@@ -645,10 +645,10 @@ export function FellowshipDetailPage() {
                 alignItems: 'center',
                 gap: 8,
                 padding: '9px 18px',
-                background: 'linear-gradient(135deg, #7c6bff, #6456e8)',
+                background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))',
                 border: 'none',
                 borderRadius: 10,
-                color: 'white',
+                color: 'var(--text-primary)',
                 fontSize: 13,
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -668,7 +668,7 @@ export function FellowshipDetailPage() {
                 background: 'transparent',
                 border: '1px solid rgba(124,107,255,0.5)',
                 borderRadius: 10,
-                color: '#7c6bff',
+                color: 'var(--accent)',
                 fontSize: 13,
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -693,7 +693,7 @@ export function FellowshipDetailPage() {
                 left: 12,
                 top: '50%',
                 transform: 'translateY(-50%)',
-                color: 'rgba(255,255,255,0.35)',
+                color: 'rgb(var(--inv) / 0.35)',
                 pointerEvents: 'none',
               }}
             />
@@ -714,31 +714,31 @@ export function FellowshipDetailPage() {
             <div style={{ textAlign: 'center', padding: '60px 0' }}>
               <Users
                 size={40}
-                style={{ color: 'rgba(255,255,255,0.2)', margin: '0 auto 12px' }}
+                style={{ color: 'rgb(var(--inv) / 0.2)', margin: '0 auto 12px' }}
               />
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14 }}>
                 {memberSearch ? 'No members match your search.' : 'No members in this group yet.'}
               </p>
             </div>
           ) : (
             <div
               style={{
-                backgroundColor: '#13152e',
+                backgroundColor: 'var(--card-bg)',
                 borderRadius: 16,
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '1px solid rgb(var(--inv) / 0.08)',
                 overflow: 'hidden',
               }}
             >
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                  <tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.08)' }}>
                     {['Name', 'Email', 'Phone Number', 'Group Role', 'Date Joined', 'Remove'].map(
                       (col) => (
                         <th
                           key={col}
                           style={{
                             padding: '12px 16px',
-                            color: 'rgba(255,255,255,0.4)',
+                            color: 'rgb(var(--inv) / 0.4)',
                             fontSize: 11,
                             fontWeight: 600,
                             textTransform: 'uppercase',
@@ -758,7 +758,7 @@ export function FellowshipDetailPage() {
                     return (
                       <tr
                         key={gm.id}
-                        style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+                        style={{ borderBottom: '1px solid rgb(var(--inv) / 0.05)' }}
                       >
                         {/* Name */}
                         <td style={{ padding: '14px 16px' }}>
@@ -768,24 +768,24 @@ export function FellowshipDetailPage() {
                                 width: 30,
                                 height: 30,
                                 borderRadius: 8,
-                                background: 'linear-gradient(135deg, #7c6bff, #6456e8)',
+                                background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 fontSize: 11,
                                 fontWeight: 700,
-                                color: 'white',
+                                color: 'var(--text-primary)',
                                 flexShrink: 0,
                               }}
                             >
                               {getInitials(gm.member.fullName)}
                             </div>
                             <div>
-                              <p style={{ color: 'white', fontSize: 14, fontWeight: 500, margin: 0 }}>
+                              <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 500, margin: 0 }}>
                                 {gm.member.fullName}
                               </p>
                               {gm.member.email && (
-                                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: 0 }}>
+                                <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: 0 }}>
                                   {gm.member.email}
                                 </p>
                               )}
@@ -794,12 +794,12 @@ export function FellowshipDetailPage() {
                         </td>
 
                         {/* Email */}
-                        <td style={{ padding: '14px 16px', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>
+                        <td style={{ padding: '14px 16px', color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>
                           {gm.member.email || '—'}
                         </td>
 
                         {/* Phone */}
-                        <td style={{ padding: '14px 16px', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>
+                        <td style={{ padding: '14px 16px', color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>
                           {gm.member.phoneNumber || '—'}
                         </td>
 
@@ -820,7 +820,7 @@ export function FellowshipDetailPage() {
                         </td>
 
                         {/* Date Joined */}
-                        <td style={{ padding: '14px 16px', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>
+                        <td style={{ padding: '14px 16px', color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>
                           {gm.joinedAt ? formatDate(gm.joinedAt) : '—'}
                         </td>
 
@@ -861,30 +861,30 @@ export function FellowshipDetailPage() {
             <div style={{ textAlign: 'center', padding: '60px 0' }}>
               <Calendar
                 size={40}
-                style={{ color: 'rgba(255,255,255,0.2)', margin: '0 auto 12px' }}
+                style={{ color: 'rgb(var(--inv) / 0.2)', margin: '0 auto 12px' }}
               />
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14 }}>
                 No attendance sessions recorded yet.
               </p>
             </div>
           ) : (
             <div
               style={{
-                backgroundColor: '#13152e',
+                backgroundColor: 'var(--card-bg)',
                 borderRadius: 16,
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '1px solid rgb(var(--inv) / 0.08)',
                 overflow: 'hidden',
               }}
             >
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                  <tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.08)' }}>
                     {['Meeting Date', 'Topic / Discussion', 'Notes', 'View Roll Call'].map((col) => (
                       <th
                         key={col}
                         style={{
                           padding: '12px 16px',
-                          color: 'rgba(255,255,255,0.4)',
+                          color: 'rgb(var(--inv) / 0.4)',
                           fontSize: 11,
                           fontWeight: 600,
                           textTransform: 'uppercase',
@@ -901,18 +901,18 @@ export function FellowshipDetailPage() {
                   {attendanceHistory.map((session) => (
                     <tr
                       key={session.id}
-                      style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+                      style={{ borderBottom: '1px solid rgb(var(--inv) / 0.05)' }}
                     >
-                      <td style={{ padding: '14px 16px', color: 'white', fontSize: 14 }}>
+                      <td style={{ padding: '14px 16px', color: 'var(--text-primary)', fontSize: 14 }}>
                         {formatDate(session.meetingDate)}
                       </td>
-                      <td style={{ padding: '14px 16px', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
+                      <td style={{ padding: '14px 16px', color: 'rgb(var(--inv) / 0.7)', fontSize: 13 }}>
                         {session.topic || '—'}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <span
                           style={{
-                            color: 'rgba(255,255,255,0.5)',
+                            color: 'rgb(var(--inv) / 0.5)',
                             fontSize: 13,
                             maxWidth: 200,
                             overflow: 'hidden',
@@ -931,7 +931,7 @@ export function FellowshipDetailPage() {
                             background: 'rgba(124,107,255,0.1)',
                             border: '1px solid rgba(124,107,255,0.3)',
                             borderRadius: 8,
-                            color: '#7c6bff',
+                            color: 'var(--accent)',
                             fontSize: 12,
                             fontWeight: 600,
                             padding: '6px 12px',
@@ -966,18 +966,18 @@ export function FellowshipDetailPage() {
         >
           <div
             style={{
-              backgroundColor: '#1a1b3a',
+              backgroundColor: 'var(--drawer-bg)',
               borderRadius: 20,
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid rgb(var(--inv) / 0.08)',
               padding: 28,
               width: 380,
               maxWidth: '90vw',
             }}
           >
-            <h3 style={{ color: 'white', fontWeight: 700, fontSize: 18, margin: '0 0 10px' }}>
+            <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18, margin: '0 0 10px' }}>
               Remove Member?
             </h3>
-            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, margin: '0 0 24px' }}>
+            <p style={{ color: 'rgb(var(--inv) / 0.55)', fontSize: 14, margin: '0 0 24px' }}>
               Are you sure you want to remove this member from the group?
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
@@ -986,9 +986,9 @@ export function FellowshipDetailPage() {
                 style={{
                   padding: '9px 18px',
                   background: 'transparent',
-                  border: '1px solid rgba(255,255,255,0.15)',
+                  border: '1px solid rgb(var(--inv) / 0.15)',
                   borderRadius: 10,
-                  color: 'rgba(255,255,255,0.7)',
+                  color: 'rgb(var(--inv) / 0.7)',
                   fontSize: 13,
                   fontWeight: 500,
                   cursor: 'pointer',
@@ -1004,7 +1004,7 @@ export function FellowshipDetailPage() {
                   background: 'rgba(239,68,68,0.85)',
                   border: 'none',
                   borderRadius: 10,
-                  color: 'white',
+                  color: 'var(--text-primary)',
                   fontSize: 13,
                   fontWeight: 600,
                   cursor: 'pointer',
@@ -1033,9 +1033,9 @@ export function FellowshipDetailPage() {
         >
           <div
             style={{
-              backgroundColor: '#1a1b3a',
+              backgroundColor: 'var(--drawer-bg)',
               borderRadius: 20,
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid rgb(var(--inv) / 0.08)',
               width: 480,
               maxWidth: '90vw',
               maxHeight: '80vh',
@@ -1047,18 +1047,18 @@ export function FellowshipDetailPage() {
             <div
               style={{
                 padding: '20px 24px',
-                borderBottom: '1px solid rgba(255,255,255,0.08)',
+                borderBottom: '1px solid rgb(var(--inv) / 0.08)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}
             >
               <div>
-                <h3 style={{ color: 'white', fontWeight: 700, fontSize: 16, margin: 0 }}>
+                <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 16, margin: 0 }}>
                   Roll Call Details
                 </h3>
                 {rollCallSession && (
-                  <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, margin: '4px 0 0' }}>
+                  <p style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 13, margin: '4px 0 0' }}>
                     {rollCallSession.topic && `${rollCallSession.topic} · `}
                     {formatDate(rollCallSession.meetingDate)}
                   </p>
@@ -1067,10 +1067,10 @@ export function FellowshipDetailPage() {
               <button
                 onClick={() => setRollCallModal(null)}
                 style={{
-                  background: 'rgba(255,255,255,0.08)',
+                  background: 'rgb(var(--inv) / 0.08)',
                   border: 'none',
                   borderRadius: 8,
-                  color: 'rgba(255,255,255,0.6)',
+                  color: 'rgb(var(--inv) / 0.6)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -1087,7 +1087,7 @@ export function FellowshipDetailPage() {
             {/* Modal body */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
               {(attendanceDetailsMap[rollCallModal] ?? []).length === 0 ? (
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14, textAlign: 'center', padding: '20px 0' }}>
+                <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14, textAlign: 'center', padding: '20px 0' }}>
                   No roll call data for this session.
                 </p>
               ) : (
@@ -1099,10 +1099,10 @@ export function FellowshipDetailPage() {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       padding: '10px 0',
-                      borderBottom: '1px solid rgba(255,255,255,0.06)',
+                      borderBottom: '1px solid rgb(var(--inv) / 0.06)',
                     }}
                   >
-                    <span style={{ color: 'white', fontSize: 14 }}>{entry.memberName}</span>
+                    <span style={{ color: 'var(--text-primary)', fontSize: 14 }}>{entry.memberName}</span>
                     {entry.present ? (
                       <span
                         style={{
@@ -1150,9 +1150,9 @@ export function FellowshipDetailPage() {
               style={{
                 padding: '9px 18px',
                 background: 'transparent',
-                border: '1px solid rgba(255,255,255,0.15)',
+                border: '1px solid rgb(var(--inv) / 0.15)',
                 borderRadius: 10,
-                color: 'rgba(255,255,255,0.7)',
+                color: 'rgb(var(--inv) / 0.7)',
                 fontSize: 13,
                 fontWeight: 500,
                 cursor: 'pointer',
@@ -1165,10 +1165,10 @@ export function FellowshipDetailPage() {
               disabled={editMutation.isPending}
               style={{
                 padding: '9px 20px',
-                background: 'linear-gradient(135deg, #7c6bff, #6456e8)',
+                background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))',
                 border: 'none',
                 borderRadius: 10,
-                color: 'white',
+                color: 'var(--text-primary)',
                 fontSize: 13,
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -1296,9 +1296,9 @@ export function FellowshipDetailPage() {
               style={{
                 padding: '9px 18px',
                 background: 'transparent',
-                border: '1px solid rgba(255,255,255,0.15)',
+                border: '1px solid rgb(var(--inv) / 0.15)',
                 borderRadius: 10,
-                color: 'rgba(255,255,255,0.7)',
+                color: 'rgb(var(--inv) / 0.7)',
                 fontSize: 13,
                 fontWeight: 500,
                 cursor: 'pointer',
@@ -1311,10 +1311,10 @@ export function FellowshipDetailPage() {
               disabled={addMemberMutation.isPending || !addMemberForm.memberId}
               style={{
                 padding: '9px 20px',
-                background: 'linear-gradient(135deg, #7c6bff, #6456e8)',
+                background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))',
                 border: 'none',
                 borderRadius: 10,
-                color: 'white',
+                color: 'var(--text-primary)',
                 fontSize: 13,
                 fontWeight: 600,
                 cursor: 'pointer',

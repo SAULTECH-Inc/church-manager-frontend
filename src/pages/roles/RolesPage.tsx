@@ -12,10 +12,10 @@ interface EndpointGuard { id: string; method: string; pathPattern: string; permi
 interface ApprovalChain { id: string; name: string; description?: string; triggerModule?: string; triggerAction?: string; isActive: boolean; steps?: ApprovalStep[] }
 interface ApprovalStep  { id: string; stepOrder: number; approverType: string; staticRole?: string; isRequired: boolean; timeoutHours?: number }
 
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const inputStyle: React.CSSProperties = { backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const outlineBtn: React.CSSProperties = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const inputStyle: React.CSSProperties = { backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const outlineBtn: React.CSSProperties = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
 
 interface DrawerProps { open: boolean; onClose: () => void; title: string; children: React.ReactNode; footer: React.ReactNode }
 function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
@@ -24,13 +24,13 @@ function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
     <>
       <div style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-        <div style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}><X size={20} /></button>
+        <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer' }}><X size={20} /></button>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-5">{children}</div>
-          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -113,11 +113,11 @@ export function RolesPage() {
   ][activeTab]
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Roles & Permissions</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Access Control · Role Groups · Endpoint Guards</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Roles & Permissions</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Access Control · Role Groups · Endpoint Guards</p>
         </div>
         {addBtn && <button onClick={addBtn.action} style={{ ...gradientBtn, display: 'flex', alignItems: 'center', gap: 6 }}><Plus size={15} /> {addBtn.label}</button>}
       </div>
@@ -129,37 +129,37 @@ export function RolesPage() {
           { label: 'Permissions', value: stats.permissions ?? permissions.length },
           { label: 'User Assignments', value: stats.assignments ?? assignments.length },
         ].map(k => (
-          <div key={k.label} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 20 }}>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: '0 0 4px' }}>{k.value}</p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
+          <div key={k.label} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 20 }}>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: '0 0 4px' }}>{k.value}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: 0 }}>{k.label}</p>
           </div>
         ))}
       </div>
 
       {/* Underline tabs */}
-      <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: 20, gap: 4 }}>
+      <div style={{ display: 'flex', borderBottom: '1px solid rgb(var(--inv) / 0.08)', marginBottom: 20, gap: 4 }}>
         {TABS.map((tab, i) => (
           <button key={tab} onClick={() => setActiveTab(i)}
-            style={{ padding: '10px 18px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: activeTab === i ? '#7c6bff' : 'rgba(255,255,255,0.4)', borderBottom: `2px solid ${activeTab === i ? '#7c6bff' : 'transparent'}`, transition: 'all 0.15s' }}>
+            style={{ padding: '10px 18px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: activeTab === i ? '#7c6bff' : 'rgb(var(--inv) / 0.4)', borderBottom: `2px solid ${activeTab === i ? '#7c6bff' : 'transparent'}`, transition: 'all 0.15s' }}>
             {tab}
           </button>
         ))}
       </div>
 
-      {isLoading && <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading...</p></div>}
+      {isLoading && <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading...</p></div>}
 
       {!isLoading && activeTab === 0 && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           <table className="w-full text-sm">
-            <thead><tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
-              {['GROUP NAME', 'DESCRIPTION', 'ROLES', 'ACTIONS'].map(col => <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>)}
+            <thead><tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
+              {['GROUP NAME', 'DESCRIPTION', 'ROLES', 'ACTIONS'].map(col => <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>)}
             </tr></thead>
             <tbody>
-              {groups.length === 0 && <tr><td colSpan={4} style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>No role groups yet</td></tr>}
+              {groups.length === 0 && <tr><td colSpan={4} style={{ textAlign: 'center', padding: 40, color: 'rgb(var(--inv) / 0.4)' }}>No role groups yet</td></tr>}
               {groups.map(g => (
-                <tr key={g.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                  <td className="px-5 py-4" style={{ color: 'white', fontWeight: 600 }}>{g.name}</td>
-                  <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{g.description || '—'}</td>
+                <tr key={g.id} style={{ borderBottom: '1px solid rgb(var(--inv) / 0.04)' }}>
+                  <td className="px-5 py-4" style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{g.name}</td>
+                  <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>{g.description || '—'}</td>
                   <td className="px-5 py-4"><span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: '#a78bfa', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{g.roleCount}</span></td>
                   <td className="px-5 py-4">
                     <div className="flex gap-2">
@@ -176,17 +176,17 @@ export function RolesPage() {
 
       {!isLoading && activeTab === 1 && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
-          {roles.length === 0 && <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 32, textAlign: 'center', gridColumn: '1/-1' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>No roles yet</p></div>}
+          {roles.length === 0 && <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 32, textAlign: 'center', gridColumn: '1/-1' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>No roles yet</p></div>}
           {roles.map(role => (
-            <div key={role.id} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
-              <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div key={role.id} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
+              <div style={{ padding: '16px 20px', borderBottom: '1px solid rgb(var(--inv) / 0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
-                  <p style={{ color: 'white', fontWeight: 700, fontSize: 15, margin: 0 }}>{role.name}</p>
-                  {role.groupName && <p style={{ color: '#7c6bff', fontSize: 12, margin: '2px 0 0' }}>{role.groupName}</p>}
+                  <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 15, margin: 0 }}>{role.name}</p>
+                  {role.groupName && <p style={{ color: 'var(--accent)', fontSize: 12, margin: '2px 0 0' }}>{role.groupName}</p>}
                 </div>
                 <div className="flex items-center gap-2">
                   <button onClick={() => setExpandedRole(expandedRole === role.id ? null : role.id)}
-                    style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: 'rgba(255,255,255,0.6)', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    style={{ background: 'rgb(var(--inv) / 0.06)', border: 'none', color: 'rgb(var(--inv) / 0.6)', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <ChevronDown size={13} style={{ transform: expandedRole === role.id ? 'rotate(180deg)' : 'none', transition: '0.2s' }} />
                   </button>
                   <button onClick={() => { setEditRole(role); setEditRoleForm({ name: role.name, description: role.description ?? '', groupId: '' }) }}
@@ -194,18 +194,18 @@ export function RolesPage() {
                   <button onClick={() => { if (confirm('Delete role?')) deleteRole.mutate(role.id) }} style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Trash2 size={12} /></button>
                 </div>
               </div>
-              {role.description && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, padding: '10px 20px 0', margin: 0 }}>{role.description}</p>}
+              {role.description && <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, padding: '10px 20px 0', margin: 0 }}>{role.description}</p>}
               {expandedRole === role.id && (
                 <div style={{ padding: '12px 20px 16px' }}>
-                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', marginBottom: 8 }}>Permissions ({role.permissions.length})</p>
+                  <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', marginBottom: 8 }}>Permissions ({role.permissions.length})</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 6 }}>
                     {role.permissions.map(p => <span key={p} style={{ backgroundColor: 'rgba(124,107,255,0.1)', color: '#a78bfa', borderRadius: 6, padding: '3px 8px', fontSize: 11 }}>{p}</span>)}
-                    {role.permissions.length === 0 && <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13 }}>No permissions assigned</span>}
+                    {role.permissions.length === 0 && <span style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 13 }}>No permissions assigned</span>}
                   </div>
                 </div>
               )}
-              <div style={{ padding: '10px 20px', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
-                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>{role.permissions.length} permission{role.permissions.length !== 1 ? 's' : ''}</span>
+              <div style={{ padding: '10px 20px', borderTop: '1px solid rgb(var(--inv) / 0.04)' }}>
+                <span style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12 }}>{role.permissions.length} permission{role.permissions.length !== 1 ? 's' : ''}</span>
               </div>
             </div>
           ))}
@@ -214,18 +214,18 @@ export function RolesPage() {
 
       {!isLoading && activeTab === 2 && (
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 16 }}>
-          {Object.keys(permByModule).length === 0 && <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>No permissions defined</p></div>}
+          {Object.keys(permByModule).length === 0 && <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>No permissions defined</p></div>}
           {Object.entries(permByModule).map(([module, perms]) => (
-            <div key={module} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
-              <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.02)' }}>
-                <span style={{ color: '#7c6bff', fontWeight: 700, fontSize: 14 }}>{module}</span>
-                <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, marginLeft: 8 }}>{perms.length} permissions</span>
+            <div key={module} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
+              <div style={{ padding: '14px 20px', borderBottom: '1px solid rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.02)' }}>
+                <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 14 }}>{module}</span>
+                <span style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 12, marginLeft: 8 }}>{perms.length} permissions</span>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 8, padding: 16 }}>
                 {perms.map(p => (
                   <div key={p.id} style={{ backgroundColor: 'rgba(124,107,255,0.08)', border: '1px solid rgba(124,107,255,0.2)', borderRadius: 10, padding: '7px 12px' }}>
                     <p style={{ color: '#a78bfa', fontWeight: 600, fontSize: 13, margin: 0 }}>{p.name}</p>
-                    {p.description && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '2px 0 0' }}>{p.description}</p>}
+                    {p.description && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: '2px 0 0' }}>{p.description}</p>}
                   </div>
                 ))}
               </div>
@@ -235,21 +235,21 @@ export function RolesPage() {
       )}
 
       {!isLoading && activeTab === 3 && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           <table className="w-full text-sm">
-            <thead><tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
-              {['USER', 'ROLE', 'ASSIGNED AT'].map(col => <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>)}
+            <thead><tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
+              {['USER', 'ROLE', 'ASSIGNED AT'].map(col => <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>)}
             </tr></thead>
             <tbody>
-              {assignments.length === 0 && <tr><td colSpan={3} style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>No assignments</td></tr>}
+              {assignments.length === 0 && <tr><td colSpan={3} style={{ textAlign: 'center', padding: 40, color: 'rgb(var(--inv) / 0.4)' }}>No assignments</td></tr>}
               {assignments.map(a => (
-                <tr key={a.userId} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                <tr key={a.userId} style={{ borderBottom: '1px solid rgb(var(--inv) / 0.04)' }}>
                   <td className="px-5 py-4">
-                    <p style={{ color: 'white', fontWeight: 600, margin: 0 }}>{a.displayName}</p>
-                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: 0 }}>{a.email}</p>
+                    <p style={{ color: 'var(--text-primary)', fontWeight: 600, margin: 0 }}>{a.displayName}</p>
+                    <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: 0 }}>{a.email}</p>
                   </td>
                   <td className="px-5 py-4"><span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: '#a78bfa', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{a.role}</span></td>
-                  <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{a.assignedAt ? new Date(a.assignedAt).toLocaleDateString() : '—'}</td>
+                  <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>{a.assignedAt ? new Date(a.assignedAt).toLocaleDateString() : '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -258,21 +258,21 @@ export function RolesPage() {
       )}
 
       {!isLoading && activeTab === 4 && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           <table className="w-full text-sm">
-            <thead><tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
-              {['METHOD', 'PATH PATTERN', 'PERMISSION GATE', 'ROLE GATE', 'ACTIONS'].map(col => <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>)}
+            <thead><tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
+              {['METHOD', 'PATH PATTERN', 'PERMISSION GATE', 'ROLE GATE', 'ACTIONS'].map(col => <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>)}
             </tr></thead>
             <tbody>
-              {guards.length === 0 && <tr><td colSpan={5} style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>No endpoint guards</td></tr>}
+              {guards.length === 0 && <tr><td colSpan={5} style={{ textAlign: 'center', padding: 40, color: 'rgb(var(--inv) / 0.4)' }}>No endpoint guards</td></tr>}
               {guards.map(g => {
-                const mc = httpMethodColor[g.method] ?? { color: 'white', bg: 'rgba(255,255,255,0.1)' }
+                const mc = httpMethodColor[g.method] ?? { color: 'var(--text-primary)', bg: 'rgb(var(--inv) / 0.1)' }
                 return (
-                  <tr key={g.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <tr key={g.id} style={{ borderBottom: '1px solid rgb(var(--inv) / 0.04)' }}>
                     <td className="px-5 py-4"><span style={{ backgroundColor: mc.bg, color: mc.color, borderRadius: 6, padding: '3px 8px', fontSize: 11, fontWeight: 700 }}>{g.method}</span></td>
-                    <td className="px-5 py-4" style={{ fontFamily: 'monospace', color: 'rgba(255,255,255,0.8)', fontSize: 13 }}>{g.pathPattern}</td>
-                    <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{g.permissionGate || <span style={{ color: 'rgba(255,255,255,0.25)' }}>—</span>}</td>
-                    <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{g.roleGate || <span style={{ color: 'rgba(255,255,255,0.25)' }}>—</span>}</td>
+                    <td className="px-5 py-4" style={{ fontFamily: 'monospace', color: 'rgb(var(--inv) / 0.8)', fontSize: 13 }}>{g.pathPattern}</td>
+                    <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>{g.permissionGate || <span style={{ color: 'rgb(var(--inv) / 0.25)' }}>—</span>}</td>
+                    <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>{g.roleGate || <span style={{ color: 'rgb(var(--inv) / 0.25)' }}>—</span>}</td>
                     <td className="px-5 py-4">
                       <button onClick={() => { if (confirm('Delete guard?')) deleteGuard.mutate(g.id) }} style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Trash2 size={13} /></button>
                     </td>
@@ -287,14 +287,14 @@ export function RolesPage() {
       {!isLoading && activeTab === 5 && (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>Define multi-step approval workflows that trigger on specific module actions.</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: 0 }}>Define multi-step approval workflows that trigger on specific module actions.</p>
             <button onClick={() => setChainDrawer(true)} style={{ ...gradientBtn, display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', fontSize: 13 }}><Plus size={14} /> New Chain</button>
           </div>
           {chains.length === 0 && (
-            <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}>
+            <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}>
               <p style={{ fontSize: 36, margin: '0 0 10px' }}>🔗</p>
-              <p style={{ color: 'white', fontWeight: 700, fontSize: 16, margin: '0 0 6px' }}>No Approval Chains</p>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: 0 }}>Create your first approval chain to automate multi-step approvals.</p>
+              <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 16, margin: '0 0 6px' }}>No Approval Chains</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 13, margin: 0 }}>Create your first approval chain to automate multi-step approvals.</p>
             </div>
           )}
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 10 }}>
@@ -302,24 +302,24 @@ export function RolesPage() {
               const isOpen = expandedChain === c.id
               const steps  = c.steps ?? []
               return (
-                <div key={c.id} style={{ backgroundColor: '#13152e', borderRadius: 16, border: `1px solid ${c.isActive ? 'rgba(124,107,255,0.25)' : 'rgba(255,255,255,0.08)'}`, overflow: 'hidden' }}>
+                <div key={c.id} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 16, border: `1px solid ${c.isActive ? 'rgba(124,107,255,0.25)' : 'rgb(var(--inv) / 0.08)'}`, overflow: 'hidden' }}>
                   <div style={{ padding: '14px 20px' }}>
                     <div className="flex items-center justify-between gap-4">
                       <div style={{ flex: 1 }}>
                         <div className="flex items-center gap-2 mb-1">
                           <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: c.isActive ? '#10b981' : '#6b7280', display: 'inline-block', flexShrink: 0 }} />
-                          <p style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: 0 }}>{c.name}</p>
+                          <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14, margin: 0 }}>{c.name}</p>
                         </div>
-                        {c.description && <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, margin: '2px 0 0 16px' }}>{c.description}</p>}
+                        {c.description && <p style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 13, margin: '2px 0 0 16px' }}>{c.description}</p>}
                         <div className="flex gap-3 mt-1 ml-4">
-                          {c.triggerModule && <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>Module: <span style={{ color: '#a78bfa' }}>{c.triggerModule}</span></span>}
-                          {c.triggerAction && <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>Action: <span style={{ color: '#60a5fa' }}>{c.triggerAction}</span></span>}
-                          <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>{steps.length} step{steps.length !== 1 ? 's' : ''}</span>
+                          {c.triggerModule && <span style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12 }}>Module: <span style={{ color: '#a78bfa' }}>{c.triggerModule}</span></span>}
+                          {c.triggerAction && <span style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12 }}>Action: <span style={{ color: '#60a5fa' }}>{c.triggerAction}</span></span>}
+                          <span style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 12 }}>{steps.length} step{steps.length !== 1 ? 's' : ''}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         <button onClick={() => toggleChain.mutate(c.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                          {c.isActive ? <ToggleRight size={26} color="#7c6bff" /> : <ToggleLeft size={26} color="rgba(255,255,255,0.3)" />}
+                          {c.isActive ? <ToggleRight size={26} color="#7c6bff" /> : <ToggleLeft size={26} color="rgb(var(--inv) / 0.3)" />}
                         </button>
                         <button onClick={() => setExpandedChain(isOpen ? null : c.id)} style={{ ...outlineBtn, padding: '4px 10px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 3 }}>
                           {isOpen ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
@@ -330,20 +330,20 @@ export function RolesPage() {
                     </div>
                   </div>
                   {isOpen && (
-                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '14px 20px' }}>
+                    <div style={{ borderTop: '1px solid rgb(var(--inv) / 0.06)', padding: '14px 20px' }}>
                       <div className="flex items-center justify-between mb-3">
-                        <h4 style={{ color: 'white', fontWeight: 700, fontSize: 13, margin: 0 }}>Steps</h4>
+                        <h4 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 13, margin: 0 }}>Steps</h4>
                         <button onClick={() => setStepFor(c.id)} style={{ ...gradientBtn, padding: '4px 10px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 3 }}><Plus size={12} /> Add Step</button>
                       </div>
-                      {steps.length === 0 && <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13 }}>No steps yet. Add the first approver.</p>}
+                      {steps.length === 0 && <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 13 }}>No steps yet. Add the first approver.</p>}
                       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 6 }}>
                         {steps.map(s => (
-                          <div key={s.id} className="flex items-center justify-between" style={{ padding: '8px 12px', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
+                          <div key={s.id} className="flex items-center justify-between" style={{ padding: '8px 12px', backgroundColor: 'rgb(var(--inv) / 0.03)', borderRadius: 10, border: '1px solid rgb(var(--inv) / 0.06)' }}>
                             <div className="flex items-center gap-3">
-                              <div style={{ width: 24, height: 24, borderRadius: '50%', backgroundColor: 'rgba(124,107,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c6bff', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>{s.stepOrder}</div>
+                              <div style={{ width: 24, height: 24, borderRadius: '50%', backgroundColor: 'rgba(124,107,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>{s.stepOrder}</div>
                               <div>
-                                <p style={{ color: 'white', fontSize: 13, fontWeight: 600, margin: 0 }}>{s.staticRole ?? s.approverType}</p>
-                                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: 0 }}>
+                                <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 600, margin: 0 }}>{s.staticRole ?? s.approverType}</p>
+                                <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, margin: 0 }}>
                                   {s.approverType} · {s.isRequired ? 'Required' : 'Optional'}{s.timeoutHours ? ` · ${s.timeoutHours}h timeout` : ''}
                                 </p>
                               </div>
@@ -437,7 +437,7 @@ export function RolesPage() {
         <div><label style={labelStyle}>TIMEOUT (hours, optional)</label><input type="number" value={stepForm.timeoutHours} onChange={e => setStepForm(f => ({ ...f, timeoutHours: e.target.value }))} style={inputStyle} placeholder="Leave blank for no timeout" /></div>
         <div className="flex items-center gap-3">
           <input type="checkbox" id="roleStepRequired" checked={stepForm.required} onChange={e => setStepForm(f => ({ ...f, required: e.target.checked }))} />
-          <label htmlFor="roleStepRequired" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, cursor: 'pointer' }}>Required (must be approved to proceed)</label>
+          <label htmlFor="roleStepRequired" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 14, cursor: 'pointer' }}>Required (must be approved to proceed)</label>
         </div>
       </Drawer>
 

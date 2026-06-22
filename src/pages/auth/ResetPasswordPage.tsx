@@ -7,7 +7,7 @@ import { api } from '@/api/client'
 const INPUT_STYLE: React.CSSProperties = {
   backgroundColor: 'rgba(19,21,46,0.6)',
   border: '1px solid #252855',
-  color: 'white',
+  color: 'var(--text-primary)',
   borderRadius: 16,
   width: '100%',
   padding: '12px 14px 12px 42px',
@@ -37,18 +37,18 @@ export function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#131326' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--page-bg)' }}>
         <div style={{ textAlign: 'center', padding: 40 }}>
           <AlertCircle size={40} style={{ color: '#f87171', margin: '0 auto 16px' }} />
-          <p style={{ color: 'white', fontSize: 16, fontWeight: 600 }}>Invalid reset link</p>
-          <Link to="/forgot-password" style={{ color: '#7c6bff', fontSize: 14, marginTop: 12, display: 'block' }}>Request a new one</Link>
+          <p style={{ color: 'var(--text-primary)', fontSize: 16, fontWeight: 600 }}>Invalid reset link</p>
+          <Link to="/forgot-password" style={{ color: 'var(--accent)', fontSize: 14, marginTop: 12, display: 'block' }}>Request a new one</Link>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden" style={{ backgroundColor: '#131326' }}>
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden" style={{ backgroundColor: 'var(--page-bg)' }}>
       <div className="absolute -top-20 -left-20 w-96 h-96 rounded-full pointer-events-none" style={{ background: 'rgba(124,107,255,0.15)', filter: 'blur(100px)' }} />
       <div className="absolute -bottom-20 -right-20 w-[30rem] h-[30rem] rounded-full pointer-events-none" style={{ background: 'rgba(124,107,255,0.10)', filter: 'blur(120px)' }} />
 
@@ -56,12 +56,12 @@ export function ResetPasswordPage() {
         <div className="p-10 md:p-12" style={{
           backgroundColor: 'rgba(19,21,46,0.3)',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.10)',
+          border: '1px solid rgb(var(--inv) / 0.10)',
           borderRadius: 40,
           boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
         }}>
           <div className="flex flex-col items-center mb-8">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(135deg, #7c6bff, #6456e8)', boxShadow: '0 8px 20px rgba(100,86,232,0.3)' }}>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', boxShadow: '0 8px 20px rgba(100,86,232,0.3)' }}>
               <Compass size={22} color="white" strokeWidth={2.5} />
             </div>
             <h1 className="text-2xl font-bold text-white">ChurchOS</h1>
@@ -73,12 +73,12 @@ export function ResetPasswordPage() {
                 <CheckCircle size={28} style={{ color: '#34d399' }} />
               </div>
               <h2 className="text-xl font-bold text-white mb-2">Password reset!</h2>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>Redirecting you to login…</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14 }}>Redirecting you to login…</p>
             </div>
           ) : (
             <>
               <h2 className="text-xl font-bold text-white mb-1 text-center">Set new password</h2>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, textAlign: 'center', marginBottom: 28 }}>
+              <p style={{ color: 'rgb(var(--inv) / 0.45)', fontSize: 14, textAlign: 'center', marginBottom: 28 }}>
                 Choose a strong password of at least 6 characters.
               </p>
 
@@ -91,7 +91,7 @@ export function ResetPasswordPage() {
 
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.35)', pointerEvents: 'none' }} />
+                  <Lock size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'rgb(var(--inv) / 0.35)', pointerEvents: 'none' }} />
                   <input
                     type="password"
                     value={newPassword}
@@ -105,7 +105,7 @@ export function ResetPasswordPage() {
                 </div>
 
                 <div style={{ position: 'relative' }}>
-                  <Lock size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.35)', pointerEvents: 'none' }} />
+                  <Lock size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'rgb(var(--inv) / 0.35)', pointerEvents: 'none' }} />
                   <input
                     type="password"
                     value={confirm}
@@ -125,12 +125,12 @@ export function ResetPasswordPage() {
 
                 <button type="submit" disabled={!match || mutation.isPending}
                   className="w-full py-3 rounded-2xl font-semibold text-sm text-white"
-                  style={{ background: 'linear-gradient(135deg, #7c6bff, #6456e8)', border: 'none', cursor: !match || mutation.isPending ? 'not-allowed' : 'pointer', opacity: !match || mutation.isPending ? 0.7 : 1 }}>
+                  style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', border: 'none', cursor: !match || mutation.isPending ? 'not-allowed' : 'pointer', opacity: !match || mutation.isPending ? 0.7 : 1 }}>
                   {mutation.isPending ? 'Resetting...' : 'Reset password'}
                 </button>
               </form>
 
-              <Link to="/login" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: 'rgba(255,255,255,0.5)', fontSize: 13, marginTop: 20, textDecoration: 'none' }}>
+              <Link to="/login" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: 'rgb(var(--inv) / 0.5)', fontSize: 13, marginTop: 20, textDecoration: 'none' }}>
                 <ArrowLeft size={14} /> Back to login
               </Link>
             </>

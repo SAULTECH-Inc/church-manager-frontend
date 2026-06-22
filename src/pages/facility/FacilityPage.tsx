@@ -8,10 +8,10 @@ interface Facility { id: string; name: string; facilityType: string; capacity?: 
 interface Booking { id: string; facilityName?: string; facilityType?: string; bookerName?: string; bookerContact?: string; purpose?: string; bookingDate?: string; startTime?: string; endTime?: string; cost?: number; attendees?: number; status: string; memberId?: string }
 interface Member { id: string; fullName: string }
 
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const inputStyle: React.CSSProperties = { backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const outlineBtn: React.CSSProperties = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const inputStyle: React.CSSProperties = { backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const outlineBtn: React.CSSProperties = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
 
 interface DrawerProps { open: boolean; onClose: () => void; title: string; children: React.ReactNode; footer: React.ReactNode }
 function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
@@ -20,13 +20,13 @@ function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
     <>
       <div style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-        <div style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}><X size={20} /></button>
+        <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer' }}><X size={20} /></button>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-5">{children}</div>
-          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -45,7 +45,7 @@ const bookingStatusColors: Record<string, { color: string; bg: string }> = {
   APPROVED: { color: '#34d399', bg: 'rgba(52,211,153,0.15)' },
   COMPLETED: { color: '#60a5fa', bg: 'rgba(96,165,250,0.15)' },
   REJECTED: { color: '#f87171', bg: 'rgba(248,113,113,0.15)' },
-  CANCELLED: { color: 'rgba(255,255,255,0.4)', bg: 'rgba(255,255,255,0.06)' },
+  CANCELLED: { color: 'rgb(var(--inv) / 0.4)', bg: 'rgb(var(--inv) / 0.06)' },
 }
 
 export function FacilityPage() {
@@ -93,11 +93,11 @@ export function FacilityPage() {
   ]
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Facility Management</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Bookings · Facilities · Scheduling</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Facility Management</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Bookings · Facilities · Scheduling</p>
         </div>
         <div className="flex items-center gap-3">
           <button onClick={() => setAddFacDrawer(true)} style={{ ...outlineBtn }}>Add Facility</button>
@@ -107,54 +107,54 @@ export function FacilityPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 14, marginBottom: 24 }}>
         {kpis.map(k => (
-          <div key={k.label} style={{ backgroundColor: '#13152e', borderRadius: 18, border: '1px solid rgba(255,255,255,0.08)', padding: 18 }}>
+          <div key={k.label} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 18, border: '1px solid rgb(var(--inv) / 0.08)', padding: 18 }}>
             <div style={{ fontSize: 22, marginBottom: 8 }}>{k.icon}</div>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 22, margin: '0 0 4px' }}>{k.value}</p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, margin: 0 }}>{k.label}</p>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 22, margin: '0 0 4px' }}>{k.value}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 11, margin: 0 }}>{k.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="flex gap-1 mb-6" style={{ backgroundColor: '#13152e', borderRadius: 14, padding: 4, width: 'fit-content', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="flex gap-1 mb-6" style={{ backgroundColor: 'var(--card-bg)', borderRadius: 14, padding: 4, width: 'fit-content', border: '1px solid rgb(var(--inv) / 0.06)' }}>
         {(['bookings', 'facilities'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)}
-            style={{ padding: '8px 20px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, backgroundColor: tab === t ? '#7c6bff' : 'transparent', color: tab === t ? 'white' : 'rgba(255,255,255,0.5)' }}>
+            style={{ padding: '8px 20px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, backgroundColor: tab === t ? '#7c6bff' : 'transparent', color: tab === t ? 'white' : 'rgb(var(--inv) / 0.5)' }}>
             {t === 'bookings' ? '📅 Bookings' : '🏢 Facilities'}
           </button>
         ))}
       </div>
 
-      {isLoading && <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading...</p></div>}
+      {isLoading && <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading...</p></div>}
 
       {!isLoading && tab === 'bookings' && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="border-b" style={{ borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+              <thead><tr className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                 {['FACILITY', 'BOOKER', 'PURPOSE', 'DATE & TIME', 'COST', 'STATUS', 'ACTIONS'].map(col => (
-                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                 ))}
               </tr></thead>
               <tbody>
-                {bookings.length === 0 && <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>No bookings yet</td></tr>}
+                {bookings.length === 0 && <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: 'rgb(var(--inv) / 0.4)' }}>No bookings yet</td></tr>}
                 {bookings.map(b => {
-                  const sc = bookingStatusColors[b.status] ?? { color: 'rgba(255,255,255,0.4)', bg: 'rgba(255,255,255,0.06)' }
+                  const sc = bookingStatusColors[b.status] ?? { color: 'rgb(var(--inv) / 0.4)', bg: 'rgb(var(--inv) / 0.06)' }
                   return (
-                    <tr key={b.id} className="border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
+                    <tr key={b.id} className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.04)' }}>
                       <td className="px-5 py-4">
-                        <p style={{ color: 'white', fontWeight: 600, margin: 0 }}>{b.facilityName || '—'}</p>
-                        {b.facilityType && <span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: '#7c6bff', borderRadius: 20, padding: '2px 8px', fontSize: 11, fontWeight: 600 }}>{b.facilityType}</span>}
+                        <p style={{ color: 'var(--text-primary)', fontWeight: 600, margin: 0 }}>{b.facilityName || '—'}</p>
+                        {b.facilityType && <span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: 'var(--accent)', borderRadius: 20, padding: '2px 8px', fontSize: 11, fontWeight: 600 }}>{b.facilityType}</span>}
                       </td>
                       <td className="px-5 py-4">
-                        <p style={{ color: 'white', fontWeight: 500, margin: 0 }}>{b.bookerName || '—'}</p>
-                        {b.bookerContact && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: 0 }}>{b.bookerContact}</p>}
+                        <p style={{ color: 'var(--text-primary)', fontWeight: 500, margin: 0 }}>{b.bookerName || '—'}</p>
+                        {b.bookerContact && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: 0 }}>{b.bookerContact}</p>}
                       </td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.purpose || '—'}{b.attendees ? ` · ${b.attendees} pax` : ''}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.purpose || '—'}{b.attendees ? ` · ${b.attendees} pax` : ''}</td>
                       <td className="px-5 py-4">
-                        {b.bookingDate && <p style={{ color: 'white', fontSize: 13, margin: 0 }}>{new Date(b.bookingDate).toLocaleDateString()}</p>}
-                        {(b.startTime || b.endTime) && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: 0 }}>{b.startTime}{b.endTime ? ` – ${b.endTime}` : ''}</p>}
+                        {b.bookingDate && <p style={{ color: 'var(--text-primary)', fontSize: 13, margin: 0 }}>{new Date(b.bookingDate).toLocaleDateString()}</p>}
+                        {(b.startTime || b.endTime) && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: 0 }}>{b.startTime}{b.endTime ? ` – ${b.endTime}` : ''}</p>}
                       </td>
-                      <td className="px-5 py-4" style={{ color: b.cost ? '#34d399' : 'rgba(255,255,255,0.4)', fontWeight: b.cost ? 700 : 400, fontSize: 13 }}>{b.cost ? `₦${b.cost.toLocaleString()}` : 'Free'}</td>
+                      <td className="px-5 py-4" style={{ color: b.cost ? '#34d399' : 'rgb(var(--inv) / 0.4)', fontWeight: b.cost ? 700 : 400, fontSize: 13 }}>{b.cost ? `₦${b.cost.toLocaleString()}` : 'Free'}</td>
                       <td className="px-5 py-4"><span style={{ backgroundColor: sc.bg, color: sc.color, borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{b.status}</span></td>
                       <td className="px-5 py-4">
                         <div className="flex gap-1">
@@ -163,7 +163,7 @@ export function FacilityPage() {
                             <button onClick={() => rejectBooking.mutate(b.id)} style={{ backgroundColor: 'rgba(239,68,68,0.08)', border: 'none', color: '#f87171', borderRadius: 8, padding: '4px 8px', cursor: 'pointer', fontSize: 11 }}>Reject</button>
                           </>}
                           {b.status === 'APPROVED' && <button onClick={() => completeBooking.mutate(b.id)} style={{ backgroundColor: 'rgba(96,165,250,0.1)', border: 'none', color: '#60a5fa', borderRadius: 8, padding: '4px 8px', cursor: 'pointer', fontSize: 11 }}>Done</button>}
-                          {(b.status === 'PENDING' || b.status === 'APPROVED') && <button onClick={() => cancelBooking.mutate(b.id)} style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: 'none', color: 'rgba(255,255,255,0.4)', borderRadius: 8, padding: '4px 8px', cursor: 'pointer', fontSize: 11 }}>Cancel</button>}
+                          {(b.status === 'PENDING' || b.status === 'APPROVED') && <button onClick={() => cancelBooking.mutate(b.id)} style={{ backgroundColor: 'rgb(var(--inv) / 0.06)', border: 'none', color: 'rgb(var(--inv) / 0.4)', borderRadius: 8, padding: '4px 8px', cursor: 'pointer', fontSize: 11 }}>Cancel</button>}
                         </div>
                       </td>
                     </tr>
@@ -177,30 +177,30 @@ export function FacilityPage() {
 
       {!isLoading && tab === 'facilities' && (
         facilities.length === 0
-          ? <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 60, textAlign: 'center' }}>
-              <p style={{ color: 'rgba(255,255,255,0.4)' }}>No facilities added yet</p>
+          ? <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 60, textAlign: 'center' }}>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)' }}>No facilities added yet</p>
               <button onClick={() => setAddFacDrawer(true)} style={{ marginTop: 12, ...gradientBtn }}>Add Facility</button>
             </div>
           : <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
               {facilities.map(f => (
-                <div key={f.id} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+                <div key={f.id} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
                   <div style={{ height: 6, background: facilityTypeStripe(f.facilityType) }} />
                   <div style={{ padding: 20 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
-                      <h3 style={{ color: 'white', fontWeight: 700, fontSize: 16, margin: 0 }}>{f.name}</h3>
+                      <h3 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 16, margin: 0 }}>{f.name}</h3>
                       <button onClick={() => { if (confirm('Delete?')) deleteFacility.mutate(f.id) }}
                         style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Trash2 size={12} />
                       </button>
                     </div>
-                    {f.location && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: '0 0 10px' }}>📍 {f.location}</p>}
+                    {f.location && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 13, margin: '0 0 10px' }}>📍 {f.location}</p>}
                     <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' as const, marginBottom: 10 }}>
-                      <span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: '#7c6bff', borderRadius: 20, padding: '2px 8px', fontSize: 11, fontWeight: 600 }}>{f.facilityType}</span>
-                      {f.capacity && <span style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', borderRadius: 20, padding: '2px 8px', fontSize: 11 }}>👥 {f.capacity}</span>}
-                      {f.hourlyRate ? <span style={{ backgroundColor: 'rgba(52,211,153,0.1)', color: '#34d399', borderRadius: 20, padding: '2px 8px', fontSize: 11 }}>₦{f.hourlyRate.toLocaleString()}/hr</span> : <span style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.4)', borderRadius: 20, padding: '2px 8px', fontSize: 11 }}>Free</span>}
+                      <span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: 'var(--accent)', borderRadius: 20, padding: '2px 8px', fontSize: 11, fontWeight: 600 }}>{f.facilityType}</span>
+                      {f.capacity && <span style={{ backgroundColor: 'rgb(var(--inv) / 0.06)', color: 'rgb(var(--inv) / 0.5)', borderRadius: 20, padding: '2px 8px', fontSize: 11 }}>👥 {f.capacity}</span>}
+                      {f.hourlyRate ? <span style={{ backgroundColor: 'rgba(52,211,153,0.1)', color: '#34d399', borderRadius: 20, padding: '2px 8px', fontSize: 11 }}>₦{f.hourlyRate.toLocaleString()}/hr</span> : <span style={{ backgroundColor: 'rgb(var(--inv) / 0.06)', color: 'rgb(var(--inv) / 0.4)', borderRadius: 20, padding: '2px 8px', fontSize: 11 }}>Free</span>}
                     </div>
-                    {f.description && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: '0 0 10px' }}>{f.description}</p>}
-                    {f.amenities && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: '0 0 12px' }}>{f.amenities}</p>}
+                    {f.description && <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 13, margin: '0 0 10px' }}>{f.description}</p>}
+                    {f.amenities && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: '0 0 12px' }}>{f.amenities}</p>}
                     <button onClick={() => openBook(f.id)} style={{ ...gradientBtn, width: '100%', fontSize: 13, padding: '8px 16px' }}>📅 Book This</button>
                   </div>
                 </div>
@@ -255,7 +255,7 @@ export function FacilityPage() {
         </div>
         <div><label style={labelStyle}>NOTES</label><textarea rows={2} value={bookForm.notes} onChange={e => setBookForm(f => ({ ...f, notes: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
         <div style={{ backgroundColor: 'rgba(124,107,255,0.1)', borderRadius: 12, padding: '12px 16px' }}>
-          <p style={{ color: '#7c6bff', fontSize: 13, margin: 0 }}>ℹ️ Bookings require approval. Cost is auto-calculated based on facility rate and duration.</p>
+          <p style={{ color: 'var(--accent)', fontSize: 13, margin: 0 }}>ℹ️ Bookings require approval. Cost is auto-calculated based on facility rate and duration.</p>
         </div>
       </Drawer>
     </div>

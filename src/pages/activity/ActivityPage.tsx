@@ -9,10 +9,10 @@ interface Activity { id: string; title: string; activityType: string; targetAudi
 interface Participant { id: string; activityTitle?: string; memberName?: string; name?: string; phone?: string; role?: string; attended: boolean; notes?: string; activityId: string }
 interface Member { id: string; fullName: string }
 
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const inputStyle: React.CSSProperties = { backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const outlineBtn: React.CSSProperties = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const inputStyle: React.CSSProperties = { backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const outlineBtn: React.CSSProperties = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
 
 interface DrawerProps { open: boolean; onClose: () => void; title: string; children: React.ReactNode; footer: React.ReactNode }
 function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
@@ -21,13 +21,13 @@ function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
     <>
       <div style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-        <div style={{ backgroundColor: '#1a1b3a', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}><X size={20} /></button>
+        <div style={{ backgroundColor: 'var(--drawer-bg)', borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+          <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer' }}><X size={20} /></button>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-5">{children}</div>
-          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div className="shrink-0 flex gap-3 px-6 py-4 border-t" style={{ borderColor: 'rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -39,12 +39,12 @@ const activityTypeColor = (t: string) => {
     EVANGELISM: { color: '#34d399', bg: 'rgba(52,211,153,0.15)' },
     OUTREACH: { color: '#60a5fa', bg: 'rgba(96,165,250,0.15)' },
     CAMP: { color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
-    CONFERENCE: { color: '#7c6bff', bg: 'rgba(124,107,255,0.15)' },
+    CONFERENCE: { color: 'var(--accent)', bg: 'rgba(124,107,255,0.15)' },
     SEMINAR: { color: '#f472b6', bg: 'rgba(244,114,182,0.15)' },
     CRUSADE: { color: '#fb923c', bg: 'rgba(251,146,60,0.15)' },
     MISSION_TRIP: { color: '#a78bfa', bg: 'rgba(167,139,250,0.15)' },
   }
-  return map[t] ?? { color: 'rgba(255,255,255,0.5)', bg: 'rgba(255,255,255,0.08)' }
+  return map[t] ?? { color: 'rgb(var(--inv) / 0.5)', bg: 'rgb(var(--inv) / 0.08)' }
 }
 
 export function ActivityPage() {
@@ -92,11 +92,11 @@ export function ActivityPage() {
   ]
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: '#131326' }}>
+    <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: 'var(--page-bg)' }}>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>Activities</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>Evangelism · Outreach · Camp · Conference</p>
+          <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>Activities</h1>
+          <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, marginTop: 4 }}>Evangelism · Outreach · Camp · Conference</p>
         </div>
         <div className="flex items-center gap-3">
           <button onClick={() => setParDrawer(true)} style={outlineBtn}>Add Participant</button>
@@ -106,47 +106,47 @@ export function ActivityPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 16, marginBottom: 24 }}>
         {kpis.map(k => (
-          <div key={k.label} style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 20 }}>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 24, margin: '0 0 4px' }}>{k.value}</p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0 }}>{k.label}</p>
+          <div key={k.label} style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 20 }}>
+            <p style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 24, margin: '0 0 4px' }}>{k.value}</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 12, margin: 0 }}>{k.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="flex gap-1 mb-6" style={{ backgroundColor: '#13152e', borderRadius: 14, padding: 4, width: 'fit-content', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="flex gap-1 mb-6" style={{ backgroundColor: 'var(--card-bg)', borderRadius: 14, padding: 4, width: 'fit-content', border: '1px solid rgb(var(--inv) / 0.06)' }}>
         {(['activities', 'participants'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)}
-            style={{ padding: '8px 20px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, backgroundColor: tab === t ? '#7c6bff' : 'transparent', color: tab === t ? 'white' : 'rgba(255,255,255,0.5)' }}>
+            style={{ padding: '8px 20px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, backgroundColor: tab === t ? '#7c6bff' : 'transparent', color: tab === t ? 'white' : 'rgb(var(--inv) / 0.5)' }}>
             {t === 'activities' ? '📋 Activities' : '👥 Participants'}
           </button>
         ))}
       </div>
 
-      {isLoading && <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading...</p></div>}
+      {isLoading && <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', padding: 40, textAlign: 'center' }}><p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading...</p></div>}
 
       {!isLoading && tab === 'activities' && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="border-b" style={{ borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+              <thead><tr className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                 {['TITLE', 'TYPE', 'AUDIENCE', 'LOCATION', 'DATE', 'LEADER', 'BUDGET', 'PAX', 'ACTIONS'].map(col => (
-                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                 ))}
               </tr></thead>
               <tbody>
-                {activities.length === 0 && <tr><td colSpan={9} style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>No activities yet</td></tr>}
+                {activities.length === 0 && <tr><td colSpan={9} style={{ textAlign: 'center', padding: 40, color: 'rgb(var(--inv) / 0.4)' }}>No activities yet</td></tr>}
                 {activities.map(a => {
                   const tc = activityTypeColor(a.activityType)
                   return (
-                    <tr key={a.id} className="border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
-                      <td className="px-5 py-4" style={{ color: 'white', fontWeight: 600 }}>{a.title}</td>
+                    <tr key={a.id} className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.04)' }}>
+                      <td className="px-5 py-4" style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{a.title}</td>
                       <td className="px-5 py-4"><span style={{ backgroundColor: tc.bg, color: tc.color, borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 600 }}>{a.activityType}</span></td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{a.targetAudience || '—'}</td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{a.location || '—'}</td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{new Date(a.activityDate).toLocaleDateString()}{a.endDate ? ` – ${new Date(a.endDate).toLocaleDateString()}` : ''}</td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{a.leaderName || '—'}</td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{a.budget ? `₦${a.budget.toLocaleString()}` : '—'}</td>
-                      <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{a.participantCount ?? 0}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{a.targetAudience || '—'}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{a.location || '—'}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{new Date(a.activityDate).toLocaleDateString()}{a.endDate ? ` – ${new Date(a.endDate).toLocaleDateString()}` : ''}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{a.leaderName || '—'}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{a.budget ? `₦${a.budget.toLocaleString()}` : '—'}</td>
+                      <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{a.participantCount ?? 0}</td>
                       <td className="px-5 py-4">
                         <button onClick={() => { if (confirm('Delete activity?')) deleteActivity.mutate(a.id) }}
                           style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -163,24 +163,24 @@ export function ActivityPage() {
       )}
 
       {!isLoading && tab === 'participants' && (
-        <div style={{ backgroundColor: '#13152e', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="border-b" style={{ borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+              <thead><tr className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                 {['ACTIVITY', 'NAME', 'PHONE', 'ROLE', 'ATTENDED', 'NOTES', 'ACTIONS'].map(col => (
-                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                  <th key={col} className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                 ))}
               </tr></thead>
               <tbody>
-                {participants.length === 0 && <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>No participants yet</td></tr>}
+                {participants.length === 0 && <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: 'rgb(var(--inv) / 0.4)' }}>No participants yet</td></tr>}
                 {participants.map(p => (
-                  <tr key={p.id} className="border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
-                    <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{p.activityTitle || '—'}</td>
-                    <td className="px-5 py-4" style={{ color: 'white', fontWeight: 500 }}>{p.memberName ?? p.name ?? '—'}</td>
-                    <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{p.phone || '—'}</td>
-                    <td className="px-5 py-4">{p.role ? <span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: '#7c6bff', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{p.role}</span> : <span style={{ color: 'rgba(255,255,255,0.3)' }}>—</span>}</td>
+                  <tr key={p.id} className="border-b" style={{ borderColor: 'rgb(var(--inv) / 0.04)' }}>
+                    <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.7)', fontSize: 13 }}>{p.activityTitle || '—'}</td>
+                    <td className="px-5 py-4" style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{p.memberName ?? p.name ?? '—'}</td>
+                    <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{p.phone || '—'}</td>
+                    <td className="px-5 py-4">{p.role ? <span style={{ backgroundColor: 'rgba(124,107,255,0.15)', color: 'var(--accent)', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>{p.role}</span> : <span style={{ color: 'rgb(var(--inv) / 0.3)' }}>—</span>}</td>
                     <td className="px-5 py-4"><span style={{ color: p.attended ? '#34d399' : '#f87171', fontSize: 16 }}>{p.attended ? '✓' : '✗'}</span></td>
-                    <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.notes || '—'}</td>
+                    <td className="px-5 py-4" style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 13, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.notes || '—'}</td>
                     <td className="px-5 py-4">
                       <button onClick={() => { if (confirm('Remove?')) deleteParticipant.mutate(p.id) }}
                         style={{ background: 'rgba(239,68,68,0.1)', border: 'none', color: '#f87171', borderRadius: 8, width: 30, height: 30, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -245,9 +245,9 @@ export function ActivityPage() {
           <input type="text" list="role-list" value={parForm.role} onChange={e => setParForm(f => ({ ...f, role: e.target.value }))} style={inputStyle} />
           <datalist id="role-list"><option value="Volunteer" /><option value="Coordinator" /><option value="Speaker" /><option value="Musician" /><option value="Intercessor" /><option value="Usher" /></datalist>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '12px 16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, backgroundColor: 'rgb(var(--inv) / 0.04)', borderRadius: 12, padding: '12px 16px' }}>
           <input type="checkbox" id="attended" checked={parForm.attended} onChange={e => setParForm(f => ({ ...f, attended: e.target.checked }))} style={{ width: 16, height: 16, accentColor: '#7c6bff' }} />
-          <label htmlFor="attended" style={{ color: 'white', fontWeight: 500, fontSize: 14, cursor: 'pointer' }}>Attended</label>
+          <label htmlFor="attended" style={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: 14, cursor: 'pointer' }}>Attended</label>
         </div>
         <div><label style={labelStyle}>NOTES</label><textarea rows={2} value={parForm.notes} onChange={e => setParForm(f => ({ ...f, notes: e.target.value }))} style={{ ...inputStyle, resize: 'vertical' as const }} /></div>
       </Drawer>

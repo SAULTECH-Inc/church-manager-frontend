@@ -21,15 +21,15 @@ interface EventRegistration {
 }
 interface Member { id: string; fullName: string }
 
-const PAGE_BG = '#131326'
-const CARD = '#13152e'
-const CARD_INNER = '#1a1b3a'
+const PAGE_BG = 'var(--page-bg)'
+const CARD = 'var(--card-bg)'
+const CARD_INNER = 'var(--drawer-bg)'
 const ACCENT = '#7c6bff'
 
-const labelStyle: React.CSSProperties = { display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
-const inputStyle: React.CSSProperties = { backgroundColor: '#1e2248', border: '1px solid rgba(255,255,255,0.10)', color: 'white', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
-const outlineBtn: React.CSSProperties = { border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent', color: 'white', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
-const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, #7c6bff, #6456e8)', color: 'white', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
+const labelStyle: React.CSSProperties = { display: 'block', color: 'rgb(var(--inv) / 0.5)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }
+const inputStyle: React.CSSProperties = { backgroundColor: 'var(--input-bg)', border: '1px solid rgb(var(--inv) / 0.10)', color: 'var(--text-primary)', borderRadius: 12, width: '100%', padding: '10px 14px', fontSize: 14, outline: 'none' }
+const outlineBtn: React.CSSProperties = { border: '1px solid rgb(var(--inv) / 0.15)', backgroundColor: 'transparent', color: 'var(--text-primary)', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, fontSize: 14 }
+const gradientBtn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'var(--text-primary)', border: 'none', borderRadius: 12, padding: '10px 20px', cursor: 'pointer', fontWeight: 600, fontSize: 14 }
 
 const toQS = (obj: Record<string, string | number | undefined>) => {
   const p = new URLSearchParams()
@@ -51,13 +51,13 @@ function Drawer({ open, onClose, title, children, footer }: DrawerProps) {
     <>
       <div style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, pointerEvents: 'none' }}>
-        <div style={{ backgroundColor: CARD_INNER, borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ color: 'white', fontWeight: 700, fontSize: 18, margin: 0 }}>{title}</h2>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}><X size={20} /></button>
+        <div style={{ backgroundColor: CARD_INNER, borderRadius: 24, width: '100%', maxWidth: 520, maxHeight: '90vh', border: '1px solid rgb(var(--inv) / 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', borderBottom: '1px solid rgb(var(--inv) / 0.08)' }}>
+            <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 18, margin: 0 }}>{title}</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgb(var(--inv) / 0.5)', cursor: 'pointer' }}><X size={20} /></button>
           </div>
           <div style={{ flex: 1, overflowY: 'auto', padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>{children}</div>
-          <div style={{ display: 'flex', gap: 10, padding: '16px 24px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>{footer}</div>
+          <div style={{ display: 'flex', gap: 10, padding: '16px 24px', borderTop: '1px solid rgb(var(--inv) / 0.08)' }}>{footer}</div>
         </div>
       </div>
     </>
@@ -116,13 +116,13 @@ export function EventDetailPage() {
 
   if (isLoading) return (
     <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: PAGE_BG, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading event...</p>
+      <p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Loading event...</p>
     </div>
   )
 
   if (isError || !data?.event) return (
     <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: PAGE_BG, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-      <p style={{ color: 'rgba(255,255,255,0.4)' }}>Event not found.</p>
+      <p style={{ color: 'rgb(var(--inv) / 0.4)' }}>Event not found.</p>
       <button onClick={() => navigate('/events')} style={outlineBtn}>← Back to Events</button>
     </div>
   )
@@ -139,22 +139,22 @@ export function EventDetailPage() {
     setEditDrawer(true)
   }
 
-  const sc = STATUS_COLORS[event.status] ?? { color: 'rgba(255,255,255,0.5)', bg: 'rgba(255,255,255,0.06)' }
+  const sc = STATUS_COLORS[event.status] ?? { color: 'rgb(var(--inv) / 0.5)', bg: 'rgb(var(--inv) / 0.06)' }
 
   return (
     <div style={{ padding: '24px 32px', minHeight: '100vh', backgroundColor: PAGE_BG }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 24 }}>
-        <button onClick={() => navigate('/events')} style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: 'rgba(255,255,255,0.6)', borderRadius: 10, width: 36, height: 36, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <button onClick={() => navigate('/events')} style={{ background: 'rgb(var(--inv) / 0.06)', border: 'none', color: 'rgb(var(--inv) / 0.6)', borderRadius: 10, width: 36, height: 36, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <ArrowLeft size={16} />
         </button>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-            <h1 style={{ color: 'white', fontWeight: 700, fontSize: 26, margin: 0 }}>{event.name}</h1>
+            <h1 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 26, margin: 0 }}>{event.name}</h1>
             <span style={{ backgroundColor: TYPE_COLOR.bg, color: TYPE_COLOR.color, borderRadius: 20, padding: '4px 12px', fontSize: 12, fontWeight: 700 }}>{event.eventType}</span>
             <span style={{ backgroundColor: sc.bg, color: sc.color, borderRadius: 20, padding: '4px 12px', fontSize: 12, fontWeight: 700 }}>{event.status}</span>
           </div>
-          {event.description && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, margin: 0 }}>{event.description}</p>}
+          {event.description && <p style={{ color: 'rgb(var(--inv) / 0.5)', fontSize: 14, margin: 0 }}>{event.description}</p>}
         </div>
         <button onClick={openEdit} style={outlineBtn}>Edit Event</button>
       </div>
@@ -167,22 +167,22 @@ export function EventDetailPage() {
           { icon: <Users size={18} />, label: 'Registrations', value: `${registrations.length}${event.maxCapacity ? ` / ${event.maxCapacity}` : ''}` },
           { icon: <DollarSign size={18} />, label: 'Budget', value: `${fmt(event.budgetAllocated)} alloc · ${fmt(event.budgetSpent)} spent` },
         ].map(c => (
-          <div key={c.label} style={{ backgroundColor: CARD, borderRadius: 16, border: '1px solid rgba(255,255,255,0.08)', padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+          <div key={c.label} style={{ backgroundColor: CARD, borderRadius: 16, border: '1px solid rgb(var(--inv) / 0.08)', padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
             <span style={{ color: ACCENT, marginTop: 2 }}>{c.icon}</span>
             <div>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 4px' }}>{c.label}</p>
-              <p style={{ color: 'white', fontWeight: 600, fontSize: 14, margin: 0 }}>{c.value}</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 4px' }}>{c.label}</p>
+              <p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 14, margin: 0 }}>{c.value}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 4, borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: 20 }}>
+      <div style={{ display: 'flex', gap: 4, borderBottom: '1px solid rgb(var(--inv) / 0.08)', marginBottom: 20 }}>
         {(['sessions', 'registrations'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)} style={{
             padding: '10px 20px', fontSize: 14, fontWeight: 500, cursor: 'pointer', border: 'none', background: 'none',
-            color: tab === t ? ACCENT : 'rgba(255,255,255,0.4)',
+            color: tab === t ? ACCENT : 'rgb(var(--inv) / 0.4)',
             borderBottom: tab === t ? `2px solid ${ACCENT}` : '2px solid transparent',
             marginBottom: -1, textTransform: 'capitalize',
           }}>
@@ -204,32 +204,32 @@ export function EventDetailPage() {
 
       {/* Sessions tab */}
       {tab === 'sessions' && (
-        <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           {sessions.length === 0 ? (
             <div style={{ padding: 60, textAlign: 'center' }}>
               <Calendar size={32} style={{ color: ACCENT, margin: '0 auto 12px' }} />
-              <p style={{ color: 'white', fontWeight: 600, margin: '0 0 4px' }}>No sessions yet</p>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: 0 }}>Add programme sessions for this event</p>
+              <p style={{ color: 'var(--text-primary)', fontWeight: 600, margin: '0 0 4px' }}>No sessions yet</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 13, margin: 0 }}>Add programme sessions for this event</p>
             </div>
           ) : (
             <table style={{ width: '100%', fontSize: 14, borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+                <tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                   {['TITLE', 'SPEAKER', 'START TIME', 'END TIME'].map(col => (
-                    <th key={col} style={{ textAlign: 'left', padding: '12px 20px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                    <th key={col} style={{ textAlign: 'left', padding: '12px 20px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {sessions.map(s => (
-                  <tr key={s.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <tr key={s.id} style={{ borderBottom: '1px solid rgb(var(--inv) / 0.04)' }}>
                     <td style={{ padding: '14px 20px' }}>
-                      <p style={{ color: 'white', fontWeight: 600, margin: 0 }}>{s.title}</p>
-                      {s.description && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: 0 }}>{s.description}</p>}
+                      <p style={{ color: 'var(--text-primary)', fontWeight: 600, margin: 0 }}>{s.title}</p>
+                      {s.description && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: 0 }}>{s.description}</p>}
                     </td>
-                    <td style={{ padding: '14px 20px', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{s.speakerName ?? '—'}</td>
-                    <td style={{ padding: '14px 20px', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{fmtDt(s.startTime)}</td>
-                    <td style={{ padding: '14px 20px', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{fmtDt(s.endTime)}</td>
+                    <td style={{ padding: '14px 20px', color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{s.speakerName ?? '—'}</td>
+                    <td style={{ padding: '14px 20px', color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{fmtDt(s.startTime)}</td>
+                    <td style={{ padding: '14px 20px', color: 'rgb(var(--inv) / 0.6)', fontSize: 13 }}>{fmtDt(s.endTime)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -240,19 +240,19 @@ export function EventDetailPage() {
 
       {/* Registrations tab */}
       {tab === 'registrations' && (
-        <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: CARD, borderRadius: 20, border: '1px solid rgb(var(--inv) / 0.08)', overflow: 'hidden' }}>
           {registrations.length === 0 ? (
             <div style={{ padding: 60, textAlign: 'center' }}>
               <Users size={32} style={{ color: ACCENT, margin: '0 auto 12px' }} />
-              <p style={{ color: 'white', fontWeight: 600, margin: '0 0 4px' }}>No registrations yet</p>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: 0 }}>Register attendees for this event</p>
+              <p style={{ color: 'var(--text-primary)', fontWeight: 600, margin: '0 0 4px' }}>No registrations yet</p>
+              <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 13, margin: 0 }}>Register attendees for this event</p>
             </div>
           ) : (
             <table style={{ width: '100%', fontSize: 14, borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)' }}>
+                <tr style={{ borderBottom: '1px solid rgb(var(--inv) / 0.06)', backgroundColor: 'rgb(var(--inv) / 0.03)' }}>
                   {['ATTENDEE', 'TICKET #', 'REGISTERED', 'STATUS', 'ACTIONS'].map(col => (
-                    <th key={col} style={{ textAlign: 'left', padding: '12px 20px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)' }}>{col}</th>
+                    <th key={col} style={{ textAlign: 'left', padding: '12px 20px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgb(var(--inv) / 0.4)' }}>{col}</th>
                   ))}
                 </tr>
               </thead>
@@ -261,17 +261,17 @@ export function EventDetailPage() {
                   const name = r.member?.fullName ?? r.visitorName ?? 'Unknown'
                   const email = r.visitorEmail
                   return (
-                    <tr key={r.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                    <tr key={r.id} style={{ borderBottom: '1px solid rgb(var(--inv) / 0.04)' }}>
                       <td style={{ padding: '14px 20px' }}>
-                        <p style={{ color: 'white', fontWeight: 600, margin: 0 }}>{name}</p>
-                        {email && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: 0 }}>{email}</p>}
+                        <p style={{ color: 'var(--text-primary)', fontWeight: 600, margin: 0 }}>{name}</p>
+                        {email && <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: 0 }}>{email}</p>}
                       </td>
-                      <td style={{ padding: '14px 20px', color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: 'monospace' }}>{r.ticketNumber ?? '—'}</td>
-                      <td style={{ padding: '14px 20px', color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{fmtDt(r.registrationDate)}</td>
+                      <td style={{ padding: '14px 20px', color: 'rgb(var(--inv) / 0.5)', fontSize: 13, fontFamily: 'monospace' }}>{r.ticketNumber ?? '—'}</td>
+                      <td style={{ padding: '14px 20px', color: 'rgb(var(--inv) / 0.5)', fontSize: 13 }}>{fmtDt(r.registrationDate)}</td>
                       <td style={{ padding: '14px 20px' }}>
                         {r.checkedIn
                           ? <span style={{ backgroundColor: 'rgba(34,197,94,0.15)', color: '#22c55e', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>Checked In</span>
-                          : <span style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.4)', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>Pending</span>
+                          : <span style={{ backgroundColor: 'rgb(var(--inv) / 0.06)', color: 'rgb(var(--inv) / 0.4)', borderRadius: 20, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>Pending</span>
                         }
                       </td>
                       <td style={{ padding: '14px 20px' }}>
@@ -321,13 +321,13 @@ export function EventDetailPage() {
             {register.isPending ? 'Registering...' : 'Register'}
           </button>
         </>}>
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: 0 }}>Select a member OR enter visitor details.</p>
+        <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 13, margin: 0 }}>Select a member OR enter visitor details.</p>
         <div><label style={labelStyle}>MEMBER</label>
           <select value={registerForm.memberId} onChange={e => setRegisterForm(f => ({ ...f, memberId: e.target.value, visitorName: '', visitorEmail: '' }))} style={inputStyle}>
             <option value="">— Select member —</option>
             {allMembers.map(m => <option key={m.id} value={m.id}>{m.fullName}</option>)}
           </select></div>
-        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, textAlign: 'center', margin: 0 }}>— or walk-in visitor —</p>
+        <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 12, textAlign: 'center', margin: 0 }}>— or walk-in visitor —</p>
         <div><label style={labelStyle}>VISITOR NAME</label>
           <input value={registerForm.visitorName} onChange={e => setRegisterForm(f => ({ ...f, visitorName: e.target.value, memberId: '' }))} placeholder="Full name" style={inputStyle} /></div>
         <div><label style={labelStyle}>VISITOR EMAIL</label>

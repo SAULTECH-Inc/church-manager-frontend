@@ -9,9 +9,9 @@ import { useAuthStore } from '@/store/authStore'
 interface Channel { id: string; name: string; description: string }
 interface Message { id: string; channelId: string; senderId: string; senderName: string; content: string; messageType: string; createdAt: string }
 
-const PAGE_BG = '#131326'
-const CARD_BG = '#13152e'
-const INPUT_BG = '#1e2248'
+const PAGE_BG = 'var(--page-bg)'
+const CARD_BG = 'var(--card-bg)'
+const INPUT_BG = 'var(--input-bg)'
 
 function formatTime(iso: string) {
   try {
@@ -117,23 +117,23 @@ export function ChatPage() {
   }
 
   return (
-    <div style={{ height: 'calc(100vh - 56px - 48px)', display: 'flex', borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+    <div style={{ height: 'calc(100vh - 56px - 48px)', display: 'flex', borderRadius: 20, overflow: 'hidden', border: '1px solid rgb(var(--inv) / 0.08)' }}>
       {/* Channels sidebar */}
-      <div style={{ width: 240, backgroundColor: CARD_BG, borderRight: '1px solid rgba(255,255,255,0.08)', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
-        <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <h2 style={{ color: 'white', fontWeight: 700, fontSize: 15, margin: 0 }}>Staff Chat</h2>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: '2px 0 0' }}>Team channels</p>
+      <div style={{ width: 240, backgroundColor: CARD_BG, borderRight: '1px solid rgb(var(--inv) / 0.08)', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
+        <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid rgb(var(--inv) / 0.06)' }}>
+          <h2 style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 15, margin: 0 }}>Staff Chat</h2>
+          <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 12, margin: '2px 0 0' }}>Team channels</p>
         </div>
         <div style={{ flex: 1, overflowY: 'auto', padding: '8px 8px' }}>
-          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '6px 8px 4px' }}>Channels</p>
+          <p style={{ color: 'rgb(var(--inv) / 0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '6px 8px 4px' }}>Channels</p>
           {channels.map(ch => (
             <button key={ch.id} onClick={() => setActiveChannel(ch)}
               style={{
                 display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '8px 10px', borderRadius: 10, border: 'none', cursor: 'pointer', textAlign: 'left',
                 backgroundColor: activeChannel?.id === ch.id ? 'rgba(124,107,255,0.15)' : 'transparent',
-                color: activeChannel?.id === ch.id ? 'var(--accent,#7c6bff)' : 'rgba(255,255,255,0.65)',
+                color: activeChannel?.id === ch.id ? 'var(--accent,#7c6bff)' : 'rgb(var(--inv) / 0.65)',
               }}
-              onMouseEnter={e => { if (activeChannel?.id !== ch.id) e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)' }}
+              onMouseEnter={e => { if (activeChannel?.id !== ch.id) e.currentTarget.style.backgroundColor = 'rgb(var(--inv) / 0.05)' }}
               onMouseLeave={e => { if (activeChannel?.id !== ch.id) e.currentTarget.style.backgroundColor = 'transparent' }}
             >
               <Hash size={13} style={{ flexShrink: 0, opacity: 0.7 }} />
@@ -147,12 +147,12 @@ export function ChatPage() {
       {activeChannel ? (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: PAGE_BG }}>
           {/* Channel header */}
-          <div style={{ padding: '12px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 10, backgroundColor: CARD_BG }}>
+          <div style={{ padding: '12px 20px', borderBottom: '1px solid rgb(var(--inv) / 0.06)', display: 'flex', alignItems: 'center', gap: 10, backgroundColor: CARD_BG }}>
             <Hash size={16} style={{ color: 'var(--accent,#7c6bff)' }} />
             <div>
-              <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>{activeChannel.name}</span>
+              <span style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: 14 }}>{activeChannel.name}</span>
               {activeChannel.description && (
-                <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, marginLeft: 12 }}>{activeChannel.description}</span>
+                <span style={{ color: 'rgb(var(--inv) / 0.35)', fontSize: 12, marginLeft: 12 }}>{activeChannel.description}</span>
               )}
             </div>
           </div>
@@ -164,7 +164,7 @@ export function ChatPage() {
                 <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(124,107,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Hash size={24} style={{ color: 'var(--accent,#7c6bff)' }} />
                 </div>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14, margin: 0 }}>No messages yet. Say hello!</p>
+                <p style={{ color: 'rgb(var(--inv) / 0.4)', fontSize: 14, margin: 0 }}>No messages yet. Say hello!</p>
               </div>
             ) : (
               messages.map((msg, i) => {
@@ -175,17 +175,17 @@ export function ChatPage() {
                     {showHeader && (
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
                         <span style={{ color: isMe ? 'var(--accent,#7c6bff)' : '#a78bfa', fontWeight: 700, fontSize: 13 }}>{msg.senderName}</span>
-                        <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11 }}>{formatTime(msg.createdAt)}</span>
+                        <span style={{ color: 'rgb(var(--inv) / 0.25)', fontSize: 11 }}>{formatTime(msg.createdAt)}</span>
                       </div>
                     )}
                     <div style={{
                       maxWidth: '70%', padding: '8px 12px', borderRadius: showHeader ? '4px 16px 16px 16px' : '4px 16px 16px 4px',
-                      backgroundColor: isMe ? 'rgba(var(--accent-rgb,124,107,255),0.15)' : 'rgba(255,255,255,0.06)',
+                      backgroundColor: isMe ? 'rgba(var(--accent-rgb,124,107,255),0.15)' : 'rgb(var(--inv) / 0.06)',
                       alignSelf: isMe ? 'flex-end' : 'flex-start',
                       ...(isMe && showHeader ? { borderRadius: '16px 4px 16px 16px' } : {}),
                       ...(isMe && !showHeader ? { borderRadius: '16px 4px 4px 16px' } : {}),
                     }}>
-                      <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14, margin: 0, lineHeight: 1.5, wordBreak: 'break-word' }}>{msg.content}</p>
+                      <p style={{ color: 'rgb(var(--inv) / 0.9)', fontSize: 14, margin: 0, lineHeight: 1.5, wordBreak: 'break-word' }}>{msg.content}</p>
                     </div>
                   </div>
                 )
@@ -195,34 +195,34 @@ export function ChatPage() {
           </div>
 
           {/* Input */}
-          <div style={{ padding: '12px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', backgroundColor: CARD_BG }}>
+          <div style={{ padding: '12px 20px', borderTop: '1px solid rgb(var(--inv) / 0.06)', backgroundColor: CARD_BG }}>
             <div style={{ display: 'flex', gap: 10, alignItems: 'flex-end' }}>
-              <div style={{ flex: 1, backgroundColor: INPUT_BG, borderRadius: 14, border: '1px solid rgba(255,255,255,0.10)', padding: '10px 14px' }}>
+              <div style={{ flex: 1, backgroundColor: INPUT_BG, borderRadius: 14, border: '1px solid rgb(var(--inv) / 0.10)', padding: '10px 14px' }}>
                 <textarea
                   rows={1}
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
                   placeholder={`Message #${activeChannel.name}`}
-                  style={{ width: '100%', background: 'none', border: 'none', outline: 'none', color: 'white', fontSize: 14, resize: 'none', lineHeight: 1.5, maxHeight: 100, overflow: 'auto' }}
+                  style={{ width: '100%', background: 'none', border: 'none', outline: 'none', color: 'var(--text-primary)', fontSize: 14, resize: 'none', lineHeight: 1.5, maxHeight: 100, overflow: 'auto' }}
                 />
               </div>
               <button onClick={send} disabled={!input.trim()}
                 style={{
                   width: 42, height: 42, borderRadius: 12, border: 'none', cursor: input.trim() ? 'pointer' : 'not-allowed', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: input.trim() ? 'linear-gradient(135deg,var(--accent,#7c6bff),var(--accent-dark,#6456e8))' : 'rgba(255,255,255,0.08)',
-                  color: input.trim() ? 'white' : 'rgba(255,255,255,0.3)',
+                  background: input.trim() ? 'linear-gradient(135deg,var(--accent,#7c6bff),var(--accent-dark,#6456e8))' : 'rgb(var(--inv) / 0.08)',
+                  color: input.trim() ? 'white' : 'rgb(var(--inv) / 0.3)',
                   transition: 'all 0.15s',
                 }}>
                 <Send size={16} />
               </button>
             </div>
-            <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11, margin: '6px 0 0' }}>Enter to send · Shift+Enter for new line</p>
+            <p style={{ color: 'rgb(var(--inv) / 0.25)', fontSize: 11, margin: '6px 0 0' }}>Enter to send · Shift+Enter for new line</p>
           </div>
         </div>
       ) : (
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: PAGE_BG }}>
-          <p style={{ color: 'rgba(255,255,255,0.3)' }}>Select a channel to start chatting</p>
+          <p style={{ color: 'rgb(var(--inv) / 0.3)' }}>Select a channel to start chatting</p>
         </div>
       )}
     </div>
