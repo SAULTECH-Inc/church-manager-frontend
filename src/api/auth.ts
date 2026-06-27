@@ -8,9 +8,10 @@ export interface AuthUser {
   tenantId: string
 }
 
-export async function login(email: string, password: string): Promise<AuthUser> {
-  const res = await api.post<{ data: AuthUser }>('/api/auth/login', { email, password })
-  return res.data.data
+export async function login(email: string, password: string): Promise<{ user: AuthUser; token: string }> {
+  const res = await api.post<{ data: AuthUser & { token: string } }>('/api/auth/login', { email, password })
+  const { token, ...user } = res.data.data
+  return { user: user as AuthUser, token }
 }
 
 export async function signup(tenantName: string, adminEmail: string, adminPassword: string, subdomain: string, email?: string, phone?: string): Promise<AuthUser> {

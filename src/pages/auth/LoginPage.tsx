@@ -34,7 +34,7 @@ export function LoginPage() {
 
   const loginMutation = useMutation({
     mutationFn: (d: FormData) => login(d.email, d.password),
-    onSuccess: (user) => { setUser(user); navigate('/') },
+    onSuccess: ({ user, token }) => { setUser(user, token); navigate('/') },
     onError: () => setError('root', { message: 'Invalid email or password' }),
   })
 

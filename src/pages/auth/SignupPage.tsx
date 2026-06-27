@@ -52,6 +52,8 @@ export function SignupPage() {
     resolver: zodResolver(schema),
   })
 
+  const { ref: subRef, onChange: subOnChange, ...subRest } = register('subdomain')
+
   const signupMutation = useMutation({
     mutationFn: (d: FormData) => signup(d.name, d.adminEmail, d.adminPassword, d.subdomain, d.email, d.phone),
     onSuccess: () => navigate('/login'),
@@ -93,9 +95,21 @@ export function SignupPage() {
                 </Field>
                 <Field label="SUBDOMAIN" error={errors.subdomain?.message}>
                   <div className="flex">
-                    <input {...register('subdomain')} placeholder="grace" style={{ ...INPUT_STYLE, borderRadius: '14px 0 0 14px' }}
+                    <input
+                      ref={subRef}
+                      {...subRest}
+                      onChange={e => {
+                        e.target.value = e.target.value
+                          .toLowerCase()
+                          .replace(/\s+/g, '-')
+                          .replace(/[^a-z0-9-]/g, '')
+                        subOnChange(e)
+                      }}
+                      placeholder="grace-assembly"
+                      style={{ ...INPUT_STYLE, borderRadius: '14px 0 0 14px' }}
                       onFocus={e => (e.currentTarget.style.borderColor = '#7c6bff')}
-                      onBlur={e => (e.currentTarget.style.borderColor = 'rgb(var(--inv) / 0.12)')} />
+                      onBlur={e => (e.currentTarget.style.borderColor = 'rgb(var(--inv) / 0.12)')}
+                    />
                     <span className="flex items-center px-3 text-xs font-medium whitespace-nowrap" style={{ backgroundColor: '#252643', border: '1px solid #252855', borderLeft: 'none', borderRadius: '0 14px 14px 0', color: 'rgb(var(--inv) / 0.5)' }}>
                       .churchos.org
                     </span>
