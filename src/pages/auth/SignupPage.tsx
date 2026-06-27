@@ -1,9 +1,10 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
-import { ArrowRight, Compass } from 'lucide-react'
+import { ArrowRight, Compass, Eye, EyeOff } from 'lucide-react'
 import { signup } from '@/api/auth'
 
 const schema = z.object({
@@ -47,6 +48,7 @@ function Field({ label, error, children }: { label: string; error?: string; chil
 
 export function SignupPage() {
   const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
 
   const { register, handleSubmit, formState: { errors }, setError } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -138,9 +140,14 @@ export function SignupPage() {
                     onBlur={e => (e.currentTarget.style.borderColor = 'rgb(var(--inv) / 0.12)')} />
                 </Field>
                 <Field label="ADMIN PASSWORD" error={errors.adminPassword?.message}>
-                  <input type="password" {...register('adminPassword')} placeholder="••••••••" style={INPUT_STYLE}
-                    onFocus={e => (e.currentTarget.style.borderColor = '#7c6bff')}
-                    onBlur={e => (e.currentTarget.style.borderColor = 'rgb(var(--inv) / 0.12)')} />
+                  <div className="relative">
+                    <input type={showPassword ? 'text' : 'password'} {...register('adminPassword')} placeholder="••••••••" style={{ ...INPUT_STYLE, paddingRight: 42 }}
+                      onFocus={e => (e.currentTarget.style.borderColor = '#7c6bff')}
+                      onBlur={e => (e.currentTarget.style.borderColor = 'rgb(var(--inv) / 0.12)')} />
+                    <button type="button" onClick={() => setShowPassword(v => !v)} className="absolute right-3.5 top-1/2 -translate-y-1/2" style={{ color: 'rgb(var(--inv) / 0.3)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                      {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                    </button>
+                  </div>
                 </Field>
               </div>
             </div>

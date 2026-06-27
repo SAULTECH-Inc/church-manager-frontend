@@ -1,9 +1,10 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
-import { Mail, Lock, ArrowRight, Compass } from 'lucide-react'
+import { Mail, Lock, ArrowRight, Compass, Eye, EyeOff } from 'lucide-react'
 import { login } from '@/api/auth'
 import { useAuthStore } from '@/store/authStore'
 
@@ -27,6 +28,7 @@ const INPUT_STYLE: React.CSSProperties = {
 export function LoginPage() {
   const navigate = useNavigate()
   const { setUser } = useAuthStore()
+  const [showPassword, setShowPassword] = useState(false)
 
   const { register, handleSubmit, formState: { errors }, setError } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -92,13 +94,16 @@ export function LoginPage() {
               <div className="relative">
                 <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'rgb(var(--inv) / 0.3)' }} />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   {...register('password')}
                   placeholder="••••••••"
-                  style={INPUT_STYLE}
+                  style={{ ...INPUT_STYLE, paddingRight: 42 }}
                   onFocus={e => (e.currentTarget.style.borderColor = '#7c6bff')}
                   onBlur={e => (e.currentTarget.style.borderColor = 'rgb(var(--inv) / 0.12)')}
                 />
+                <button type="button" onClick={() => setShowPassword(v => !v)} className="absolute right-3.5 top-1/2 -translate-y-1/2" style={{ color: 'rgb(var(--inv) / 0.3)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
               </div>
               {errors.password && <p className="text-xs mt-1.5" style={{ color: '#fca5a5' }}>{errors.password.message}</p>}
             </div>
